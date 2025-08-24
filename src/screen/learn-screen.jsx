@@ -4,18 +4,22 @@ import Card from "../components/card";
 import Container from "../components/container";
 import BackButton from "../components/back-button";
 
-export default function LearnScreen({ navigation }) {
-  return (
-    <SafeAreaView>
-      <Container>
-        <BackButton />
 
-        <Card backgroundColor={"#fff"}>
-          <Text style={{ color: "#333", fontSize: 20, textAlign: "center" }}>
-            Iba pang mga kategorya
-          </Text>
-        </Card>
-      </Container>
-    </SafeAreaView>
-  );
-}
+export default function LearnScreen( { navigation } ) {
+    return (
+        <SafeAreaView >
+            <Container>
+                <BackButton/>
+                   
+                <Card backgroundColor={"#573826"} >
+                    <Text style={{ color: "#ffffffff", fontSize: 20, textAlign: "center" }}>
+                        Iba pang mga kategorya
+                    </Text>
+                
+                </Card>
+            </Container>
+            
+     
+        </SafeAreaView>
+    );
+    }
