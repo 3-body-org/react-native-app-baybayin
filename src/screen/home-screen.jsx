@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { Text, Image, SafeAreaView, View, TouchableOpacity } from "react-native";
+import {
+  Text,
+  Image,
+  SafeAreaView,
+  View,
+  TouchableOpacity,
+} from "react-native";
 import Card from "../components/card";
 import Container from "../components/container";
 import Carousel from "../components/carousel";
@@ -19,7 +25,7 @@ export default function HomeScreen({ navigation }) {
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
       <Container>
         <Text
           style={{
@@ -40,16 +46,28 @@ export default function HomeScreen({ navigation }) {
         />
 
         <Card backgroundColor="#FEF3EC">
-          <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
+          >
             <Image
-              source={require("../assets/boy.png")}
+              source={require("../assets/boy.webp")}
               resizeMode="contain"
-              style={{ width: 110, height: 70}}
+              style={{ width: 110, height: 110 }}
             />
-            <Text style={{ color: "#333", fontSize: 20 , margintTop: 10}}>
-              Tayo na't matuto ng baybayin
+            <Text
+              style={{
+                color: "#333",
+                fontSize: 25,
+                fontWeight: "600",
+                textAlign: "right",
+                marginTop: 10,
+                flexWrap: "wrap",
+                flex: 1,
+              }}
+            >
+              Tayo na't matuto ng Baybayin!
             </Text>
-          </View>  
+          </View>
         </Card>
 
         <Text
@@ -67,40 +85,59 @@ export default function HomeScreen({ navigation }) {
         <Image
           source={require("../assets/kategorya.png")}
           resizeMode="contain"
-          style={{ width: 100, height: 20, alignSelf: "flex-start" }}
+          style={{ width: 100, height: 20, alignSelf: "flex-start"}}
         />
       </Container>
 
       <Carousel data={carouselData} navigation={navigation} />
 
-      <Container>
-        {/* <TouchableOpacity onPress={handleOpenBottomSheet}>
-          <Card backgroundColor={"#fff"}>
-            <Text style={{ color: "#333", fontSize: 20, textAlign: "center" }}>
-              I-share ang app
-            </Text>
-            <Text style={{ color: "#666", fontSize: 14, textAlign: "center", marginTop: 5 }}>
-              Pindutin para i-share sa social media
-            </Text>
-          </Card>
-        </TouchableOpacity> */}
-        <Card backgroundColor={"#573826"}>
-          <Text style={{ color: "#fff", fontSize: 20, textAlign: "center" }}>
-            Halina't i-share ang app na ito!
-          </Text>
-          <Image
-            source={require("../assets/phone.png")}
-            resizeMode="contain"
-            style={{ width: 100, height: 100, alignSelf: "center" }}
-          />
-          <TouchableOpacity 
-            onPress={handleOpenBottomSheet} 
-            style={{backgroundColor: "F1E3DA", borderRadius: 10}}>
-            <Text style={{ color: "#fff", fontSize: 20, textAlign: "center" }}>
-              Ibahagi
-            </Text>
-            <Share size={20} color="#573826"/>
-          </TouchableOpacity>
+      <Container style={{ paddingTop: 0 }}>
+        <Card backgroundColor={"#573826"} style={{ marginTop: -40 }}>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <View style={{ flex: 1, marginRight: 10, paddingLeft: 10 }}>
+              <Text
+                style={{
+                  color: "#fff",
+                  fontSize: 18,
+                  fontWeight: "600",
+                  marginBottom: 10,
+                }}
+              >
+                Halina't i-share ang app na ito!
+              </Text>
+              <TouchableOpacity
+                onPress={handleOpenBottomSheet}
+                style={{
+                  backgroundColor: "#F1E3DA",
+                  borderRadius: 8,
+                  paddingVertical: 8,
+                  alignItems: "center",
+                  maxWidth: 120,
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  gap: 8,
+                }}
+              >
+                <Text
+                  style={{ color: "#573826", fontSize: 16, fontWeight: "600" }}
+                >
+                  Ibahagi
+                </Text>
+                <Share size={16} color="#573826" />
+              </TouchableOpacity>
+            </View>
+            <Image
+              source={require("../assets/phone.webp")}
+              resizeMode="contain"
+              style={{ width: 100, height: 100 }}
+            />
+          </View>
         </Card>
       </Container>
 
@@ -108,7 +145,7 @@ export default function HomeScreen({ navigation }) {
         isVisible={isBottomSheetVisible}
         onClose={handleCloseBottomSheet}
         title="I-share ang Baybayin App"
-        snapPoints={['40%', '60%', '80%']}
+        snapPoints={["40%", "60%", "80%"]}
         type="social"
       />
     </SafeAreaView>

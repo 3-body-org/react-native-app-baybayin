@@ -15,13 +15,13 @@ import PropTypes from "prop-types";
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
 
 const ImageModal = ({ isVisible, onClose, imageSource }) => {
-const [imageSize, setImageSize] = useState({ width: 0, height: 0 });
-const isImageLoading = imageSize.width === 0 && imageSize.height === 0;
+  const [imageSize, setImageSize] = useState({ width: 0, height: 0 });
+  const isImageLoading = imageSize.width === 0 && imageSize.height === 0;
 
-const onImageLoad = (event) => {
-  const { width, height } = event.nativeEvent.source;
-  setImageSize({ width, height });
-};
+  const onImageLoad = (event) => {
+    const { width, height } = event.nativeEvent.source;
+    setImageSize({ width, height });
+  };
 
   const imageContainerStyle = useMemo(() => {
     const maxWidth = SCREEN_WIDTH * 0.9;
