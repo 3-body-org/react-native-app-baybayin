@@ -9,7 +9,8 @@ export const carouselData = [
   {
     id: 2,
     title: "Merchs",
-    description: "Join us for thrilling adventures and unforgettable experiences.",
+    description:
+      "Join us for thrilling adventures and unforgettable experiences.",
     backgroundImage: require("../assets/bg2.jpg"),
     screen: "MerchScreen",
   },
