@@ -17,8 +17,8 @@ export default function App() {
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="HomeScreen" component={HomeScreen} />
           <Stack.Screen name="LearnScreen" component={LearnScreen} />
-          {/* <Stack.Screen name="Merch" component={MerchScreen} />
-          <Stack.Screen name="Bill" component={BillScreen} /> */}
+          <Stack.Screen name="MerchScreen" component={MerchScreen} />
+          <Stack.Screen name="BillScreen" component={BillScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaView>
