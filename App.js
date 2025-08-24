@@ -1,8 +1,9 @@
 import React from "react";
-import { StatusBar, StyleSheet, SafeAreaView } from "react-native";
+import { StatusBar, StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import HomeScreen from "./src/screen/home-screen";
 import LearnScreen from "./src/screen/learn-screen";
 import MerchScreen from "./src/screen/merch-screen";
@@ -12,10 +13,10 @@ const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    <GestureHandlerRootView style={styles.container}>
-      <SafeAreaView style={styles.container}>
+    <SafeAreaProvider>
+      <GestureHandlerRootView style={styles.container}>
         <StatusBar backgroundColor="#ffffffff" barStyle="dark-content" />
-        <NavigationContainer >
+        <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name="HomeScreen" component={HomeScreen} />
             <Stack.Screen name="LearnScreen" component={LearnScreen} />
@@ -23,8 +24,8 @@ export default function App() {
             <Stack.Screen name="BillScreen" component={BillScreen} />
           </Stack.Navigator>
         </NavigationContainer>
-      </SafeAreaView>
-    </GestureHandlerRootView>
+      </GestureHandlerRootView>
+    </SafeAreaProvider>
   );
 }
 

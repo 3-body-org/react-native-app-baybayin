@@ -1,38 +1,58 @@
-// not yet done
-import React from "react";
-import { View, StyleSheet } from "react-native";
+import React, { useEffect, useRef } from "react";
+import { View, StyleSheet, Animated, TouchableOpacity } from "react-native";
 
-const Pagination = ({ data, currentIndex }) => {
+const Pagination = ({ data, currentIndex, scrollToIndex }) => {
+  if (!data || data.length <= 1) return null;
+
   return (
     <View style={styles.container}>
-      {data.map((_, index) => (
-        <View
-          key={index}
-          style={[styles.dot, currentIndex === index && styles.activeDot]}
-        />
-      ))}
+      {data.map((_, index) => {
+        const isActive = currentIndex === index;
+        const scale = isActive ? 1.2 : 0.8;
+        const opacity = isActive ? 1 : 0.5;
+        
+        return (
+          <TouchableOpacity
+            key={index}
+            onPress={() => scrollToIndex(index)}
+            activeOpacity={0.7}
+            style={styles.dotContainer}
+          >
+            <Animated.View
+              style={[
+                styles.dot,
+                {
+                  transform: [{ scale }],
+                  opacity,
+                  backgroundColor: isActive ? "#573826" : "rgba(0, 0, 0, 0.2)",
+                },
+              ]}
+            />
+          </TouchableOpacity>
+        );
+      })}
     </View>
   );
 };
-
-export default Pagination;
 
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     justifyContent: "center",
-    marginTop: 10,
+    alignItems: "center",
+    marginTop: 12,
+    marginBottom: 8,
+  },
+  dotContainer: {
+    padding: 4,
   },
   dot: {
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: "rgba(255, 255, 255, 0.5)",
-    marginHorizontal: 4,
-  },
-  activeDot: {
-    backgroundColor: "#fff",
-    width: 10,
-    height: 10,
+    marginHorizontal: 2,
+    transition: 'transform 150ms ease, opacity 150ms ease',
   },
 });
+
+export default React.memo(Pagination);

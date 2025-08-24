@@ -12,15 +12,13 @@ import { ChevronLeft, ChevronRight } from "lucide-react-native";
 import Pagination from "./pagination";
 
 const { width } = Dimensions.get("window");
-console.log("Carousel width:", width); // Debugging line to check width
-const ITEM_WIDTH = Math.round(width * 0.87); // this width is sa scroll view
+const ITEM_WIDTH = Math.round(width * 0.87);
 const ITEM_MARGIN = 7;
 
 export default function Carousel({ data = [], navigation }) {
   const flatListRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Function to scroll to a specific index and update the current index
   const scrollToIndex = (index) => {
     if (index >= 0 && index < data.length) {
       flatListRef.current.scrollToIndex({ index, animated: true });
@@ -35,11 +33,24 @@ export default function Carousel({ data = [], navigation }) {
     setCurrentIndex(newIndex);
   };
 
+  const getItemLayout = (_, index) => ({
+    length: ITEM_WIDTH + ITEM_MARGIN * 2,
+    offset: (ITEM_WIDTH + ITEM_MARGIN * 2) * index,
+    index,
+  });
+
+  const onScrollToIndexFailed = (info) => {
+    const wait = new Promise(resolve => setTimeout(resolve, 500));
+    wait.then(() => {
+      flatListRef.current?.scrollToIndex({ index: info.index, animated: false });
+    });
+  };
+
   const renderItem = ({ item }) => (
     <View style={{ width: ITEM_WIDTH, marginHorizontal: ITEM_MARGIN }}>
       <TouchableOpacity
         activeOpacity={0.8}
-        onPress={() => navigation.navigate(item.screen)} // navigate to item's screen
+        onPress={() => navigation.navigate(item.screen)}
       >
         <ImageBackground
           source={item.backgroundImage}
@@ -57,48 +68,36 @@ export default function Carousel({ data = [], navigation }) {
 
   return (
     <View style={styles.container}>
-      {/* <TouchableOpacity
-        style={[styles.arrow, { left: 10 }]}
-        onPress={() => scrollToIndex(currentIndex - 1)}
-        disabled={currentIndex === 0}
-      >
-        <ChevronLeft size={28} color="#fff" />
-      </TouchableOpacity> */}
-
       <FlatList
         ref={flatListRef}
         data={data}
-        horizontal
-        pagingEnabled
-        snapToInterval={ITEM_WIDTH + ITEM_MARGIN * 2}
-        decelerationRate="fast"
-        showsHorizontalScrollIndicator={false}
-        keyExtractor={(_, index) => index.toString()}
         renderItem={renderItem}
+        keyExtractor={(_, index) => index.toString()}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        pagingEnabled
         onMomentumScrollEnd={handleMomentumScrollEnd}
+        snapToInterval={ITEM_WIDTH + ITEM_MARGIN * 2}
+        snapToAlignment="start"
+        decelerationRate="fast"
         contentContainerStyle={{
-          //paddingHorizontal: (width - ITEM_WIDTH) / 2,
-          paddingHorizontal: 18,
+          paddingHorizontal: (width - ITEM_WIDTH) / 2 - ITEM_MARGIN,
         }}
+        getItemLayout={getItemLayout}
+        onScrollToIndexFailed={onScrollToIndexFailed}
       />
-      {/* <Pagination data={data} currentIndex={currentIndex} /> */}
-
-      {/* <TouchableOpacity
-        style={[styles.arrow, { right: 10 }]}
-        onPress={() => scrollToIndex(currentIndex + 1)}
-        disabled={currentIndex === data.length - 1}
-      >
-        <ChevronRight size={28} color="#fff" />
-      </TouchableOpacity> */}
+      <Pagination 
+        data={data} 
+        currentIndex={currentIndex} 
+        scrollToIndex={scrollToIndex}
+      /> 
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
-    // alignItems: "center",
-    // justifyContent: "center",
+    position: "relative",
   },
   slide: {
     width: "100%",
