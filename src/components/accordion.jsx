@@ -4,8 +4,6 @@ import {
   Text,
   TouchableOpacity,
   LayoutAnimation,
-  Platform,
-  UIManager,
   StyleSheet,
 } from "react-native";
 import { ChevronDown } from "lucide-react-native";
