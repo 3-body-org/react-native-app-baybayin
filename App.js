@@ -5,17 +5,19 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 import HomeScreen from "./src/screen/home-screen";
 import LearnScreen from "./src/screen/learn-screen";
+import BackButton from "./src/components/back-button";
 
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
     <SafeAreaView style={styles.safeArea}>
-      <StatusBar backgroundColor="#f9f9f9ff" barStyle="dark-content" />
+      <StatusBar backgroundColor="#ffffffff" barStyle="dark-content" />
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="HomeScreen" component={HomeScreen} />
           <Stack.Screen name="LearnScreen" component={LearnScreen} />
+          <Stack.Screen name="BackButton" component={BackButton} />
           {/* <Stack.Screen name="Merch" component={MerchScreen} />
           <Stack.Screen name="Bill" component={BillScreen} /> */}
         </Stack.Navigator>
