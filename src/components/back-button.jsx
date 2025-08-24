@@ -1,16 +1,15 @@
-import react from "react";
-import { TouchableOpacity, StyleSheet } from "react-native";
+import React from "react";
+import { TouchableOpacity, StyleSheet, Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Undo2 } from "lucide-react-native";
 
-export default function BackButton( { navigation } ) {
-  // const navigation = useNavigation();
+export default function BackButton() {
+  const navigation = useNavigation();
   return (
     <TouchableOpacity 
      onPress={() => navigation.navigate("HomeScreen")} 
      style={styles.backButton}>
-      <View>
-
+      <View style={{ flexDirection: "row", alignItems: "center" }}>
         <Undo2 size={16} color="#573826" style={{ marginRight: 5 }} />
         <Text>Bumalik</Text>
       </View>
@@ -21,7 +20,6 @@ export default function BackButton( { navigation } ) {
 
 const styles = StyleSheet.create({
   backButton: {
-    // margin: 10,
     alignSelf: "flex-start",
     paddingVertical: 10,
     paddingHorizontal: 25,
@@ -33,8 +31,8 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 4,
-    elevation: 5,       
-    }
+    elevation: 5,
+  },
 });
 
 

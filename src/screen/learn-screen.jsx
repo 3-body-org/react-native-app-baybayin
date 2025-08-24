@@ -9,7 +9,7 @@ export default function LearnScreen( { navigation } ) {
     return (
         <SafeAreaView >
             <Container>
-                <BackButton navigation={navigation}/>
+                <BackButton/>
                    
 
                 <Card backgroundColor={"#fff"} >
