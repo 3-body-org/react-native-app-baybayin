@@ -25,10 +25,7 @@ export default function Accordion() {
         const isOpen = activeSection === item.id;
 
         return (
-          <View
-            key={item.id}
-            style={[styles.card, isOpen && styles.cardOpen]}
-          >
+          <View key={item.id} style={[styles.card, isOpen && styles.cardOpen]}>
             {/* Accordion Header */}
             <TouchableOpacity
               onPress={() => toggleSection(item.id)}
@@ -53,7 +50,7 @@ export default function Accordion() {
             )}
           </View>
         );
-        })}
+      })}
     </View>
   );
 }

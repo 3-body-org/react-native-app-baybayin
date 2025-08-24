@@ -14,8 +14,7 @@ const styles = StyleSheet.create({
   card: {
     width: "100%",
     padding: 18,
-    marginVertical: 30,
-    flexShrink: 1,
+    marginVertical: 20,
 
     // iOS Shadow
     shadowColor: "#000",
