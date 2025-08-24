@@ -1,4 +1,4 @@
-// not yet done 
+// not yet done
 import React from "react";
 import { View, StyleSheet } from "react-native";
 
@@ -8,10 +8,7 @@ const Pagination = ({ data, currentIndex }) => {
       {data.map((_, index) => (
         <View
           key={index}
-          style={[
-            styles.dot,
-            currentIndex === index && styles.activeDot,
-          ]}
+          style={[styles.dot, currentIndex === index && styles.activeDot]}
         />
       ))}
     </View>

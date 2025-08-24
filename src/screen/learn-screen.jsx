@@ -1,26 +1,21 @@
 import React from "react";
 import { Text, SafeAreaView, Button } from "react-native";
 import Card from "../components/card";
-import Container from "../components/container";    
+import Container from "../components/container";
 import BackButton from "../components/back-button";
 
+export default function LearnScreen({ navigation }) {
+  return (
+    <SafeAreaView>
+      <Container>
+        <BackButton />
 
-export default function LearnScreen( { navigation } ) {
-    return (
-        <SafeAreaView >
-            <Container>
-                <BackButton/>
-                   
-
-                <Card backgroundColor={"#fff"} >
-                    <Text style={{ color: "#333", fontSize: 20, textAlign: "center" }}>
-                        Iba pang mga kategorya
-                    </Text>
-                
-                </Card>
-            </Container>
-            
-     
-        </SafeAreaView>
-    );
-    }
+        <Card backgroundColor={"#fff"}>
+          <Text style={{ color: "#333", fontSize: 20, textAlign: "center" }}>
+            Iba pang mga kategorya
+          </Text>
+        </Card>
+      </Container>
+    </SafeAreaView>
+  );
+}

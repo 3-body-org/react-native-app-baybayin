@@ -1,14 +1,22 @@
 import React, { useRef, useState } from "react";
-import { View, FlatList, Dimensions, StyleSheet, TouchableOpacity, Text, ImageBackground } from "react-native";
+import {
+  View,
+  FlatList,
+  Dimensions,
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+  ImageBackground,
+} from "react-native";
 import { ChevronLeft, ChevronRight } from "lucide-react-native";
-import Pagination from "./pagination"; 
+import Pagination from "./pagination";
 
 const { width } = Dimensions.get("window");
 console.log("Carousel width:", width); // Debugging line to check width
 const ITEM_WIDTH = Math.round(width * 0.87); // this width is sa scroll view
-const ITEM_MARGIN = 7; 
+const ITEM_MARGIN = 7;
 
-export default function Carousel ({ data = [] , navigation }) {
+export default function Carousel({ data = [], navigation }) {
   const flatListRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -21,7 +29,9 @@ export default function Carousel ({ data = [] , navigation }) {
   };
 
   const handleMomentumScrollEnd = (event) => {
-    const newIndex = Math.round(event.nativeEvent.contentOffset.x / (ITEM_WIDTH + ITEM_MARGIN * 2));
+    const newIndex = Math.round(
+      event.nativeEvent.contentOffset.x / (ITEM_WIDTH + ITEM_MARGIN * 2),
+    );
     setCurrentIndex(newIndex);
   };
 
@@ -54,7 +64,6 @@ export default function Carousel ({ data = [] , navigation }) {
       >
         <ChevronLeft size={28} color="#fff" />
       </TouchableOpacity> */}
-      
 
       <FlatList
         ref={flatListRef}
@@ -81,13 +90,9 @@ export default function Carousel ({ data = [] , navigation }) {
       >
         <ChevronRight size={28} color="#fff" />
       </TouchableOpacity> */}
-  
     </View>
-
-
-
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
