@@ -10,7 +10,7 @@ export default function BackButton() {
       onPress={() => navigation.navigate("HomeScreen")}
       style={styles.backButton}
     >
-      <View style={{ flexDirection: "row", alignItems: "center" }}>
+      <View style={styles.container}>
         <Undo2 size={16} color="#573826" style={{ marginRight: 5 }} />
         <Text>Bumalik</Text>
       </View>
@@ -19,10 +19,14 @@ export default function BackButton() {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
   backButton: {
     alignSelf: "flex-start",
     paddingVertical: 10,
-    paddingHorizontal: 25,
+    paddingHorizontal: 20,
     backgroundColor: "#F1E3DA",
     borderColor: "#573826",
     borderWidth: 1,
