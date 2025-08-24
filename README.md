@@ -11,11 +11,13 @@ A React Native project built with Expo for learning and exploring the Baybayin s
 ## Installation
 
 1. Install project dependencies:
+
 ```bash
 npm install
 ```
 
 2. Check for outdated dependencies:
+
 ```bash
 npx expo install --check
 ```
@@ -23,6 +25,7 @@ npx expo install --check
 ## Running the Project
 
 Start the development server:
+
 ```bash
 npx expo start
 ```
@@ -34,11 +37,13 @@ This will open a Metro bundler in your browser with various connection options.
 If you encounter issues with Expo Go not being able to start the app, try using ngrok tunnel:
 
 1. First install ngrok globally:
+
 ```bash
 sudo npm install -g @expo/ngrok
 ```
 
 2. Then start Expo with tunnel:
+
 ```bash
 npx expo start --tunnel
 ```
