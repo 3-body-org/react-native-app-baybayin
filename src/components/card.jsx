@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     elevation: 3,
 
     // Background + Border
-    borderRadius: 15,
+    borderRadius: 12,
   },
   content: {
     justifyContent: "flex-start",

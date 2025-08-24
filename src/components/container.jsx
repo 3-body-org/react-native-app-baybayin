@@ -10,12 +10,10 @@ export default function Container({ children, style, ...props }) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 20,
+    backgroundColor: '#fff',       
+    justifyContent: 'center',      
+    padding: 20,  
     // paddingHorizontal: 25,
-
-    position: "relative",
+    // position: 'relative',          
   },
 });
