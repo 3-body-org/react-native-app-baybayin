@@ -1,12 +1,12 @@
 import React, { useRef, useState } from "react";
 import { View, FlatList, Dimensions, StyleSheet, TouchableOpacity, Text, ImageBackground } from "react-native";
 import { ChevronLeft, ChevronRight } from "lucide-react-native";
-import Pagination from "./pagination"; // Assuming you have a Pagination component
+import Pagination from "./pagination"; 
 
 const { width } = Dimensions.get("window");
 console.log("Carousel width:", width); // Debugging line to check width
 const ITEM_WIDTH = Math.round(width * 0.87); // this width is sa scroll view
-const ITEM_MARGIN = 7; // margin between items
+const ITEM_MARGIN = 7; 
 
 export default function Carousel ({ data = [] , navigation }) {
   const flatListRef = useRef(null);
@@ -29,7 +29,7 @@ export default function Carousel ({ data = [] , navigation }) {
     <View style={{ width: ITEM_WIDTH, marginHorizontal: ITEM_MARGIN }}>
       <TouchableOpacity
         activeOpacity={0.8}
-        onPress={() => navigation.navigate(item.screen)} // 👈 navigate to item's screen
+        onPress={() => navigation.navigate(item.screen)} // navigate to item's screen
       >
         <ImageBackground
           source={item.backgroundImage}

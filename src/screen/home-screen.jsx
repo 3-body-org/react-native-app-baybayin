@@ -9,7 +9,7 @@ export default function HomeScreen( { navigation } ) {
   return (
     <SafeAreaView >
         <Container>
-            <Text style={{ fontSize: 20, fontWeight: 500, color: "#573826", marginBottom: 5, alignSelf: "flex-start" }}>
+            <Text style={{ fontSize: 20, fontWeight: 600, color: "#573826", marginBottom: 5, alignSelf: "flex-start" }}>
                 Magandang araw!
             </Text>
 
@@ -19,7 +19,7 @@ export default function HomeScreen( { navigation } ) {
                 style={{ width: 160, height: 20, alignSelf: "flex-start" }}
             />
 
-            <Card backgroundColor="#fff" >
+            <Card backgroundColor="#FEF3EC" >
                 <Text style={{ color: "#333", fontSize: 20 }}>Tayo na't matuto ng baybayin</Text>
                 <Text style={{ color: "#333", fontSize: 20 }}>Tayo na't matuto ng baybayin</Text>
                 <Text style={{ color: "#333", fontSize: 20 }}>Tayo na't matuto ng baybayin</Text>
@@ -27,7 +27,7 @@ export default function HomeScreen( { navigation } ) {
             
             </Card>
 
-            <Text style={{ fontSize: 20, fontWeight: 500, color: "#573826", marginBottom: 5, alignSelf: "flex-start" }}>
+            <Text style={{ fontSize: 20, fontWeight: 600, color: "#573826", marginBottom: 5, alignSelf: "flex-start" }}>
                 Kategorya
             </Text>
 
@@ -53,7 +53,6 @@ export default function HomeScreen( { navigation } ) {
                  <Text style={{ color: "#333", fontSize: 20, textAlign: "center" }}>
                     Iba pang mga kategorya
                 </Text>
-            
             </Card>
         </Container>
         
