@@ -69,6 +69,7 @@ export default function CustomBottomSheet({
       snapPoints={snapPointsMemo}
       onChange={handleSheetChanges}
       enablePanDownToClose={true}
+      containerStyle={styles.zIndex2}
       backgroundStyle={styles.bottomSheetBackground}
       handleIndicatorStyle={styles.handleIndicator}
     >
@@ -80,33 +81,18 @@ export default function CustomBottomSheet({
         )}
         <View style={styles.content}>
           {type === "social" ? (
-            <View style={{ paddingVertical: 10 }}>
-              <Text
-                style={{
-                  fontSize: 16,
-                  color: "#666",
-                  textAlign: "center",
-                  marginBottom: 20,
-                }}
-              >
+            <View style={styles.socialContainer}>
+              <Text style={styles.socialSubtitle}>
                 Piliin ang social media platform
               </Text>
 
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-around",
-                  marginBottom: 30,
-                }}
-              >
+              <View style={styles.socialGrid}>
                 <TouchableOpacity
                   onPress={() => handleSocialShare("facebook")}
                   style={styles.socialButton}
                 >
-                  <View
-                    style={[styles.socialIcon, { backgroundColor: "#1877F2" }]}
-                  >
-                    <Icon name="facebook" size={30} color="#fff" />
+                  <View style={[styles.socialIcon, { backgroundColor: "#1877F2" }]}>
+                    <Icon name="facebook" size={24} color="#fff" />
                   </View>
                   <Text style={styles.socialText}>Facebook</Text>
                 </TouchableOpacity>
@@ -115,30 +101,18 @@ export default function CustomBottomSheet({
                   onPress={() => handleSocialShare("twitter")}
                   style={styles.socialButton}
                 >
-                  <View
-                    style={[styles.socialIcon, { backgroundColor: "#1DA1F2" }]}
-                  >
-                    <Icon name="alternate-email" size={30} color="#fff" />
+                  <View style={[styles.socialIcon, { backgroundColor: "#1DA1F2" }]}>
+                    <Icon name="alternate-email" size={24} color="#fff" />
                   </View>
                   <Text style={styles.socialText}>Twitter</Text>
                 </TouchableOpacity>
-              </View>
 
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-around",
-                  marginBottom: 20,
-                }}
-              >
                 <TouchableOpacity
                   onPress={() => handleSocialShare("instagram")}
                   style={styles.socialButton}
                 >
-                  <View
-                    style={[styles.socialIcon, { backgroundColor: "#E4405F" }]}
-                  >
-                    <Icon name="instagram" size={30} color="#fff" />
+                  <View style={[styles.socialIcon, { backgroundColor: "#E4405F" }]}>
+                    <Icon name="camera-alt" size={24} color="#fff" />
                   </View>
                   <Text style={styles.socialText}>Instagram</Text>
                 </TouchableOpacity>
@@ -147,10 +121,8 @@ export default function CustomBottomSheet({
                   onPress={() => handleSocialShare("whatsapp")}
                   style={styles.socialButton}
                 >
-                  <View
-                    style={[styles.socialIcon, { backgroundColor: "#25D366" }]}
-                  >
-                    <Icon name="chat" size={30} color="#fff" />
+                  <View style={[styles.socialIcon, { backgroundColor: "#25D366" }]}>
+                    <Icon name="chat-bubble" size={24} color="#fff" />
                   </View>
                   <Text style={styles.socialText}>WhatsApp</Text>
                 </TouchableOpacity>
@@ -168,63 +140,87 @@ export default function CustomBottomSheet({
 const styles = StyleSheet.create({
   bottomSheetBackground: {
     backgroundColor: "#fff",
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: -2,
+      height: -4,
     },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5,
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 8,
   },
   handleIndicator: {
     backgroundColor: "#D1D5DB",
-    width: 40,
+    width: 48,
+    height: 4,
+    borderRadius: 2,
   },
   contentContainer: {
     flex: 1,
-    paddingHorizontal: 20,
+    paddingHorizontal: 24,
   },
   header: {
-    paddingVertical: 15,
+    paddingVertical: 20,
     borderBottomWidth: 1,
     borderBottomColor: "#F3F4F6",
-    marginBottom: 15,
+    marginBottom: 20,
   },
   title: {
-    fontSize: 18,
-    fontWeight: "600",
+    fontSize: 20,
+    fontWeight: "700",
     color: "#573826",
     textAlign: "center",
   },
   content: {
     flex: 1,
   },
+  socialContainer: {
+    paddingVertical: 16,
+  },
+  socialSubtitle: {
+    fontSize: 16,
+    color: "#6B7280",
+    textAlign: "center",
+    marginBottom: 32,
+    fontWeight: "500",
+  },
+  socialGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    gap: 16,
+  },
   socialButton: {
     alignItems: "center",
-    marginHorizontal: 10,
+    width: "45%",
+    paddingVertical: 16,
+    paddingHorizontal: 12,
   },
   socialIcon: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 8,
+    marginBottom: 12,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 3,
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+    elevation: 4,
   },
   socialText: {
-    fontSize: 12,
+    fontSize: 14,
     color: "#573826",
-    fontWeight: "500",
+    fontWeight: "600",
+  },
+  zIndex2: {
+    zIndex: 2,
+    elevation: 2,
   },
 });

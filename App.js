@@ -5,7 +5,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import HomeScreen from "./src/screen/home-screen";
-import LearnScreen from "./src/screen/learn-screen";
+import LessonScreen from "./src/screen/lesson-screen";
 import MerchScreen from "./src/screen/merch-screen";
 import BillScreen from "./src/screen/bill-screen";
 
@@ -19,7 +19,7 @@ export default function App() {
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name="HomeScreen" component={HomeScreen} />
-            <Stack.Screen name="LearnScreen" component={LearnScreen} />
+            <Stack.Screen name="LearnScreen" component={LessonScreen} />
             <Stack.Screen name="MerchScreen" component={MerchScreen} />
             <Stack.Screen name="BillScreen" component={BillScreen} />
           </Stack.Navigator>

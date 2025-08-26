@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: '45%',
     transform: [{ translateY: -20 }],
-    zIndex: 2,
+    zIndex: 1,
     backgroundColor: "rgba(0, 0, 0, 0.5)",
     borderRadius: 10,
     padding: 12,
