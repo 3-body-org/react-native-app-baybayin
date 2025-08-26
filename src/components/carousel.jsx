@@ -68,6 +68,15 @@ export default function Carousel({ data = [], navigation }) {
 
   return (
     <View style={styles.container}>
+      {currentIndex > 0 && (
+        <TouchableOpacity 
+          style={[styles.arrowButton, styles.arrowLeft]}
+          onPress={() => scrollToIndex(currentIndex - 1)}
+        >
+          <ChevronLeft size={24} color="#000" />
+        </TouchableOpacity>
+      )}
+      
       <FlatList
         ref={flatListRef}
         data={data}
@@ -86,6 +95,16 @@ export default function Carousel({ data = [], navigation }) {
         getItemLayout={getItemLayout}
         onScrollToIndexFailed={onScrollToIndexFailed}
       />
+
+      {currentIndex < data.length - 1 && (
+        <TouchableOpacity 
+          style={[styles.arrowButton, styles.arrowRight]}
+          onPress={() => scrollToIndex(currentIndex + 1)}
+        >
+          <ChevronRight size={24} color="#000" />
+        </TouchableOpacity>
+      )}
+      
       <Pagination 
         data={data} 
         currentIndex={currentIndex} 
@@ -120,12 +139,23 @@ const styles = StyleSheet.create({
     color: "#fff",
     marginTop: 5,
   },
-  arrow: {
-    position: "absolute",
-    top: "45%",
-    zIndex: 1,
-    padding: 10,
-    backgroundColor: "rgba(0,0,0,0.3)",
-    borderRadius: 50,
+  arrowButton: {
+    position: 'absolute',
+    top: '45%',
+    transform: [{ translateY: -20 }],
+    zIndex: 2,
+    backgroundColor: 'rgba(255, 255, 255, 0.6)',
+    borderRadius: 10,
+    padding: 12,
+    width: 30,
+    height: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  arrowLeft: {
+    left: 30,
+  },
+  arrowRight: {
+    right: 30,
   },
 });

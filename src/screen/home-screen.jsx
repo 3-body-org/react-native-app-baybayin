@@ -40,7 +40,7 @@ export default function HomeScreen({ navigation }) {
         </Text>
 
         <Image
-          source={require("../assets/magandang-araw.png")}
+          source={require("../assets/magandang-araw.webp")}
           resizeMode="contain"
           style={{ width: 160, height: 20, alignSelf: "flex-start" }}
         />
@@ -83,7 +83,7 @@ export default function HomeScreen({ navigation }) {
         </Text>
 
         <Image
-          source={require("../assets/kategorya.png")}
+          source={require("../assets/kategorya.webp")}
           resizeMode="contain"
           style={{ width: 100, height: 20, alignSelf: "flex-start"}}
         />
@@ -91,8 +91,8 @@ export default function HomeScreen({ navigation }) {
 
       <Carousel data={carouselData} navigation={navigation} />
 
-      <Container style={{ paddingTop: 0 }}>
-        <Card backgroundColor={"#573826"} style={{ marginTop: -40 }}>
+      <Container style={{ paddingVertical: 0, marginVertical: 0 }}>
+        <Card backgroundColor={"#573826"} style={{ marginTop: 0}}>
           <View
             style={{
               flexDirection: "row",
