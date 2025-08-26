@@ -36,7 +36,10 @@ export default function BillScreen() {
           DEVELOPMENT OF THE PHILIPPINES, PROVIDING FOR IT PROMOTION,
           PROTECTION, PRESERVATION AND CONSERVATION, AND FOR OTHER PURPOSES
         </Text>
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 250 }}
+        >
           <Accordion />
         </ScrollView>
       </Container>

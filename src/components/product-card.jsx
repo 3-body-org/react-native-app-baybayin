@@ -51,8 +51,10 @@ function ProductCard({ product }) {
             {product.name}
           </Text>
           <Text style={styles.price}>{product.price}</Text>
-          <TouchableOpacity style={styles.addButton}>
-            <Text style={styles.addButtonText}>Add to Cart</Text>
+          <TouchableOpacity style={styles.addButton}
+          onPress={() => setModalVisible(true)}
+          >
+            <Text style={styles.addButtonText}>View Image</Text>
           </TouchableOpacity>
         </View>
       </TouchableOpacity>

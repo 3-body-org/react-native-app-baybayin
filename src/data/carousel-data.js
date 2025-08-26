@@ -2,23 +2,23 @@ export const carouselData = [
   {
     id: 1,
     title: "Matuto ng Baybayin",
-    description: "Explore breathtaking landscapes and serene environments.",
-    backgroundImage: require("../assets/bg1.png"),
+    description: "Alamin ang kasaysayan, alpabeto, at pagsulat ng Baybayin sa mga aralin na madaling sundan.",
+    backgroundImage: require("../assets/bg1.webp"),
     screen: "LearnScreen",
   },
   {
     id: 2,
     title: "Merchs",
     description:
-      "Join us for thrilling adventures and unforgettable experiences.",
-    backgroundImage: require("../assets/bg2.jpg"),
+      "Tuklasin ang aming mga t-shirt at iba pang merch na may disenyong Baybayin.",
+    backgroundImage: require("../assets/bg2.webp"),
     screen: "MerchScreen",
   },
   {
     id: 3,
     title: "Baybayin Bill",
-    description: "Immerse yourself in diverse cultures and rich traditions.",
-    backgroundImage: require("../assets/bg1.png"),
+    description: "Basahin ang mahahalagang seksyon ng panukalang batas tungkol sa Baybayin.",
+    backgroundImage: require("../assets/bg3.webp"),
     screen: "BillScreen",
   },
 ];

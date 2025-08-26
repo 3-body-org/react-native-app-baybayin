@@ -52,13 +52,13 @@ export default function HomeScreen({ navigation }) {
             <Image
               source={require("../assets/boy.webp")}
               resizeMode="contain"
-              style={{ width: 110, height: 110 }}
+              style={{ width: 80, height: 80 }}
             />
             <Text
               style={{
                 color: "#333",
-                fontSize: 25,
-                fontWeight: "600",
+                fontSize: 22,
+                fontWeight: "500",
                 textAlign: "right",
                 marginTop: 10,
                 flexWrap: "wrap",
