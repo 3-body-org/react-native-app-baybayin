@@ -73,7 +73,7 @@ export default function Carousel({ data = [], navigation }) {
           style={[styles.arrowButton, styles.arrowLeft]}
           onPress={() => scrollToIndex(currentIndex - 1)}
         >
-          <ChevronLeft size={24} color="#000" />
+          <ChevronLeft size={24} color="white" />
         </TouchableOpacity>
       )}
       
@@ -101,7 +101,7 @@ export default function Carousel({ data = [], navigation }) {
           style={[styles.arrowButton, styles.arrowRight]}
           onPress={() => scrollToIndex(currentIndex + 1)}
         >
-          <ChevronRight size={24} color="#000" />
+          <ChevronRight size={24} color="white" />
         </TouchableOpacity>
       )}
       
@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
   },
   overlay: {
     backgroundColor: "rgba(0,0,0,0.4)",
-    padding: 20,
+    padding: 15,
     borderBottomLeftRadius: 15,
     borderBottomRightRadius: 15,
   },
@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
     top: '45%',
     transform: [{ translateY: -20 }],
     zIndex: 2,
-    backgroundColor: 'rgba(255, 255, 255, 0.6)',
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
     borderRadius: 10,
     padding: 12,
     width: 30,
@@ -159,3 +159,4 @@ const styles = StyleSheet.create({
     right: 30,
   },
 });
+ChevronRight

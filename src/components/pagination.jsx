@@ -24,7 +24,7 @@ const Pagination = ({ data, currentIndex, scrollToIndex }) => {
                 {
                   transform: [{ scale }],
                   opacity,
-                  backgroundColor: isActive ? "#573826" : "rgba(0, 0, 0, 0.2)",
+                  backgroundColor: isActive ? "#573826" : "rgba(47, 78, 43, 0.2)",
                 },
               ]}
             />
