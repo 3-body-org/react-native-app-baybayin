@@ -15,7 +15,7 @@ export default function MerchScreen() {
       <Container>
         <BackButton />
         <Card backgroundColor={"#573826"}>
-          <Text style={styles.headerText}>Merchs</Text>
+          <Text style={styles.headerText}>Mga Produkto</Text>
         </Card>
         <ScrollView
           contentContainerStyle={[
