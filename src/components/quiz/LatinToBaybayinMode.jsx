@@ -8,7 +8,7 @@ import {
   Alert 
 } from 'react-native';
 import QuizTile from './QuizTile';
-import { baybayinCharacters } from '../../data/quiz-data';
+import { baybayinCharacters, pangaltasReplacement } from '../../data/quiz-data';
 
 const LatinToBaybayinMode = ({ 
   questionData, 
@@ -19,6 +19,11 @@ const LatinToBaybayinMode = ({
 }) => {
   const [selectedCharacters, setSelectedCharacters] = useState([]);
   const [availableCharacters, setAvailableCharacters] = useState([]);
+
+  // Function to replace pangaltas with replacement symbol for display
+  const replacePangaltasForDisplay = (char) => {
+    return char === '᜔' ? pangaltasReplacement : char;
+  };
 
   // Generate available characters for the current question
   const generateAvailableCharacters = useMemo(() => {
@@ -33,7 +38,7 @@ const LatinToBaybayinMode = ({
     // Add some random characters to make it challenging
     const allChars = baybayinCharacters;
     
-    // Add 3-5 random incorrect characters
+    // Add 3-5 random incorrect characters (including pangaltas)
     const randomChars = allChars
       .filter(char => !correctChars.includes(char))
       .sort(() => 0.5 - Math.random())
@@ -133,7 +138,7 @@ const LatinToBaybayinMode = ({
           {selectedCharacters.map((character, index) => (
             <QuizTile
               key={`selected-${index}`}
-              character={character}
+              character={replacePangaltasForDisplay(character)}
               onPress={() => handleRemoveCharacter(index)}
               isSelected={true}
               isCorrect={getSelectedCharacterStatus(character, index) === 'correct'}
@@ -166,10 +171,12 @@ const LatinToBaybayinMode = ({
             const isUsed = selectedCharacters.includes(character);
             const status = getCharacterStatus(character, index);
             
+
+            
             return (
               <QuizTile
                 key={`available-${index}`}
-                character={character}
+                character={replacePangaltasForDisplay(character)}
                 onPress={() => handleCharacterPress(character)}
                 disabled={isUsed || showFeedback}
                 isCorrect={status === 'correct'}

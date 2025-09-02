@@ -53,24 +53,14 @@ const quizData = {
     "ᜐ", "ᜐᜒ", "ᜐᜓ", // SA, SE/SI, SO/SU
     "ᜑ", "ᜑᜒ", "ᜑᜓ", // HA, HE/HI, HO/HU
   
-    // KATINIG + PANGALTAS (KRUS)
-    "ᜊ᜔", // B
-    "ᜃ᜔", // K
-    "ᜄ᜔", // G
-    "ᜅ᜔", // NG
-    "ᜆ᜔", // T
-    "ᜇ᜔", // D / R
-    "ᜈ᜔", // N
-    "ᜉ᜔", // P
-    "ᜎ᜔", // L
-    "ᜋ᜔", // M
-    "ᜌ᜔", // Y
-    "ᜏ᜔", // W
-    "ᜐ᜔", // S
-    "ᜑ᜔", // H
+    // PANGALTAS (KRUS) - Individual tiles
+    "᜔" // Pangaltas
   ];
   
   
+
+// Pangaltas replacement symbol for display
+const pangaltasReplacement = "×"; // Using × symbol for better visibility
 
 // Game configuration
 const gameConfig = {
@@ -88,5 +78,5 @@ const gameConfig = {
 
 
 
-export { quizData, gameConfig, baybayinCharacters };
+export { quizData, gameConfig, baybayinCharacters, pangaltasReplacement };
   
