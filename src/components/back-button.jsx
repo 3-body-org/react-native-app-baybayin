@@ -12,7 +12,7 @@ export default function BackButton() {
     >
       <View style={styles.container}>
         <Undo2 size={16} color="#573826" style={{ marginRight: 5 }} />
-        <Text>Bumalik</Text>
+        <Text style={styles.text}>Bumalik</Text>
       </View>
     </TouchableOpacity>
   );
@@ -22,6 +22,10 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: "center",
+  },
+  text: {
+    color: "#573826",
+    fontSize: 14,
   },
   backButton: {
     alignSelf: "flex-start",

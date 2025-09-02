@@ -8,7 +8,7 @@ import HomeScreen from "./src/screen/home-screen";
 import LessonScreen from "./src/screen/lesson-screen";
 import MerchScreen from "./src/screen/merch-screen";
 import BillScreen from "./src/screen/bill-screen";
-
+import PDFViewerScreen from "./src/screen/bill-screen";
 const Stack = createStackNavigator();
 
 export default function App() {
@@ -22,6 +22,7 @@ export default function App() {
             <Stack.Screen name="LearnScreen" component={LessonScreen} />
             <Stack.Screen name="MerchScreen" component={MerchScreen} />
             <Stack.Screen name="BillScreen" component={BillScreen} />
+            <Stack.Screen name="PDFViewerScreen" component={PDFViewerScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </GestureHandlerRootView>
