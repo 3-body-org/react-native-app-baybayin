@@ -17,6 +17,10 @@ export const useQuizGame = () => {
     endTime: null
   });
 
+  // Question pool for current game
+  const [questionPool, setQuestionPool] = useState([]);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+
   // Current question data
   const [currentQuestionData, setCurrentQuestionData] = useState(null);
   const [userAnswer, setUserAnswer] = useState('');
@@ -30,13 +34,25 @@ export const useQuizGame = () => {
     return quizData[levelKey] || quizData.level1;
   }, [gameState.currentLevel]);
 
-  // Get random question from current level
-  const getRandomQuestion = useCallback(() => {
+  // Create shuffled question pool for the game
+  const createQuestionPool = useCallback(() => {
     const levelData = getCurrentLevelData();
     const availableWords = levelData.words;
-    const randomIndex = Math.floor(Math.random() * availableWords.length);
-    return availableWords[randomIndex];
+    
+    // Create a pool of 10 questions (or all available if less than 10)
+    const poolSize = Math.min(10, availableWords.length);
+    const shuffledWords = [...availableWords].sort(() => Math.random() - 0.5);
+    
+    return shuffledWords.slice(0, poolSize);
   }, [getCurrentLevelData]);
+
+  // Get current question from pool
+  const getCurrentQuestion = useCallback(() => {
+    if (questionPool.length > 0 && currentQuestionIndex < questionPool.length) {
+      return questionPool[currentQuestionIndex];
+    }
+    return null;
+  }, [questionPool, currentQuestionIndex]);
 
   // Start new game
   const startGame = useCallback((mode = 'latin-to-baybayin') => {
@@ -55,17 +71,33 @@ export const useQuizGame = () => {
     };
     
     setGameState(newGameState);
-    loadNextQuestion();
-  }, []);
+    
+    // Create shuffled question pool
+    const pool = createQuestionPool();
+    setQuestionPool(pool);
+    setCurrentQuestionIndex(0);
+    
+    // Load first question
+    if (pool.length > 0) {
+      setCurrentQuestionData(pool[0]);
+      setUserAnswer('');
+      setShowFeedback(false);
+      setIsCorrect(false);
+    }
+  }, [createQuestionPool]);
 
   // Load next question
   const loadNextQuestion = useCallback(() => {
-    const questionData = getRandomQuestion();
-    setCurrentQuestionData(questionData);
-    setUserAnswer('');
-    setShowFeedback(false);
-    setIsCorrect(false);
-  }, [getRandomQuestion]);
+    const nextIndex = currentQuestionIndex + 1;
+    
+    if (nextIndex < questionPool.length) {
+      setCurrentQuestionIndex(nextIndex);
+      setCurrentQuestionData(questionPool[nextIndex]);
+      setUserAnswer('');
+      setShowFeedback(false);
+      setIsCorrect(false);
+    }
+  }, [currentQuestionIndex, questionPool]);
 
   // Submit answer
   const submitAnswer = useCallback((answer) => {
@@ -102,7 +134,7 @@ export const useQuizGame = () => {
       }
       
       // Check if game is complete
-      if (newState.lives <= 0 || newState.totalQuestions >= 10) {
+      if (newState.lives <= 0 || newState.totalQuestions >= questionPool.length) {
         newState.isGameActive = false;
         newState.isGameComplete = true;
         newState.endTime = Date.now();
@@ -111,7 +143,7 @@ export const useQuizGame = () => {
       return newState;
     });
 
-  }, [currentQuestionData, showFeedback]);
+  }, [currentQuestionData, showFeedback, questionPool]);
 
   // Check if answer is correct
   const checkAnswer = useCallback((answer) => {
@@ -146,7 +178,8 @@ export const useQuizGame = () => {
     lives: gameState.lives,
     currentLevel: gameState.currentLevel,
     totalQuestions: gameState.totalQuestions,
-    correctAnswers: gameState.correctAnswers
+    correctAnswers: gameState.correctAnswers,
+    totalQuestionsInPool: questionPool.length
   };
 
   return {

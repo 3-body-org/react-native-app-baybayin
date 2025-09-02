@@ -128,7 +128,7 @@ const QuizScreen = ({ navigation, initialMode = null }) => {
           1. Piliin ang mode: Latin → Baybayin o Baybayin → Latin
         </Text>
         <Text style={styles.instruction}>
-          2. Sagutin ang 10 tanong
+          2. Sagutin ang mga tanong (walang paulit-ulit)
         </Text>
         <Text style={styles.instruction}>
           3. Makakuha ng 10 points bawat tamang sagot
@@ -154,7 +154,7 @@ const QuizScreen = ({ navigation, initialMode = null }) => {
       
       <ProgressBar
         current={gameStats.totalQuestions}
-        total={10}
+        total={gameStats.totalQuestionsInPool}
         label="Mga Tanong"
         showPercentage={false}
       />
@@ -209,7 +209,7 @@ const QuizScreen = ({ navigation, initialMode = null }) => {
               </View>
               <View style={styles.statRow}>
                 <Text style={styles.statLabel}>Correct Answers:</Text>
-                <Text style={styles.statValue}>{gameStats.correctAnswers}/10</Text>
+                <Text style={styles.statValue}>{gameStats.correctAnswers}/{gameStats.totalQuestionsInPool}</Text>
               </View>
             </View>
             
