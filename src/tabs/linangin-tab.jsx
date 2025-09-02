@@ -110,7 +110,7 @@ export default function LinanginTab() {
         <Text style={styles.tipsTitle}>Tips to use:</Text>
         <Text style={styles.tipsText}>
           Use the flashcard to challenge or quiz yourself without pressure. 
-          If in latin script try to write the equivalent baybayin script. 
+          If in latin script try to write the equivalent baybayin script. {'\n'}
           Modes: Choose between shuffled and in order for your learning experience.
         </Text>
       </View>
@@ -269,7 +269,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 16,
     marginBottom: 16,
-    borderLeftWidth: 4,
+    borderLeftWidth: 2,
     borderLeftColor: "#573826",
   },
   tipsTitle: {

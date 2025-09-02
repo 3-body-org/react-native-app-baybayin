@@ -31,12 +31,7 @@ const LatinToBaybayinMode = ({
     const chars = [...correctChars];
     
     // Add some random characters to make it challenging
-    const allChars = [
-      ...baybayinCharacters.patinig,
-      ...baybayinCharacters.katinig,
-      ...baybayinCharacters.kudlit,
-      ...baybayinCharacters.special
-    ].map(char => char.character);
+    const allChars = baybayinCharacters.katinig.map(char => char.character);
     
     // Add 3-5 random incorrect characters
     const randomChars = allChars
