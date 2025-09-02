@@ -137,7 +137,7 @@ const QuizScreen = ({ navigation, initialMode = null }) => {
           4. May 3 buhay - mawawala ang isa sa maling sagot
         </Text>
         <Text style={styles.instruction}>
-          5. Makakakita ng iba't ibang difficulty levels!
+          5. Matuto ng mga salitang Baybayin!
         </Text>
       </View>
 
@@ -149,7 +149,6 @@ const QuizScreen = ({ navigation, initialMode = null }) => {
       <GameStats
         score={gameStats.score}
         lives={gameStats.lives}
-        currentQuestionData={currentQuestionData}
       />
       
       <ProgressBar

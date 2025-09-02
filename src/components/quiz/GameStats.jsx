@@ -3,8 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 
 const GameStats = ({ 
   score, 
-  lives, 
-  currentQuestionData 
+  lives
 }) => {
   const getLivesColor = () => {
     if (lives >= 3) return '#4CAF50';
@@ -12,13 +11,7 @@ const GameStats = ({
     return '#F44336';
   };
 
-  const getDifficultyColor = () => {
-    const difficulty = currentQuestionData?.difficulty;
-    if (difficulty === 'Easy') return '#4CAF50';
-    if (difficulty === 'Average') return '#FF9800';
-    if (difficulty === 'Hard') return '#F44336';
-    return '#2196F3';
-  };
+
 
 
 
@@ -34,13 +27,6 @@ const GameStats = ({
           <Text style={styles.statLabel}>Lives</Text>
           <Text style={[styles.statValue, { color: getLivesColor() }]}>
             {'❤️'.repeat(lives)}
-          </Text>
-        </View>
-        
-        <View style={styles.statItem}>
-          <Text style={styles.statLabel}>Difficulty</Text>
-          <Text style={[styles.statValue, { color: getDifficultyColor() }]}>
-            {currentQuestionData?.difficulty || 'Easy'}
           </Text>
         </View>
       </View>

@@ -1,32 +1,27 @@
 const quizData = {
   words: [
-    // Easy (1-syllable words)
-    { latin: "AKO", baybayin: "ᜀᜃᜓ", meaning: "I, me", difficulty: "Easy" },
-    { latin: "IKAW", baybayin: "ᜁᜃᜏ", meaning: "You", difficulty: "Easy" },
-    { latin: "MATA", baybayin: "ᜋᜆ", meaning: "Eye", difficulty: "Easy" },
-    { latin: "TAO", baybayin: "ᜆᜂ", meaning: "Person", difficulty: "Easy" },
-    { latin: "BUKO", baybayin: "ᜊᜓᜃᜓ", meaning: "Coconut", difficulty: "Easy" },
-    { latin: "GABI", baybayin: "ᜄᜊᜁ", meaning: "Night", difficulty: "Easy" },
-    { latin: "HALIK", baybayin: "ᜑᜎᜒᜃ᜔", meaning: "Kiss", difficulty: "Easy" },
-    
-    // Medium (2-syllable words)
-    { latin: "KAMAY", baybayin: "ᜃᜋᜌ᜔", meaning: "Hand", difficulty: "Average" },
-    { latin: "BAHAY", baybayin: "ᜊᜑᜌ᜔", meaning: "House", difficulty: "Average" },
-    { latin: "MAGANDA", baybayin: "ᜋᜄᜈ᜔ᜇᜀ", meaning: "Beautiful", difficulty: "Average" },
-    { latin: "MABUTI", baybayin: "ᜋᜊᜓᜆᜒ", meaning: "Good", difficulty: "Average" },
-    { latin: "UMAGA", baybayin: "ᜂᜋᜄᜀ", meaning: "Morning", difficulty: "Average" },
-    { latin: "TAON", baybayin: "ᜆᜂᜈ᜔", meaning: "Year", difficulty: "Average" },
-    { latin: "BAYAN", baybayin: "ᜊᜌᜈ᜔", meaning: "Country", difficulty: "Average" },
-    { latin: "MAGULANG", baybayin: "ᜋᜄᜓᜎᜅ᜔", meaning: "Parent", difficulty: "Average" },
-    { latin: "KAPITBAHAY", baybayin: "ᜃᜉᜒᜆ᜔ᜊᜑᜌ᜔", meaning: "Neighbor", difficulty: "Average" },
-    { latin: "KAPATID", baybayin: "ᜃᜉᜆᜒᜇ᜔", meaning: "Sibling", difficulty: "Average" },
-    
-    // Hard (3+ syllable words)
-    { latin: "KAPAMILYA", baybayin: "ᜃᜉᜋᜒᜎᜌ", meaning: "Family", difficulty: "Hard" },
-    { latin: "KAPATIRAN", baybayin: "ᜃᜉᜆᜒᜇᜈ᜔", meaning: "Brotherhood", difficulty: "Hard" },
-    { latin: "KASALANAN", baybayin: "ᜃᜐᜎᜈᜈ᜔", meaning: "Sin", difficulty: "Hard" },
-    { latin: "KAPANGYARIHAN", baybayin: "ᜃᜉᜅ᜔ᜌᜇᜒᜑᜈ᜔", meaning: "Power", difficulty: "Hard" },
-    { latin: "KAPALARAN", baybayin: "ᜃᜉᜎᜇᜈ᜔", meaning: "Destiny", difficulty: "Hard" }
+    { latin: "AKO", baybayin: "ᜀᜃᜓ", meaning: "I, me" },
+    { latin: "IKAW", baybayin: "ᜁᜃᜏ", meaning: "You" },
+    { latin: "MATA", baybayin: "ᜋᜆ", meaning: "Eye" },
+    { latin: "TAO", baybayin: "ᜆᜂ", meaning: "Person" },
+    { latin: "BUKO", baybayin: "ᜊᜓᜃᜓ", meaning: "Coconut" },
+    { latin: "GABI", baybayin: "ᜄᜊᜁ", meaning: "Night" },
+    { latin: "HALIK", baybayin: "ᜑᜎᜒᜃ᜔", meaning: "Kiss" },
+    { latin: "KAMAY", baybayin: "ᜃᜋᜌ᜔", meaning: "Hand" },
+    { latin: "BAHAY", baybayin: "ᜊᜑᜌ᜔", meaning: "House" },
+    { latin: "MAGANDA", baybayin: "ᜋᜄᜈ᜔ᜇᜀ", meaning: "Beautiful" },
+    { latin: "MABUTI", baybayin: "ᜋᜊᜓᜆᜒ", meaning: "Good" },
+    { latin: "UMAGA", baybayin: "ᜂᜋᜄᜀ", meaning: "Morning" },
+    { latin: "TAON", baybayin: "ᜆᜂᜈ᜔", meaning: "Year" },
+    { latin: "BAYAN", baybayin: "ᜊᜌᜈ᜔", meaning: "Country" },
+    { latin: "MAGULANG", baybayin: "ᜋᜄᜓᜎᜅ᜔", meaning: "Parent" },
+    { latin: "KAPITBAHAY", baybayin: "ᜃᜉᜒᜆ᜔ᜊᜑᜌ᜔", meaning: "Neighbor" },
+    { latin: "KAPATID", baybayin: "ᜃᜉᜆᜒᜇ᜔", meaning: "Sibling" },
+    { latin: "KAPAMILYA", baybayin: "ᜃᜉᜋᜒᜎᜌ", meaning: "Family" },
+    { latin: "KAPATIRAN", baybayin: "ᜃᜉᜆᜒᜇᜈ᜔", meaning: "Brotherhood" },
+    { latin: "KASALANAN", baybayin: "ᜃᜐᜎᜈᜈ᜔", meaning: "Sin" },
+    { latin: "KAPANGYARIHAN", baybayin: "ᜃᜉᜅ᜔ᜌᜇᜒᜑᜈ᜔", meaning: "Power" },
+    { latin: "KAPALARAN", baybayin: "ᜃᜉᜎᜇᜈ᜔", meaning: "Destiny" }
   ]
 };
   
