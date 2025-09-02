@@ -6,6 +6,8 @@ import {
   View,
   StyleSheet,
   ActivityIndicator,
+  Linking,
+  Alert,
 } from "react-native";
 import * as Font from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
@@ -27,6 +29,19 @@ function ProductCard({ product }) {
 
     loadFont();
   }, []);
+
+  const handleBuyButton = async () => {
+    try {
+      // Open URL directly without validation (more reliable)
+      await Linking.openURL(product.link);
+    } catch (error) {
+      console.log("Linking error:", error);
+      Alert.alert(
+        "Error",
+        "Failed to open the link. Please try again later."
+      );
+    }
+  };
 
   if (!fontLoaded) {
     return (
@@ -52,9 +67,9 @@ function ProductCard({ product }) {
           </Text>
           <Text style={styles.price}>{product.price}</Text>
           <TouchableOpacity style={styles.addButton}
-          onPress={() => setModalVisible(true)}
+          onPress={handleBuyButton}
           >
-            <Text style={styles.addButtonText}>View Image</Text>
+            <Text style={styles.addButtonText}>Bilhin</Text>
           </TouchableOpacity>
         </View>
       </TouchableOpacity>
@@ -152,6 +167,7 @@ ProductCard.propTypes = {
         }),
       ),
     ]).isRequired,
+    link: PropTypes.string.isRequired,
   }).isRequired,
 };
 
