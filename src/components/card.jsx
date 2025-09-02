@@ -1,10 +1,9 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 
-// pede icustomize si backgroundColor kapag irereuse
-export default function Card({ children, backgroundColor }) {
+export default function Card({ children, backgroundColor, style }) {
   return (
-    <View style={[styles.card, { backgroundColor }]}>
+    <View style={[styles.card, { backgroundColor }, style]}>
       <View style={styles.content}>{children}</View>
     </View>
   );
