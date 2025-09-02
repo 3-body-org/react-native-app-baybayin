@@ -90,37 +90,7 @@ const gameConfig = {
   }
 };
 
-// Achievements data
-const achievements = {
-  'baybayin-beginner': {
-    id: 'baybayin-beginner',
-    title: 'Baybayin Beginner',
-    description: 'First correct answer!',
-    icon: '🌱',
-    unlocked: false
-  },
-  'speed-demon': {
-    id: 'speed-demon',
-    title: 'Speed Demon',
-    description: '5 correct answers in a row under 10 seconds each',
-    icon: '⚡',
-    unlocked: false
-  },
-  'translation-master': {
-    id: 'translation-master',
-    title: 'Translation Master',
-    description: 'Perfect score on all questions',
-    icon: '🏆',
-    unlocked: false
-  },
-  'level-master': {
-    id: 'level-master',
-    title: 'Level Master',
-    description: 'Reached the highest level',
-    icon: '👑',
-    unlocked: false
-  }
-};
 
-export { quizData, gameConfig, achievements, baybayinCharacters };
+
+export { quizData, gameConfig, baybayinCharacters };
   

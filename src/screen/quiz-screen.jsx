@@ -12,7 +12,7 @@ import { useQuizGame } from '../hooks/useQuizGame';
 import GameStats from '../components/quiz/GameStats';
 import ProgressBar from '../components/quiz/ProgressBar';
 import FeedbackModal from '../components/quiz/FeedbackModal';
-import AchievementBadge from '../components/quiz/AchievementBadge';
+
 import LatinToBaybayinMode from '../components/quiz/LatinToBaybayinMode';
 import BaybayinToLatinMode from '../components/quiz/BaybayinToLatinMode';
 
@@ -30,7 +30,7 @@ const QuizScreen = ({ navigation, initialMode = null }) => {
     restartGame
   } = useQuizGame();
 
-  const [showAchievements, setShowAchievements] = useState(false);
+
 
   const handleStartGame = (mode) => {
     startGame(mode);
@@ -177,12 +177,7 @@ const QuizScreen = ({ navigation, initialMode = null }) => {
           <Text style={styles.controlButtonText}>Ulitin</Text>
         </TouchableOpacity>
         
-        <TouchableOpacity
-          style={styles.controlButton}
-          onPress={() => setShowAchievements(true)}
-        >
-          <Text style={styles.controlButtonText}>Mga Achievement</Text>
-        </TouchableOpacity>
+
       </View>
     </View>
   );
@@ -227,20 +222,7 @@ const QuizScreen = ({ navigation, initialMode = null }) => {
               </View>
             </View>
             
-            {gameStats.unlockedAchievements.length > 0 && (
-              <View style={styles.achievementsSection}>
-                <Text style={styles.achievementsTitle}>New Achievements!</Text>
-                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                  {gameStats.unlockedAchievements.map((achievement) => (
-                    <AchievementBadge
-                      key={achievement.id}
-                      achievement={achievement}
-                      size="small"
-                    />
-                  ))}
-                </ScrollView>
-              </View>
-            )}
+
             
             <View style={styles.congratulationsButtons}>
               <TouchableOpacity
@@ -261,29 +243,7 @@ const QuizScreen = ({ navigation, initialMode = null }) => {
         </View>
       )}
       
-      {/* Achievements Modal */}
-      {showAchievements && (
-        <View style={styles.achievementsModal}>
-          <View style={styles.achievementsContent}>
-            <Text style={styles.achievementsTitle}>Mga Achievement</Text>
-            <ScrollView>
-              {gameStats.unlockedAchievements.map((achievement) => (
-                <AchievementBadge
-                  key={achievement.id}
-                  achievement={achievement}
-                  size="medium"
-                />
-              ))}
-            </ScrollView>
-            <TouchableOpacity
-              style={styles.closeButton}
-              onPress={() => setShowAchievements(false)}
-            >
-              <Text style={styles.closeButtonText}>Isara</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      )}
+
     </SafeAreaView>
   );
 };
@@ -291,7 +251,6 @@ const QuizScreen = ({ navigation, initialMode = null }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-   
   },
   startContainer: {
     flex: 1,
@@ -395,43 +354,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
   },
-  achievementsModal: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  achievementsContent: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    padding: 20,
-    width: '90%',
-    maxHeight: '80%',
-  },
-  achievementsTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#333',
-    textAlign: 'center',
-    marginBottom: 16,
-  },
-  closeButton: {
-    backgroundColor: '#4CAF50',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 20,
-    alignSelf: 'center',
-    marginTop: 16,
-  },
-  closeButtonText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: '600',
-  },
+
   congratulationsModal: {
     position: 'absolute',
     top: 0,
@@ -499,17 +422,7 @@ const styles = StyleSheet.create({
     color: '#4CAF50',
     fontWeight: 'bold',
   },
-  achievementsSection: {
-    width: '100%',
-    marginBottom: 20,
-  },
-  achievementsTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
-    textAlign: 'center',
-    marginBottom: 12,
-  },
+
   congratulationsButtons: {
     flexDirection: 'row',
     gap: 12,

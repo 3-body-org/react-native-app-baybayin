@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { quizData, gameConfig, achievements } from '../data/quiz-data';
+import { quizData, gameConfig } from '../data/quiz-data';
 
 export const useQuizGame = () => {
   // Game state
@@ -24,7 +24,7 @@ export const useQuizGame = () => {
   const [userAnswer, setUserAnswer] = useState('');
   const [showFeedback, setShowFeedback] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
-  const [unlockedAchievements, setUnlockedAchievements] = useState([]);
+
 
   // Get current level data
   const getCurrentLevelData = useCallback(() => {
@@ -59,7 +59,6 @@ export const useQuizGame = () => {
     };
     
     setGameState(newGameState);
-    setUnlockedAchievements([]);
     loadNextQuestion();
   }, []);
 
@@ -137,8 +136,7 @@ export const useQuizGame = () => {
       return newState;
     });
 
-    // Check achievements
-    checkAchievements(isAnswerCorrect, answerTime);
+
   }, [currentQuestionData, showFeedback, gameState.timeRemaining]);
 
   // Check if answer is correct
@@ -152,42 +150,7 @@ export const useQuizGame = () => {
     }
   }, [currentQuestionData, gameState.gameMode]);
 
-  // Check achievements
-  const checkAchievements = useCallback((isCorrect, answerTime) => {
-    const newAchievements = [];
-    
-    // Baybayin Beginner
-    if (isCorrect && gameState.correctAnswers === 0) {
-      newAchievements.push(achievements['baybayin-beginner']);
-    }
-    
-    // Speed Demon
-    if (isCorrect && answerTime <= 10 && gameState.streak >= 5) {
-      newAchievements.push(achievements['speed-demon']);
-    }
-    
-    // Translation Master
-    if (gameState.correctAnswers >= 10 && 
-        (gameState.correctAnswers / gameState.totalQuestions) === 1) {
-      newAchievements.push(achievements['translation-master']);
-    }
-    
-    // Level Master
-    if (gameState.currentLevel >= gameConfig.levels.maxLevel) {
-      newAchievements.push(achievements['level-master']);
-    }
-    
-    if (newAchievements.length > 0) {
-      setUnlockedAchievements(prev => {
-        // Filter out achievements that are already unlocked
-        const existingIds = prev.map(achievement => achievement.id);
-        const uniqueNewAchievements = newAchievements.filter(
-          achievement => !existingIds.includes(achievement.id)
-        );
-        return [...prev, ...uniqueNewAchievements];
-      });
-    }
-  }, [gameState.correctAnswers, gameState.totalQuestions, gameState.streak, gameState.currentLevel]);
+
 
   // Continue to next question
   const continueToNext = useCallback(() => {
@@ -238,8 +201,7 @@ export const useQuizGame = () => {
     currentLevel: gameState.currentLevel,
     totalQuestions: gameState.totalQuestions,
     correctAnswers: gameState.correctAnswers,
-    timeRemaining: gameState.timeRemaining,
-    unlockedAchievements
+    timeRemaining: gameState.timeRemaining
   };
 
   return {
