@@ -6,6 +6,7 @@ import {
   TouchableOpacity 
 } from 'react-native';
 import QuizTile from './QuizTile';
+import { quizData } from '../../data/quiz-data';
 
 const BaybayinToLatinMode = ({ 
   questionData, 
@@ -17,35 +18,20 @@ const BaybayinToLatinMode = ({
   const [selectedAnswer, setSelectedAnswer] = useState('');
   const [options, setOptions] = useState([]);
 
-  // Generate multiple choice options
+  // Generate multiple choice options using real words
   const generateOptions = useMemo(() => {
     if (!questionData) return [];
     
     const correctAnswer = questionData.latin;
     const options = [correctAnswer];
     
-    // Generate similar but incorrect options
-    const similarWords = [
-      // Similar words with one letter different
-      correctAnswer.split('').map((char, index) => {
-        if (index === 0) return char;
-        const alternatives = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-        return alternatives[Math.floor(Math.random() * alternatives.length)];
-      }).join(''),
-      
-      // Similar words with different ending
-      correctAnswer.slice(0, -1) + 'X',
-      
-      // Similar words with different beginning
-      'X' + correctAnswer.slice(1),
-      
-      // Completely different but same length
-      'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').slice(0, correctAnswer.length).join('')
-    ];
+    // Get all other words from quiz data (excluding the correct answer)
+    const otherWords = quizData.words
+      .map(word => word.latin)
+      .filter(word => word !== correctAnswer);
     
-    // Add 2-3 random options
-    const randomOptions = similarWords
-      .filter(option => option !== correctAnswer)
+    // Select 3 random words from the other words
+    const randomOptions = otherWords
       .sort(() => 0.5 - Math.random())
       .slice(0, 3);
     
@@ -92,7 +78,6 @@ const BaybayinToLatinMode = ({
           Piliin ang tamang Latin na salita para sa Baybayin na:
         </Text>
         <Text style={styles.baybayinWord}>{questionData.baybayin}</Text>
-        <Text style={styles.meaning}>({questionData.meaning})</Text>
       </View>
 
       {/* Options */}
@@ -138,7 +123,7 @@ const BaybayinToLatinMode = ({
             Tamang sagot: {questionData.latin}
           </Text>
           <Text style={styles.explanation}>
-            Ang Baybayin na "{questionData.baybayin}" ay nangangahulugang "{questionData.meaning}" sa Latin na "{questionData.latin}".
+            Ang Baybayin na "{questionData.baybayin}" ay katumbas ng Latin na "{questionData.latin}".
           </Text>
         </View>
       )}
@@ -176,11 +161,6 @@ const styles = StyleSheet.create({
     color: '#333',
     marginBottom: 5,
     textAlign: 'center',
-  },
-  meaning: {
-    fontSize: 14,
-    color: '#888',
-    fontStyle: 'italic',
   },
   optionsContainer: {
     marginBottom: 20,
