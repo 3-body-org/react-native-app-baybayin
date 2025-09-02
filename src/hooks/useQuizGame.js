@@ -4,7 +4,6 @@ import { quizData, gameConfig } from '../data/quiz-data';
 export const useQuizGame = () => {
   // Game state
   const [gameState, setGameState] = useState({
-    currentLevel: 1,
     currentQuestion: 0,
     score: 0,
     lives: gameConfig.lives.maxLives,
@@ -28,23 +27,15 @@ export const useQuizGame = () => {
   const [isCorrect, setIsCorrect] = useState(false);
 
 
-  // Get current level data
-  const getCurrentLevelData = useCallback(() => {
-    const levelKey = `level${gameState.currentLevel}`;
-    return quizData[levelKey] || quizData.level1;
-  }, [gameState.currentLevel]);
-
   // Create shuffled question pool for the game
   const createQuestionPool = useCallback(() => {
-    const levelData = getCurrentLevelData();
-    const availableWords = levelData.words;
+    const availableWords = quizData.words;
     
-    // Create a pool of 10 questions (or all available if less than 10)
-    const poolSize = Math.min(10, availableWords.length);
+    // Always create exactly 10 questions
     const shuffledWords = [...availableWords].sort(() => Math.random() - 0.5);
     
-    return shuffledWords.slice(0, poolSize);
-  }, [getCurrentLevelData]);
+    return shuffledWords.slice(0, gameConfig.questions.totalQuestions);
+  }, []);
 
   // Get current question from pool
   const getCurrentQuestion = useCallback(() => {
@@ -57,7 +48,6 @@ export const useQuizGame = () => {
   // Start new game
   const startGame = useCallback((mode = 'latin-to-baybayin') => {
     const newGameState = {
-      currentLevel: 1,
       currentQuestion: 0,
       score: 0,
       lives: gameConfig.lives.maxLives,
@@ -127,14 +117,8 @@ export const useQuizGame = () => {
       
       newState.totalQuestions += 1;
       
-      // Check if level should be unlocked
-      if (newState.correctAnswers >= gameConfig.levels.unlockThreshold && 
-          newState.currentLevel < gameConfig.levels.maxLevel) {
-        newState.currentLevel += 1;
-      }
-      
       // Check if game is complete
-      if (newState.lives <= 0 || newState.totalQuestions >= questionPool.length) {
+      if (newState.lives <= 0 || newState.totalQuestions >= gameConfig.questions.totalQuestions) {
         newState.isGameActive = false;
         newState.isGameComplete = true;
         newState.endTime = Date.now();
@@ -176,10 +160,9 @@ export const useQuizGame = () => {
   const gameStats = {
     score: gameState.score,
     lives: gameState.lives,
-    currentLevel: gameState.currentLevel,
     totalQuestions: gameState.totalQuestions,
     correctAnswers: gameState.correctAnswers,
-    totalQuestionsInPool: questionPool.length
+    totalQuestionsInPool: gameConfig.questions.totalQuestions
   };
 
   return {

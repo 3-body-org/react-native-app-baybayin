@@ -4,12 +4,20 @@ import { View, Text, StyleSheet } from 'react-native';
 const GameStats = ({ 
   score, 
   lives, 
-  currentLevel 
+  currentQuestionData 
 }) => {
   const getLivesColor = () => {
     if (lives >= 3) return '#4CAF50';
     if (lives === 2) return '#FF9800';
     return '#F44336';
+  };
+
+  const getDifficultyColor = () => {
+    const difficulty = currentQuestionData?.difficulty;
+    if (difficulty === 'Easy') return '#4CAF50';
+    if (difficulty === 'Medium') return '#FF9800';
+    if (difficulty === 'Hard') return '#F44336';
+    return '#2196F3';
   };
 
 
@@ -30,9 +38,9 @@ const GameStats = ({
         </View>
         
         <View style={styles.statItem}>
-          <Text style={styles.statLabel}>Level</Text>
-          <Text style={[styles.statValue, { color: '#2196F3' }]}>
-            {currentLevel}
+          <Text style={styles.statLabel}>Difficulty</Text>
+          <Text style={[styles.statValue, { color: getDifficultyColor() }]}>
+            {currentQuestionData?.difficulty || 'Easy'}
           </Text>
         </View>
       </View>

@@ -137,7 +137,7 @@ const QuizScreen = ({ navigation, initialMode = null }) => {
           4. May 3 buhay - mawawala ang isa sa maling sagot
         </Text>
         <Text style={styles.instruction}>
-          5. Unlock levels habang naglalaro!
+          5. Makakakita ng iba't ibang difficulty levels!
         </Text>
       </View>
 
@@ -149,7 +149,7 @@ const QuizScreen = ({ navigation, initialMode = null }) => {
       <GameStats
         score={gameStats.score}
         lives={gameStats.lives}
-        currentLevel={gameStats.currentLevel}
+        currentQuestionData={currentQuestionData}
       />
       
       <ProgressBar
@@ -203,10 +203,7 @@ const QuizScreen = ({ navigation, initialMode = null }) => {
                 <Text style={styles.statValue}>{gameStats.score}</Text>
               </View>
 
-              <View style={styles.statRow}>
-                <Text style={styles.statLabel}>Level Reached:</Text>
-                <Text style={styles.statValue}>{gameStats.currentLevel}</Text>
-              </View>
+
               <View style={styles.statRow}>
                 <Text style={styles.statLabel}>Correct Answers:</Text>
                 <Text style={styles.statValue}>{gameStats.correctAnswers}/{gameStats.totalQuestionsInPool}</Text>
