@@ -128,7 +128,7 @@ const QuizScreen = ({ navigation, initialMode = null }) => {
           1. Piliin ang mode: Latin → Baybayin o Baybayin → Latin
         </Text>
         <Text style={styles.instruction}>
-          2. Sagutin ang 10 tanong sa loob ng 30 segundo bawat isa
+          2. Sagutin ang 10 tanong
         </Text>
         <Text style={styles.instruction}>
           3. Makakuha ng 10 points bawat tamang sagot
@@ -137,10 +137,7 @@ const QuizScreen = ({ navigation, initialMode = null }) => {
           4. May 3 buhay - mawawala ang isa sa maling sagot
         </Text>
         <Text style={styles.instruction}>
-          5. Makakuha ng bonus points sa mabilis na pagsagot
-        </Text>
-        <Text style={styles.instruction}>
-          6. Unlock achievements at levels!
+          5. Unlock levels habang naglalaro!
         </Text>
       </View>
 
@@ -152,9 +149,6 @@ const QuizScreen = ({ navigation, initialMode = null }) => {
       <GameStats
         score={gameStats.score}
         lives={gameStats.lives}
-        streak={gameStats.streak}
-        accuracy={gameStats.accuracy}
-        timeRemaining={gameStats.timeRemaining}
         currentLevel={gameStats.currentLevel}
       />
       
@@ -208,10 +202,7 @@ const QuizScreen = ({ navigation, initialMode = null }) => {
                 <Text style={styles.statLabel}>Final Score:</Text>
                 <Text style={styles.statValue}>{gameStats.score}</Text>
               </View>
-              <View style={styles.statRow}>
-                <Text style={styles.statLabel}>Accuracy:</Text>
-                <Text style={styles.statValue}>{gameStats.accuracy}%</Text>
-              </View>
+
               <View style={styles.statRow}>
                 <Text style={styles.statLabel}>Level Reached:</Text>
                 <Text style={styles.statValue}>{gameStats.currentLevel}</Text>

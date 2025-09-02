@@ -74,15 +74,8 @@ const gameConfig = {
     maxLives: 3,
     loseLifeOnWrong: true
   },
-  timer: {
-    enabled: true,
-    defaultTime: 30,
-    bonusThreshold: 10
-  },
   scoring: {
-    correctAnswer: 10,
-    bonusTime: 5,
-    streakBonus: 2
+    correctAnswer: 10
   },
   levels: {
     maxLevel: 3,

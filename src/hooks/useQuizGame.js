@@ -8,13 +8,11 @@ export const useQuizGame = () => {
     currentQuestion: 0,
     score: 0,
     lives: gameConfig.lives.maxLives,
-    streak: 0,
     totalQuestions: 0,
     correctAnswers: 0,
     gameMode: 'latin-to-baybayin', // 'latin-to-baybayin' or 'baybayin-to-latin'
     isGameActive: false,
     isGameComplete: false,
-    timeRemaining: gameConfig.timer.defaultTime,
     startTime: null,
     endTime: null
   });
@@ -47,13 +45,11 @@ export const useQuizGame = () => {
       currentQuestion: 0,
       score: 0,
       lives: gameConfig.lives.maxLives,
-      streak: 0,
       totalQuestions: 0,
       correctAnswers: 0,
       gameMode: mode,
       isGameActive: true,
       isGameComplete: false,
-      timeRemaining: gameConfig.timer.defaultTime,
       startTime: Date.now(),
       endTime: null
     };
@@ -69,14 +65,6 @@ export const useQuizGame = () => {
     setUserAnswer('');
     setShowFeedback(false);
     setIsCorrect(false);
-    
-    // Reset timer
-    if (gameConfig.timer.enabled) {
-      setGameState(prev => ({
-        ...prev,
-        timeRemaining: gameConfig.timer.defaultTime
-      }));
-    }
   }, [getRandomQuestion]);
 
   // Submit answer
@@ -84,7 +72,6 @@ export const useQuizGame = () => {
     if (!currentQuestionData || showFeedback) return;
 
     const isAnswerCorrect = checkAnswer(answer);
-    const answerTime = gameConfig.timer.defaultTime - gameState.timeRemaining;
     
     setUserAnswer(answer);
     setIsCorrect(isAnswerCorrect);
@@ -98,21 +85,9 @@ export const useQuizGame = () => {
         // Calculate score
         let points = gameConfig.scoring.correctAnswer;
         
-        // Time bonus
-        if (gameConfig.timer.enabled && answerTime <= gameConfig.timer.bonusThreshold) {
-          points += gameConfig.scoring.bonusTime;
-        }
-        
-        // Streak bonus
-        if (newState.streak > 0) {
-          points += gameConfig.scoring.streakBonus * newState.streak;
-        }
-        
         newState.score += points;
-        newState.streak += 1;
         newState.correctAnswers += 1;
       } else {
-        newState.streak = 0;
         if (gameConfig.lives.loseLifeOnWrong) {
           newState.lives -= 1;
         }
@@ -136,8 +111,7 @@ export const useQuizGame = () => {
       return newState;
     });
 
-
-  }, [currentQuestionData, showFeedback, gameState.timeRemaining]);
+  }, [currentQuestionData, showFeedback]);
 
   // Check if answer is correct
   const checkAnswer = useCallback((answer) => {
@@ -164,44 +138,15 @@ export const useQuizGame = () => {
     startGame(gameState.gameMode);
   }, [startGame, gameState.gameMode]);
 
-  // Timer effect
-  useEffect(() => {
-    let interval = null;
-    
-    if (gameState.isGameActive && gameConfig.timer.enabled && gameState.timeRemaining > 0) {
-      interval = setInterval(() => {
-        setGameState(prev => ({
-          ...prev,
-          timeRemaining: prev.timeRemaining - 1
-        }));
-      }, 1000);
-    } else if (gameState.timeRemaining === 0 && gameState.isGameActive) {
-      // Time's up - submit empty answer
-      submitAnswer('');
-    }
-    
-    return () => {
-      if (interval) {
-        clearInterval(interval);
-      }
-    };
-  }, [gameState.isGameActive, gameState.timeRemaining, submitAnswer]);
 
-  // Calculate accuracy
-  const accuracy = gameState.totalQuestions > 0 
-    ? Math.round((gameState.correctAnswers / gameState.totalQuestions) * 100) 
-    : 0;
 
   // Get game statistics
   const gameStats = {
     score: gameState.score,
     lives: gameState.lives,
-    streak: gameState.streak,
-    accuracy,
     currentLevel: gameState.currentLevel,
     totalQuestions: gameState.totalQuestions,
-    correctAnswers: gameState.correctAnswers,
-    timeRemaining: gameState.timeRemaining
+    correctAnswers: gameState.correctAnswers
   };
 
   return {
