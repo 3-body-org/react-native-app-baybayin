@@ -15,7 +15,7 @@ const GameStats = ({
   const getDifficultyColor = () => {
     const difficulty = currentQuestionData?.difficulty;
     if (difficulty === 'Easy') return '#4CAF50';
-    if (difficulty === 'Medium') return '#FF9800';
+    if (difficulty === 'Average') return '#FF9800';
     if (difficulty === 'Hard') return '#F44336';
     return '#2196F3';
   };

@@ -1,6 +1,4 @@
-// Quiz data for Fill-in-the-Baybayin feature
 const quizData = {
-  // All words combined with difficulty levels
   words: [
     // Easy (1-syllable words)
     { latin: "AKO", baybayin: "ᜀᜃᜓ", meaning: "I, me", difficulty: "Easy" },
@@ -12,16 +10,16 @@ const quizData = {
     { latin: "HALIK", baybayin: "ᜑᜎᜒᜃ᜔", meaning: "Kiss", difficulty: "Easy" },
     
     // Medium (2-syllable words)
-    { latin: "KAMAY", baybayin: "ᜃᜋᜌ᜔", meaning: "Hand", difficulty: "Medium" },
-    { latin: "BAHAY", baybayin: "ᜊᜑᜌ᜔", meaning: "House", difficulty: "Medium" },
-    { latin: "MAGANDA", baybayin: "ᜋᜄᜈ᜔ᜇᜀ", meaning: "Beautiful", difficulty: "Medium" },
-    { latin: "MABUTI", baybayin: "ᜋᜊᜓᜆᜒ", meaning: "Good", difficulty: "Medium" },
-    { latin: "UMAGA", baybayin: "ᜂᜋᜄᜀ", meaning: "Morning", difficulty: "Medium" },
-    { latin: "TAON", baybayin: "ᜆᜂᜈ᜔", meaning: "Year", difficulty: "Medium" },
-    { latin: "BAYAN", baybayin: "ᜊᜌᜈ᜔", meaning: "Country", difficulty: "Medium" },
-    { latin: "MAGULANG", baybayin: "ᜋᜄᜓᜎᜅ᜔", meaning: "Parent", difficulty: "Medium" },
-    { latin: "KAPITBAHAY", baybayin: "ᜃᜉᜒᜆ᜔ᜊᜑᜌ᜔", meaning: "Neighbor", difficulty: "Medium" },
-    { latin: "KAPATID", baybayin: "ᜃᜉᜆᜒᜇ᜔", meaning: "Sibling", difficulty: "Medium" },
+    { latin: "KAMAY", baybayin: "ᜃᜋᜌ᜔", meaning: "Hand", difficulty: "Average" },
+    { latin: "BAHAY", baybayin: "ᜊᜑᜌ᜔", meaning: "House", difficulty: "Average" },
+    { latin: "MAGANDA", baybayin: "ᜋᜄᜈ᜔ᜇᜀ", meaning: "Beautiful", difficulty: "Average" },
+    { latin: "MABUTI", baybayin: "ᜋᜊᜓᜆᜒ", meaning: "Good", difficulty: "Average" },
+    { latin: "UMAGA", baybayin: "ᜂᜋᜄᜀ", meaning: "Morning", difficulty: "Average" },
+    { latin: "TAON", baybayin: "ᜆᜂᜈ᜔", meaning: "Year", difficulty: "Average" },
+    { latin: "BAYAN", baybayin: "ᜊᜌᜈ᜔", meaning: "Country", difficulty: "Average" },
+    { latin: "MAGULANG", baybayin: "ᜋᜄᜓᜎᜅ᜔", meaning: "Parent", difficulty: "Average" },
+    { latin: "KAPITBAHAY", baybayin: "ᜃᜉᜒᜆ᜔ᜊᜑᜌ᜔", meaning: "Neighbor", difficulty: "Average" },
+    { latin: "KAPATID", baybayin: "ᜃᜉᜆᜒᜇ᜔", meaning: "Sibling", difficulty: "Average" },
     
     // Hard (3+ syllable words)
     { latin: "KAPAMILYA", baybayin: "ᜃᜉᜋᜒᜎᜌ", meaning: "Family", difficulty: "Hard" },
@@ -33,24 +31,45 @@ const quizData = {
 };
   
   // Baybayin character mapping for tile generation
-  const baybayinCharacters = {
-    katinig: [
-      { character: "ᜊ", latin: "BA", sound: "/ba/" },
-      { character: "ᜃ", latin: "KA", sound: "/ka/" },
-      { character: "ᜄ", latin: "GA", sound: "/ga/" },
-      { character: "ᜅ", latin: "NGA", sound: "/ŋa/" },
-      { character: "ᜆ", latin: "TA", sound: "/ta/" },
-      { character: "ᜇ", latin: "DA / RA", sound: "/da/ o /ra/" },
-      { character: "ᜈ", latin: "NA", sound: "/na/" },
-      { character: "ᜉ", latin: "PA", sound: "/pa/" },
-      { character: "ᜎ", latin: "LA", sound: "/la/" },
-      { character: "ᜋ", latin: "MA", sound: "/ma/" },
-      { character: "ᜌ", latin: "YA", sound: "/ya/" },
-      { character: "ᜏ", latin: "WA", sound: "/wa/" },
-      { character: "ᜐ", latin: "SA", sound: "/sa/" },
-      { character: "ᜑ", latin: "HA", sound: "/ha/" }
-    ]
-  };
+  const baybayinCharacters = [
+    // PATINIG
+    "ᜀ", // A
+    "ᜁ", // I / E
+    "ᜂ", // U / O
+  
+    // KATINIG + KUDLIT
+    "ᜊ", "ᜊᜒ", "ᜊᜓ", // BA, BE/BI, BO/BU
+    "ᜃ", "ᜃᜒ", "ᜃᜓ", // KA, KE/KI, KO/KU
+    "ᜄ", "ᜄᜒ", "ᜄᜓ", // GA, GE/GI, GO/GU
+    "ᜅ", "ᜅᜒ", "ᜅᜓ", // NGA, NGE/NGI, NGO/NGU
+    "ᜆ", "ᜆᜒ", "ᜆᜓ", // TA, TE/TI, TO/TU
+    "ᜇ", "ᜇᜒ", "ᜇᜓ", // DA/RA, DE/DI, DO/DU
+    "ᜈ", "ᜈᜒ", "ᜈᜓ", // NA, NE/NI, NO/NU
+    "ᜉ", "ᜉᜒ", "ᜉᜓ", // PA, PE/PI, PO/PU
+    "ᜎ", "ᜎᜒ", "ᜎᜓ", // LA, LE/LI, LO/LU
+    "ᜋ", "ᜋᜒ", "ᜋᜓ", // MA, ME/MI, MO/MU
+    "ᜌ", "ᜌᜒ", "ᜌᜓ", // YA, YE/YI, YO/YU
+    "ᜏ", "ᜏᜒ", "ᜏᜓ", // WA, WE/WI, WO/WU
+    "ᜐ", "ᜐᜒ", "ᜐᜓ", // SA, SE/SI, SO/SU
+    "ᜑ", "ᜑᜒ", "ᜑᜓ", // HA, HE/HI, HO/HU
+  
+    // KATINIG + PANGALTAS (KRUS)
+    "ᜊ᜔", // B
+    "ᜃ᜔", // K
+    "ᜄ᜔", // G
+    "ᜅ᜔", // NG
+    "ᜆ᜔", // T
+    "ᜇ᜔", // D / R
+    "ᜈ᜔", // N
+    "ᜉ᜔", // P
+    "ᜎ᜔", // L
+    "ᜋ᜔", // M
+    "ᜌ᜔", // Y
+    "ᜏ᜔", // W
+    "ᜐ᜔", // S
+    "ᜑ᜔", // H
+  ];
+  
   
 
 // Game configuration
