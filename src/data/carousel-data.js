@@ -8,7 +8,7 @@ export const carouselData = [
   },
   {
     id: 2,
-    title: "Merchs",
+    title: "Mga Produkto",
     description:
       "Tuklasin ang aming mga t-shirt at iba pang merch na may disenyong Baybayin.",
     backgroundImage: require("../assets/bg2.webp"),

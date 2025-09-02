@@ -40,8 +40,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 12,
-    marginBottom: 8,
+    marginTop: 8,
   },
   dotContainer: {
     padding: 4,

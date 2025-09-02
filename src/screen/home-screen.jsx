@@ -33,6 +33,7 @@ export default function HomeScreen({ navigation }) {
             fontWeight: 600,
             color: "#573826",
             marginBottom: 5,
+            marginTop: 14,
             alignSelf: "flex-start",
           }}
         >
@@ -65,7 +66,7 @@ export default function HomeScreen({ navigation }) {
                 flex: 1,
               }}
             >
-              Tayo na't matuto ng Baybayin!
+              Tayo na't matuto{'\n'}ng Baybayin!
             </Text>
           </View>
         </Card>

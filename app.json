@@ -17,8 +17,25 @@
       "adaptiveIcon": {
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "permissions": [
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.DOWNLOAD_WITHOUT_NOTIFICATION",
+        "android.permission.ACCESS_NETWORK_STATE"
+      ],
+      "package": "com.erudite098.baynolohiya"
     },
-    "web": {}
+    "web": {},
+    "plugins": [
+      "@config-plugins/react-native-blob-util",
+      "@config-plugins/react-native-pdf",
+      "expo-asset"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "3e3249ea-9b91-4292-9fc1-5103cc0596fc"
+      }
+    }
   }
 }
