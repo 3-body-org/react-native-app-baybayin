@@ -41,6 +41,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginTop: 8,
+    marginBottom: 14,
   },
   dotContainer: {
     padding: 4,

@@ -51,11 +51,9 @@ const quizData = {
     // PANGALTAS (KRUS) - Individual tiles
     "᜔" // Pangaltas
   ];
-  
-  
 
 // Pangaltas replacement symbol for display
-const pangaltasReplacement = "×"; // Using × symbol for better visibility
+const pangaltasReplacement = "×"; 
 
 // Game configuration
 const gameConfig = {
