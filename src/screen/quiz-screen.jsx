@@ -10,12 +10,12 @@ import {
   TouchableWithoutFeedback
 } from 'react-native';
 import { useQuizGame } from '../hooks/useQuizGame';
-import GameStats from '../components/quiz/GameStats';
-import ProgressBar from '../components/quiz/ProgressBar';
-import FeedbackModal from '../components/quiz/FeedbackModal';
+import GameStats from '../components/quiz/game-stats';
+import ProgressBar from '../components/quiz/progress-bar';
+import FeedbackModal from '../components/quiz/feedback-modal';
 
-import LatinToBaybayinMode from '../components/quiz/LatinToBaybayinMode';
-import BaybayinToLatinMode from '../components/quiz/BaybayinToLatinMode';
+import LatinToBaybayinMode from '../components/quiz/latin-to-baybayin-mode';
+import BaybayinToLatinMode from '../components/quiz/baybayin-to-latin-mode';
 
 const QuizScreen = ({ navigation, initialMode = null }) => {
   const {

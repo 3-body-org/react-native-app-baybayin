@@ -5,7 +5,7 @@ import {
   StyleSheet, 
   TouchableOpacity 
 } from 'react-native';
-import QuizTile from './QuizTile';
+import QuizTile from './quiz-tile';
 import { quizData } from '../../data/quiz-data';
 
 const BaybayinToLatinMode = ({ 
