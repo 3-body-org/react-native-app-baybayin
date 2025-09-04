@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Alert 
 } from 'react-native';
-import QuizTile from './QuizTile';
+import QuizTile from './quiz-tile';
 import { baybayinCharacters, pangaltasReplacement } from '../../data/quiz-data';
 
 const LatinToBaybayinMode = ({ 

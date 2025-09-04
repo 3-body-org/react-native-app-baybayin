@@ -131,22 +131,10 @@ export const useQuizGame = () => {
         isCorrect: isAnswerCorrect
       });
       
-      // Check if game is complete
-      if (newState.lives <= 0) {
-        // Game Over - user lost all lives
-        console.log('Game Over triggered - no lives left');
-        newState.isGameActive = false;
-        newState.isGameComplete = true;
-        newState.isGameOver = true;
-        newState.endTime = Date.now();
-        
-        // Show Game Over modal after a short delay
-        setTimeout(() => {
-          setShowGameOverModal(true);
-        }, 1000);
-      } else if (newState.totalQuestions >= gameConfig.questions.totalQuestions) {
-        // Game Complete - user finished all questions successfully
-        console.log('Game Complete triggered - all questions answered');
+      // Check if game is complete - prioritize game over (lives) over completion
+      if (newState.totalQuestions >= gameConfig.questions.totalQuestions && newState.lives > 0) {
+        // Game Complete - user finished all questions successfully with lives remaining
+        console.log('Game Complete triggered - all questions answered with lives remaining');
         newState.isGameActive = false;
         newState.isGameComplete = true;
         newState.isGameOver = false;
@@ -156,6 +144,18 @@ export const useQuizGame = () => {
         setTimeout(() => {
           console.log('Setting congratulations modal to true');
           setShowCongratulationsModal(true);
+        }, 1000);
+      } else if (newState.lives <= 0) {
+        // Game Over - user lost all lives (regardless of questions completed)
+        console.log('Game Over triggered - no lives left');
+        newState.isGameActive = false;
+        newState.isGameComplete = true;
+        newState.isGameOver = true;
+        newState.endTime = Date.now();
+        
+        // Show Game Over modal after a short delay
+        setTimeout(() => {
+          setShowGameOverModal(true);
         }, 1000);
       }
       
