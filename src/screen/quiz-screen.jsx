@@ -6,7 +6,8 @@ import {
   ScrollView,
   TouchableOpacity,
   SafeAreaView,
-  Alert
+  Alert,
+  TouchableWithoutFeedback
 } from 'react-native';
 import { useQuizGame } from '../hooks/useQuizGame';
 import GameStats from '../components/quiz/GameStats';
@@ -23,11 +24,16 @@ const QuizScreen = ({ navigation, initialMode = null }) => {
     userAnswer,
     showFeedback,
     isCorrect,
+    showGameOverModal,
+    showCongratulationsModal,
+    setShowCongratulationsModal,
     gameStats,
     startGame,
     submitAnswer,
     continueToNext,
-    restartGame
+    restartGame,
+    hideGameOverModal,
+    hideCongratulationsModal
   } = useQuizGame();
 
 
@@ -47,9 +53,25 @@ const QuizScreen = ({ navigation, initialMode = null }) => {
     submitAnswer(answer);
   };
 
+  // Debug logging to help troubleshoot
+  React.useEffect(() => {
+    console.log('Game State Debug:', {
+      isGameActive: gameState.isGameActive,
+      isGameComplete: gameState.isGameComplete,
+      isGameOver: gameState.isGameOver,
+      showGameOverModal: showGameOverModal,
+      showCongratulationsModal: showCongratulationsModal,
+      lives: gameStats.lives,
+      score: gameStats.score,
+      totalQuestions: gameStats.totalQuestions,
+      totalQuestionsInPool: gameStats.totalQuestionsInPool,
+      currentQuestionData: currentQuestionData ? 'exists' : 'null'
+    });
+  }, [gameState, gameStats, showGameOverModal, showCongratulationsModal, currentQuestionData]);
+
   const handleContinue = () => {
-    if (gameState.isGameComplete) {
-      // Don't show alert, let the congratulatory modal handle it
+    if (gameState.isGameComplete || gameState.isGameOver) {
+      // Don't show alert, let the modals handle it
       return;
     } else {
       continueToNext();
@@ -67,26 +89,46 @@ const QuizScreen = ({ navigation, initialMode = null }) => {
     );
   };
 
+  const handleBackToSubukan = () => {
+    Alert.alert(
+      'Bumalik sa Subukan?',
+      'Mawawala ang iyong kasalukuyang progress.',
+      [
+        { text: 'Hindi', style: 'cancel' },
+        { text: 'Oo', onPress: () => navigation.goBack() }
+      ]
+    );
+  };
+
   const renderGameMode = () => {
-    if (gameState.gameMode === 'latin-to-baybayin') {
+    try {
+      if (gameState.gameMode === 'latin-to-baybayin') {
+        return (
+          <LatinToBaybayinMode
+            questionData={currentQuestionData}
+            onSubmitAnswer={handleSubmitAnswer}
+            showFeedback={showFeedback}
+            isCorrect={isCorrect}
+            userAnswer={userAnswer}
+          />
+        );
+      } else {
+        return (
+          <BaybayinToLatinMode
+            questionData={currentQuestionData}
+            onSubmitAnswer={handleSubmitAnswer}
+            showFeedback={showFeedback}
+            isCorrect={isCorrect}
+            userAnswer={userAnswer}
+          />
+        );
+      }
+    } catch (error) {
+      console.error('Error rendering game mode:', error);
       return (
-        <LatinToBaybayinMode
-          questionData={currentQuestionData}
-          onSubmitAnswer={handleSubmitAnswer}
-          showFeedback={showFeedback}
-          isCorrect={isCorrect}
-          userAnswer={userAnswer}
-        />
-      );
-    } else {
-      return (
-        <BaybayinToLatinMode
-          questionData={currentQuestionData}
-          onSubmitAnswer={handleSubmitAnswer}
-          showFeedback={showFeedback}
-          isCorrect={isCorrect}
-          userAnswer={userAnswer}
-        />
+        <View style={{ padding: 20, alignItems: 'center' }}>
+          <Text style={styles.errorText}>Error loading question. Please try again.</Text>
+        </View>
       );
     }
   };
@@ -141,39 +183,90 @@ const QuizScreen = ({ navigation, initialMode = null }) => {
         </Text>
       </View>
 
+      {/* Test button for debugging - remove after testing */}
+      <View style={styles.testContainer}>
+        <TouchableOpacity
+          style={styles.testButton}
+          onPress={() => {
+            console.log('Test button pressed from start screen');
+            setShowCongratulationsModal(true);
+          }}
+        >
+          <Text style={styles.testButtonText}>🧪 Test Congratulations Modal</Text>
+        </TouchableOpacity>
+      </View>
+
     </ScrollView>
   );
 
-  const renderGameScreen = () => (
-    <View style={styles.gameContainer}>
-      <GameStats
-        score={gameStats.score}
-        lives={gameStats.lives}
-      />
-      
-      <ProgressBar
-        current={gameStats.totalQuestions}
-        total={gameStats.totalQuestionsInPool}
-        label="Mga Tanong"
-        showPercentage={false}
-      />
-      
-      <ScrollView style={styles.questionContainer}>
-        {renderGameMode()}
-      </ScrollView>
-      
-      <View style={styles.gameControls}>
+  const renderGameScreen = () => {
+    try {
+      return (
+        <View style={styles.gameContainer}>
+          <GameStats
+            score={gameStats.score}
+            lives={gameStats.lives}
+          />
+          
+          <ProgressBar
+            current={gameStats.totalQuestions}
+            total={gameStats.totalQuestionsInPool}
+            label="Mga Tanong"
+            showPercentage={false}
+          />
+          
+          <ScrollView style={styles.questionContainer}>
+            {renderGameMode()}
+          </ScrollView>
+          
+                <View style={styles.gameControls}>
         <TouchableOpacity
-          style={styles.controlButton}
+          style={[styles.controlButton, styles.restartButton]}
           onPress={handleRestart}
         >
           <Text style={styles.controlButtonText}>Ulitin</Text>
         </TouchableOpacity>
         
-
+        <TouchableOpacity
+          style={[styles.controlButton, styles.backToSubukanButton]}
+          onPress={handleBackToSubukan}
+        >
+          <Text style={styles.controlButtonText}>Back to Subukan</Text>
+        </TouchableOpacity>
+        
+        {/* Temporary test button - remove after testing */}
+        <TouchableOpacity
+          style={[styles.controlButton, { backgroundColor: '#FF9800' }]}
+          onPress={() => {
+            console.log('Test button pressed - showing congratulations modal');
+            setShowCongratulationsModal(true);
+          }}
+        >
+          <Text style={styles.controlButtonText}>Test Win</Text>
+        </TouchableOpacity>
       </View>
-    </View>
-  );
+        </View>
+      );
+    } catch (error) {
+      console.error('Error rendering game screen:', error);
+      return (
+        <View style={styles.gameContainer}>
+          <Text style={styles.errorText}>Error loading game. Please try again.</Text>
+        </View>
+      );
+    }
+  };
+
+  // Fallback if gameState is not properly initialized
+  if (!gameState) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <Text style={styles.errorText}>Loading game...</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -188,10 +281,123 @@ const QuizScreen = ({ navigation, initialMode = null }) => {
         showRestart={false}
       />
       
-      {/* Congratulatory Modal */}
-      {gameState.isGameComplete && (
+      {/* Game Over Modal - when user loses all lives */}
+      {showGameOverModal && (
+        <View style={styles.gameOverModal}>
+          <TouchableWithoutFeedback>
+            <View style={styles.gameOverContent}>
+              <Text style={styles.gameOverIcon}>💔</Text>
+              <Text style={styles.gameOverTitle}>Game Over!</Text>
+              {/* <Text style={styles.gameOverSubtitle}>Nawala ang lahat ng iyong buhay</Text> */}
+              
+              <View style={styles.finalStats}>
+                <View style={styles.statRow}>
+                  <Text style={styles.statLabel}>Final Score:</Text>
+                  <Text style={styles.statValue}>{gameStats.score}</Text>
+                </View>
+                <View style={styles.statRow}>
+                  <Text style={styles.statLabel}>Correct Answers:</Text>
+                  <Text style={styles.statValue}>{gameStats.correctAnswers}/{gameStats.totalQuestionsInPool}</Text>
+                </View>
+                <View style={styles.statRow}>
+                  <Text style={styles.statLabel}>Lives Remaining:</Text>
+                  <Text style={[styles.statValue, { color: '#F44336' }]}>0</Text>
+                </View>
+              </View>
+              
+              <View style={styles.gameOverButtons}>
+                <TouchableOpacity
+                  style={[styles.gameOverButton, styles.tryAgainButton]}
+                  onPress={restartGame}
+                >
+                  <Text style={styles.buttonText}>Try Again</Text>
+                </TouchableOpacity>
+                
+                <TouchableOpacity
+                  style={[styles.gameOverButton, styles.cancelButton]}
+                  onPress={() => {
+                    hideGameOverModal();
+                    navigation.goBack();
+                  }}
+                >
+                  <Text style={styles.buttonText}>Cancel</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </TouchableWithoutFeedback>
+        </View>
+      )}
+
+      {/* Debug indicator */}
+      {showCongratulationsModal && (
+        <View style={{ 
+          position: 'absolute', 
+          top: 100, 
+          left: 20, 
+          right: 20,
+          backgroundColor: 'red', 
+          padding: 15, 
+          zIndex: 99999,
+          borderRadius: 8,
+          borderWidth: 3,
+          borderColor: 'yellow'
+        }}>
+          <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold', textAlign: 'center' }}>
+            🚨 CONGRATULATIONS MODAL SHOULD BE VISIBLE 🚨
+          </Text>
+        </View>
+      )}
+
+      {/* Simple test modal */}
+      {showCongratulationsModal && (
+        <View style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(255, 0, 0, 0.9)',
+          justifyContent: 'center',
+          alignItems: 'center',
+          zIndex: 99999,
+        }}>
+          <View style={{
+            backgroundColor: 'white',
+            padding: 30,
+            borderRadius: 10,
+            margin: 20,
+          }}>
+            <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'red', textAlign: 'center' }}>
+              TEST MODAL WORKS!
+            </Text>
+            <Text style={{ fontSize: 16, color: 'black', textAlign: 'center', marginTop: 10 }}>
+              If you can see this, the modal system works
+            </Text>
+            <TouchableOpacity
+              style={{
+                backgroundColor: 'red',
+                padding: 10,
+                borderRadius: 5,
+                marginTop: 20,
+              }}
+              onPress={() => {
+                console.log('Closing test modal');
+                setShowCongratulationsModal(false);
+              }}
+            >
+              <Text style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>
+                Close Test Modal
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
+
+      {/* Congratulatory Modal - when user completes game successfully */}
+      {showCongratulationsModal && (
         <View style={styles.congratulationsModal}>
-          <View style={styles.congratulationsContent}>
+          <TouchableWithoutFeedback>
+            <View style={styles.congratulationsContent}>
             <Text style={styles.congratulationsIcon}>🎉</Text>
             <Text style={styles.congratulationsTitle}>Congratulations!</Text>
             <Text style={styles.congratulationsSubtitle}>Tapos na ang laro!</Text>
@@ -201,15 +407,15 @@ const QuizScreen = ({ navigation, initialMode = null }) => {
                 <Text style={styles.statLabel}>Final Score:</Text>
                 <Text style={styles.statValue}>{gameStats.score}</Text>
               </View>
-
-
               <View style={styles.statRow}>
                 <Text style={styles.statLabel}>Correct Answers:</Text>
                 <Text style={styles.statValue}>{gameStats.correctAnswers}/{gameStats.totalQuestionsInPool}</Text>
               </View>
+              <View style={styles.statRow}>
+                <Text style={styles.statLabel}>Lives Remaining:</Text>
+                <Text style={[styles.statValue, { color: '#4CAF50' }]}>{gameStats.lives}</Text>
+              </View>
             </View>
-            
-
             
             <View style={styles.congratulationsButtons}>
               <TouchableOpacity
@@ -220,13 +426,17 @@ const QuizScreen = ({ navigation, initialMode = null }) => {
               </TouchableOpacity>
               
               <TouchableOpacity
-                style={[styles.congratulationsButton, styles.backButton]}
-                onPress={() => navigation.goBack()}
+                style={[styles.congratulationsButton, styles.cancelButton]}
+                onPress={() => {
+                  hideCongratulationsModal();
+                  navigation.goBack();
+                }}
               >
-                <Text style={styles.buttonText}>Back to Subukan</Text>
+                <Text style={styles.buttonText}>Cancel</Text>
               </TouchableOpacity>
             </View>
-          </View>
+            </View>
+          </TouchableWithoutFeedback>
         </View>
       )}
       
@@ -324,34 +534,114 @@ const styles = StyleSheet.create({
   },
   gameControls: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
     padding: 16,
     backgroundColor: '#FFFFFF',
     borderTopWidth: 1,
     borderTopColor: '#E0E0E0',
+    gap: 12,
   },
   controlButton: {
-    backgroundColor: '#2196F3',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
+    flex: 1,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
     borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 44,
+  },
+  restartButton: {
+    backgroundColor: '#4CAF50',
+  },
+  backToSubukanButton: {
+    backgroundColor: '#757575',
   },
   controlButtonText: {
     color: '#FFFFFF',
     fontSize: 14,
     fontWeight: '600',
+    textAlign: 'center',
+    letterSpacing: 0.3,
   },
 
+  gameOverModal: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 9999,
+    elevation: 9999,
+  },
+  gameOverContent: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 20,
+    padding: 24,
+    width: '90%',
+    maxWidth: 400,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+    elevation: 8,
+  },
+  gameOverIcon: {
+    fontSize: 64,
+    marginBottom: 16,
+  },
+  gameOverTitle: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#F44336',
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  gameOverSubtitle: {
+    fontSize: 18,
+    color: '#666',
+    marginBottom: 24,
+    textAlign: 'center',
+  },
+  gameOverButtons: {
+    flexDirection: 'row',
+    gap: 12,
+    width: '100%',
+  },
+  gameOverButton: {
+    flex: 1,
+    paddingVertical: 14,
+    paddingHorizontal: 20,
+    borderRadius: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 48,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
   congratulationsModal: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
     justifyContent: 'center',
     alignItems: 'center',
-    zIndex: 1000,
+    zIndex: 9999,
+    elevation: 9999,
   },
   congratulationsContent: {
     backgroundColor: '#FFFFFF',
@@ -417,17 +707,59 @@ const styles = StyleSheet.create({
   },
   congratulationsButton: {
     flex: 1,
-    paddingVertical: 12,
+    paddingVertical: 14,
+    paddingHorizontal: 20,
     borderRadius: 25,
     alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 48,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   tryAgainButton: {
     backgroundColor: '#4CAF50',
   },
-  backButton: {
-    backgroundColor: '#2196F3',
+  cancelButton: {
+    backgroundColor: '#757575',
   },
   buttonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600',
+    textAlign: 'center',
+    letterSpacing: 0.5,
+  },
+  errorText: {
+    color: '#F44336',
+    fontSize: 16,
+    textAlign: 'center',
+    padding: 20,
+  },
+  testContainer: {
+    padding: 16,
+    marginTop: 10,
+  },
+  testButton: {
+    backgroundColor: '#FF9800',
+    borderRadius: 12,
+    padding: 16,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  testButtonText: {
     color: '#FFFFFF',
     fontSize: 16,
     fontWeight: '600',

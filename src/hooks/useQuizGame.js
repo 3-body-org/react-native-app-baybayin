@@ -12,6 +12,7 @@ export const useQuizGame = () => {
     gameMode: 'latin-to-baybayin', // 'latin-to-baybayin' or 'baybayin-to-latin'
     isGameActive: false,
     isGameComplete: false,
+    isGameOver: false, // New state for when user loses all lives
     startTime: null,
     endTime: null
   });
@@ -25,6 +26,8 @@ export const useQuizGame = () => {
   const [userAnswer, setUserAnswer] = useState('');
   const [showFeedback, setShowFeedback] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
+  const [showGameOverModal, setShowGameOverModal] = useState(false);
+  const [showCongratulationsModal, setShowCongratulationsModal] = useState(false);
 
 
   // Create shuffled question pool for the game
@@ -56,6 +59,7 @@ export const useQuizGame = () => {
       gameMode: mode,
       isGameActive: true,
       isGameComplete: false,
+      isGameOver: false,
       startTime: Date.now(),
       endTime: null
     };
@@ -73,6 +77,8 @@ export const useQuizGame = () => {
       setUserAnswer('');
       setShowFeedback(false);
       setIsCorrect(false);
+      setShowGameOverModal(false);
+      setShowCongratulationsModal(false);
     }
   }, [createQuestionPool]);
 
@@ -117,11 +123,40 @@ export const useQuizGame = () => {
       
       newState.totalQuestions += 1;
       
+      // Debug logging
+      console.log('Game completion check:', {
+        totalQuestions: newState.totalQuestions,
+        totalQuestionsInPool: gameConfig.questions.totalQuestions,
+        lives: newState.lives,
+        isCorrect: isAnswerCorrect
+      });
+      
       // Check if game is complete
-      if (newState.lives <= 0 || newState.totalQuestions >= gameConfig.questions.totalQuestions) {
+      if (newState.lives <= 0) {
+        // Game Over - user lost all lives
+        console.log('Game Over triggered - no lives left');
         newState.isGameActive = false;
         newState.isGameComplete = true;
+        newState.isGameOver = true;
         newState.endTime = Date.now();
+        
+        // Show Game Over modal after a short delay
+        setTimeout(() => {
+          setShowGameOverModal(true);
+        }, 1000);
+      } else if (newState.totalQuestions >= gameConfig.questions.totalQuestions) {
+        // Game Complete - user finished all questions successfully
+        console.log('Game Complete triggered - all questions answered');
+        newState.isGameActive = false;
+        newState.isGameComplete = true;
+        newState.isGameOver = false;
+        newState.endTime = Date.now();
+        
+        // Show Congratulations modal after a short delay
+        setTimeout(() => {
+          console.log('Setting congratulations modal to true');
+          setShowCongratulationsModal(true);
+        }, 1000);
       }
       
       return newState;
@@ -151,8 +186,20 @@ export const useQuizGame = () => {
 
   // Restart game
   const restartGame = useCallback(() => {
+    setShowGameOverModal(false);
+    setShowCongratulationsModal(false);
     startGame(gameState.gameMode);
   }, [startGame, gameState.gameMode]);
+
+  // Hide Game Over modal
+  const hideGameOverModal = useCallback(() => {
+    setShowGameOverModal(false);
+  }, []);
+
+  // Hide Congratulations modal
+  const hideCongratulationsModal = useCallback(() => {
+    setShowCongratulationsModal(false);
+  }, []);
 
 
 
@@ -171,11 +218,16 @@ export const useQuizGame = () => {
     userAnswer,
     showFeedback,
     isCorrect,
+    showGameOverModal,
+    showCongratulationsModal,
+    setShowCongratulationsModal,
     gameStats,
     startGame,
     submitAnswer,
     continueToNext,
     restartGame,
-    loadNextQuestion
+    loadNextQuestion,
+    hideGameOverModal,
+    hideCongratulationsModal
   };
 };
