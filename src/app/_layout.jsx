@@ -1,7 +1,8 @@
 import { StyleSheet, Text, View } from 'react-native'
-import { Stack } from 'expo-router'
+import { Stack, usePathname } from 'expo-router'
 import React, { useEffect } from 'react'
 import BackButton from "@components/back-button";
+import SummaryResultButton from "@components/summary-result-button";
 import * as NavigationBar from 'expo-navigation-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';  
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -28,6 +29,10 @@ const RootLayout = () => {
         options={{
           title:"",
           headerLeft: () => <BackButton />,
+          headerRight: () => {
+            const pathname = usePathname();
+            return pathname.includes('subukan-tab') ? <SummaryResultButton /> : null;
+          },
           headerShadowVisible: false,
           headerStyle:{
             elevation:0,
@@ -68,6 +73,7 @@ const RootLayout = () => {
         },  
       }}/>
     </Stack>
+
     </GestureHandlerRootView>
     </SafeAreaProvider>
   )

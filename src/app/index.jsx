@@ -53,18 +53,21 @@ export default function HomeScreen() {
           </View>
         </Card>
 
+
+      </Container>
+
+<Container>
         <Text style={styles.categoryText}>
           Kategorya
         </Text>
-
         <Image
-          source={require("../assets/kategorya.webp")}
+          source={require("@assets/kategorya.webp")}
           resizeMode="contain"
           style={styles.categoryImage}
         />
-      </Container>
-
       <Carousel data={carouselData} navigation={router} />
+</Container>
+
 
       <Container style={styles.shareContainer}>
         <Card backgroundColor={"#573826"} style={styles.shareCard}>
@@ -107,7 +110,9 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: "space-between",
     backgroundColor: "#fff",
+    paddingVertical: 20,
   },
   greetingText: {
     fontSize: 20,
@@ -150,9 +155,9 @@ const styles = StyleSheet.create({
     width: 100,
     height: 20,
     alignSelf: "flex-start",
+    marginBottom: 20,
   },
   shareContainer: {
-    paddingVertical: 0,
     marginVertical: 0,
   },
   shareCard: {

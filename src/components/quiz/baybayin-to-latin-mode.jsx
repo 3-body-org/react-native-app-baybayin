@@ -6,7 +6,7 @@ import {
   TouchableOpacity 
 } from 'react-native';
 import QuizTile from './quiz-tile';
-import { quizData } from '../../data/quiz-data';
+import { getRandomWordsFromLesson, getAllWords } from '../../data/quiz-data';
 
 const BaybayinToLatinMode = ({ 
   questionData, 
@@ -26,9 +26,10 @@ const BaybayinToLatinMode = ({
     const options = [correctAnswer];
     
     // Get all other words from quiz data (excluding the correct answer)
-    const otherWords = quizData.words
+    const allWords = getAllWords();
+    const otherWords = allWords
       .map(word => word.latin)
-      .filter(word => word !== correctAnswer);
+      .filter(word => word !== correctAnswer && word.length <= 12); // Limit word length for display
     
     // Select 3 random words from the other words
     const randomOptions = otherWords
@@ -80,39 +81,6 @@ const BaybayinToLatinMode = ({
         <Text style={styles.baybayinWord}>{questionData.baybayin}</Text>
       </View>
 
-      {/* Options */}
-      <View style={styles.optionsContainer}>
-        <Text style={styles.optionsLabel}>Mga pagpipilian:</Text>
-        <View style={styles.optionsGrid}>
-          {options.map((option, index) => {
-            const status = getOptionStatus(option);
-            
-            return (
-              <TouchableOpacity
-                key={`option-${index}`}
-                style={[
-                  styles.optionButton,
-                  status === 'correct' && styles.correctOption,
-                  status === 'wrong' && styles.wrongOption,
-                  selectedAnswer === option && styles.selectedOption,
-                ]}
-                onPress={() => handleOptionPress(option)}
-                disabled={showFeedback}
-              >
-                <Text style={[
-                  styles.optionText,
-                  status === 'correct' && styles.correctText,
-                  status === 'wrong' && styles.wrongText,
-                  selectedAnswer === option && styles.selectedText,
-                ]}>
-                  {option}
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
-        </View>
-      </View>
-
       {/* Feedback */}
       {showFeedback && (
         <View style={styles.feedbackContainer}>
@@ -123,10 +91,44 @@ const BaybayinToLatinMode = ({
             Tamang sagot: {questionData.latin}
           </Text>
           <Text style={styles.explanation}>
-            Ang Baybayin na "{questionData.baybayin}" ay katumbas ng Latin na "{questionData.latin}".
+            Ang Baybayin na "{questionData.baybayin}" ay katumbas ng "{questionData.latin}" ({questionData.meaning || 'walang kahulugan'}).
           </Text>
         </View>
       )}
+
+      {/* Options */}
+      <View style={styles.optionsContainer}>
+        <Text style={styles.optionsLabel}>Mga pagpipilian:</Text>
+        <View style={styles.optionsGrid}>
+          {options.map((option, index) => {
+            const status = getOptionStatus(option);
+            
+            return (
+              <TouchableOpacity
+                key={option}
+                style={[
+                  styles.optionButton,
+                  selectedAnswer === option && styles.selectedOption(showFeedback && selectedAnswer !== questionData.latin ? false : undefined),
+                  showFeedback && option === questionData.latin && styles.correctOption,
+                  showFeedback && selectedAnswer === option && selectedAnswer !== questionData.latin && styles.wrongOption,
+                ]}
+                onPress={() => handleOptionPress(option)}
+                disabled={showFeedback}
+              >
+                <Text style={[
+                  styles.optionText,
+                  status === 'correct' && styles.correctText,
+                  status === 'wrong' && styles.wrongText,
+                  selectedAnswer === option && styles.selectedText(showFeedback && selectedAnswer !== questionData.latin),
+                ]}>
+                  {option}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+      </View>
+
     </View>
   );
 };
@@ -173,14 +175,14 @@ const styles = StyleSheet.create({
   optionsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
   },
   optionButton: {
     backgroundColor: '#F5F5F5',
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
-    width: '48%',
+    width: '50%',
     alignItems: 'center',
     borderWidth: 2,
     borderColor: '#E0E0E0',
@@ -193,11 +195,10 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
-  selectedOption: {
-    backgroundColor: '#E3F2FD',
-    borderColor: '#2196F3',
-    transform: [{ scale: 1.02 }],
-  },
+  selectedOption: (isCorrect) => ({
+    backgroundColor: isCorrect === false ? '#FFEBEE' : '#FFFFFF',
+    borderColor: isCorrect === false ? '#F44336' : '#E0E0E0',
+  }),
   correctOption: {
     backgroundColor: '#E8F5E8',
     borderColor: '#4CAF50',
@@ -211,9 +212,9 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#333',
   },
-  selectedText: {
-    color: '#2196F3',
-  },
+  selectedText: (isWrong) => ({
+    color: isWrong ? '#F44336' : '#333333',
+  }),
   correctText: {
     color: '#4CAF50',
   },

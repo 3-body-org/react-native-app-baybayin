@@ -8,7 +8,7 @@ import {
   Alert 
 } from 'react-native';
 import QuizTile from '../../components/quiz/quiz-tile';
-import { baybayinCharacters, pangaltasReplacement } from '../../data/quiz-data';
+import { baybayinCharacters, pangaltasReplacement, getRandomWordsFromLesson } from '../../data/quiz-data';
 
 const LatinToBaybayinMode = ({ 
   questionData, 
@@ -20,9 +20,11 @@ const LatinToBaybayinMode = ({
   const [selectedCharacters, setSelectedCharacters] = useState([]);
   const [availableCharacters, setAvailableCharacters] = useState([]);
 
-  // Function to replace pangaltas with replacement symbol for display
-  const replacePangaltasForDisplay = (char) => {
-    return char === '᜔' ? pangaltasReplacement : char;
+  // Function to replace special characters for display
+  const replaceSpecialCharsForDisplay = (char) => {
+    if (char === '᜔') return pangaltasReplacement; // Pangaltas
+    if (char === '᜵') return '•'; // Danda (period)
+    return char;
   };
 
   // Generate available characters for the current question
@@ -30,19 +32,35 @@ const LatinToBaybayinMode = ({
     if (!questionData) return [];
     
     const correctAnswer = questionData.baybayin;
-    const correctChars = correctAnswer.split('');
+    // Split into characters but keep the kudlit and pangaltas with their base characters
+    const correctChars = [];
+    for (let i = 0; i < correctAnswer.length; i++) {
+      const char = correctAnswer[i];
+      if (char === '᜔' && i > 0) {
+        // If it's a pangaltas, combine with previous character
+        correctChars[correctChars.length - 1] += char;
+      } else if (['ᜒ', 'ᜓ'].includes(char) && i > 0) {
+        // If it's a kudlit, combine with previous character
+        correctChars[correctChars.length - 1] += char;
+      } else {
+        correctChars.push(char);
+      }
+    }
     
-    // Add correct characters
-    const chars = [...correctChars];
+    // Add correct character combinations
+    const chars = [...new Set(correctChars)]; // Remove duplicates
     
     // Add some random characters to make it challenging
-    const allChars = baybayinCharacters;
+    // Filter out special characters from the available characters
+    const allChars = baybayinCharacters.filter(char => 
+      char !== '᜔' && char !== 'ᜒ' && char !== 'ᜓ' && char !== '᜵'
+    );
     
-    // Add 3-5 random incorrect characters (including pangaltas)
+    // Add 5-8 random incorrect characters
     const randomChars = allChars
-      .filter(char => !correctChars.includes(char))
+      .filter(char => !chars.includes(char))
       .sort(() => 0.5 - Math.random())
-      .slice(0, Math.floor(Math.random() * 3) + 3);
+      .slice(0, Math.floor(Math.random() * 4) + 5);
     
     return [...chars, ...randomChars].sort(() => 0.5 - Math.random());
   }, [questionData]);
@@ -57,11 +75,11 @@ const LatinToBaybayinMode = ({
     
     setSelectedCharacters(prev => {
       const newSelection = [...prev, character];
+      const currentAnswer = newSelection.join('');
       
-      // Check if we have enough characters
-      if (newSelection.length === questionData.baybayin.length) {
-        const answer = newSelection.join('');
-        onSubmitAnswer(answer);
+      // Check if we've reached the expected number of tiles
+      if (newSelection.length >= questionData.inputCount) {
+        onSubmitAnswer(currentAnswer);
       }
       
       return newSelection;
@@ -83,33 +101,46 @@ const LatinToBaybayinMode = ({
     setSelectedCharacters([]);
   };
 
-  const getCharacterStatus = (character, index) => {
+  const getCharacterStatus = (character) => {
     if (!showFeedback) return 'normal';
     
+    // Check if this character is part of the correct answer
     const correctAnswer = questionData.baybayin;
-    const correctChars = correctAnswer.split('');
-    
-    if (correctChars.includes(character)) {
-      return 'correct';
+    // Get all unique characters in the correct answer
+    const correctChars = [];
+    for (let i = 0; i < correctAnswer.length; i++) {
+      const char = correctAnswer[i];
+      if (['᜔', 'ᜒ', 'ᜓ'].includes(char) && i > 0) {
+        correctChars[correctChars.length - 1] += char;
+      } else {
+        correctChars.push(char);
+      }
     }
     
-    return 'wrong';
+    return correctChars.includes(character) ? 'correct' : 'wrong';
   };
 
   const getSelectedCharacterStatus = (character, index) => {
     if (!showFeedback) return 'normal';
     
     const correctAnswer = questionData.baybayin;
-    const correctChars = correctAnswer.split('');
-    const userChars = userAnswer.split('');
     
-    if (userChars[index] === character && correctChars[index] === character) {
-      return 'correct';
-    } else if (userChars[index] === character && correctChars[index] !== character) {
-      return 'wrong';
+    // Split correct answer into logical characters (combining kudlits/pangaltas)
+    const correctChars = [];
+    for (let i = 0; i < correctAnswer.length; i++) {
+      const char = correctAnswer[i];
+      if (['᜔', 'ᜒ', 'ᜓ'].includes(char) && i > 0) {
+        correctChars[correctChars.length - 1] += char;
+      } else {
+        correctChars.push(char);
+      }
     }
     
-    return 'normal';
+    // If we've selected more characters than the correct answer, mark as wrong
+    if (index >= correctChars.length) return 'wrong';
+    
+    // Check if the character at this position is correct
+    return character === correctChars[index] ? 'correct' : 'wrong';
   };
 
   if (!questionData) {
@@ -131,25 +162,43 @@ const LatinToBaybayinMode = ({
         <Text style={styles.meaning}>({questionData.meaning})</Text>
       </View>
 
+      {/* Feedback */}
+      {showFeedback && (
+        <View style={styles.feedbackContainer}>
+          <Text style={[styles.feedbackText, isCorrect ? styles.correctText : styles.wrongText]}>
+            {isCorrect ? 'Tama! 🎉' : 'Mali! 😔'}
+          </Text>
+          <Text style={styles.correctAnswer}>
+            Tamang sagot: {questionData.baybayin}
+          </Text>
+          <Text style={styles.meaningText}>
+            {questionData.latin} = {questionData.meaning || 'walang kahulugan'}
+          </Text>
+        </View>
+      )}
+
       {/* Selected Characters Display */}
       <View style={styles.selectedContainer}>
         <Text style={styles.selectedLabel}>Inyong sagot:</Text>
         <View style={styles.selectedRow}>
-          {selectedCharacters.map((character, index) => (
-            <QuizTile
-              key={`selected-${index}`}
-              character={replacePangaltasForDisplay(character)}
-              onPress={() => handleRemoveCharacter(index)}
-              isSelected={true}
-              isCorrect={getSelectedCharacterStatus(character, index) === 'correct'}
-              isWrong={getSelectedCharacterStatus(character, index) === 'wrong'}
-              size="medium"
-            />
-          ))}
-          {/* Empty slots */}
-          {Array.from({ length: questionData.baybayin.length - selectedCharacters.length }).map((_, index) => (
-            <View key={`empty-${index}`} style={styles.emptySlot} />
-          ))}
+          {Array.from({ length: questionData.inputCount }).map((_, index) => {
+            const character = selectedCharacters[index];
+            if (!character) {
+              return <View key={`empty-${index}`} style={styles.emptySlot} />;
+            }
+            
+            return (
+              <QuizTile
+                key={`selected-${index}`}
+                character={replaceSpecialCharsForDisplay(character)}
+                onPress={() => handleRemoveCharacter(index)}
+                isSelected={true}
+                isCorrect={getSelectedCharacterStatus(character, index) === 'correct'}
+                isWrong={getSelectedCharacterStatus(character, index) === 'wrong'}
+                size="medium"
+              />
+            );
+          })}
         </View>
         
         {selectedCharacters.length > 0 && (
@@ -164,35 +213,24 @@ const LatinToBaybayinMode = ({
         <Text style={styles.availableLabel}>Mga karakter na pwedeng piliin:</Text>
         <View style={styles.availableRow}>
           {availableCharacters.map((character, index) => {
-            const isUsed = selectedCharacters.includes(character);
-            const status = getCharacterStatus(character, index);
+            const status = getCharacterStatus(character);
+            const isDisabled = showFeedback;
             
             return (
               <QuizTile
                 key={`available-${index}`}
-                character={replacePangaltasForDisplay(character)}
+                character={replaceSpecialCharsForDisplay(character)}
                 onPress={() => handleCharacterPress(character)}
-                disabled={isUsed || showFeedback}
+                disabled={isDisabled}
                 isCorrect={status === 'correct'}
                 isWrong={status === 'wrong'}
                 size="medium"
+                opacity={isDisabled ? 0.7 : 1}
               />
             );
           })}
         </View>
       </View>
-
-      {/* Feedback */}
-      {showFeedback && (
-        <View style={styles.feedbackContainer}>
-          <Text style={[styles.feedbackText, isCorrect ? styles.correctText : styles.wrongText]}>
-            {isCorrect ? 'Tama! 🎉' : 'Mali! 😔'}
-          </Text>
-          <Text style={styles.correctAnswer}>
-            Tamang sagot: {questionData.baybayin}
-          </Text>
-        </View>
-      )}
     </View>
   );
 };
@@ -200,6 +238,7 @@ const LatinToBaybayinMode = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    // backgroundColor: 'violet', // test
   },
   loadingText: {
     fontSize: 18,
@@ -224,7 +263,6 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: 'bold',
     color: '#333',
-    marginBottom: 5,
   },
   meaning: {
     fontSize: 14,
@@ -242,7 +280,7 @@ const styles = StyleSheet.create({
   },
   selectedRow: {
     flexDirection: 'row',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     alignItems: 'center',
     flexWrap: 'wrap',
     marginBottom: 10,
@@ -250,14 +288,16 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   emptySlot: {
-    width: 60,
-    height: 60,
-    borderWidth: 2,
-    borderColor: '#E0E0E0',
+    width: 50,
+    height: 50,
+    margin: 5,
+    borderWidth: 1,
     borderStyle: 'dashed',
-    borderRadius: 12,
-    margin: 4,
-    backgroundColor: '#F5F5F5',
+    borderColor: '#BDBDBD',
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(245, 245, 245, 0.5)',
   },
   clearButton: {
     backgroundColor: '#FF9800',
@@ -282,16 +322,18 @@ const styles = StyleSheet.create({
   },
   availableRow: {
     flexDirection: 'row',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     alignItems: 'center',
     flexWrap: 'wrap',
     paddingHorizontal: 10,
     flex: 1,
+    // backgroundColor: 'blue', // test
   },
   feedbackContainer: {
     backgroundColor: '#F8F9FA',
     borderRadius: 12,
-    padding: 16,
+    padding: 15,
+    marginBottom: 15,
     alignItems: 'center',
   },
   feedbackText: {

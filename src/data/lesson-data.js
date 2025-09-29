@@ -58,7 +58,7 @@ const lessonModules = {
       { baybayin: "ᜈ", latin: "NA", pronunciation: "/na/", description: "Katinig na NA" },
       { baybayin: "ᜐ", latin: "SA", pronunciation: "/sa/", description: "Katinig na SA" },
       { baybayin: "ᜉ", latin: "PA", pronunciation: "/pa/", description: "Katinig na PA" },
-      { baybayin: "ᜇ", latin: "RA", pronunciation: "/ra/", description: "Katinig na RA" },
+      { baybayin: "ᜍ", latin: "RA", pronunciation: "/ra/", description: "Katinig na RA" },
       { baybayin: "ᜆ", latin: "TA", pronunciation: "/ta/", description: "Katinig na TA" },
       { baybayin: "ᜏ", latin: "WA", pronunciation: "/wa/", description: "Katinig na WA" },
       { baybayin: "ᜌ", latin: "YA", pronunciation: "/ya/", description: "Katinig na YA" }

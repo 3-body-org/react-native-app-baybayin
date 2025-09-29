@@ -1,20 +1,13 @@
 import React from "react";
 import { TouchableOpacity, StyleSheet, Text, View } from "react-native";
-import { useRouter, usePathname } from "expo-router";
-import { Undo2 } from "lucide-react-native";
+import { useRouter } from "expo-router";
+import { BarChart3 } from "lucide-react-native";
 
-export default function BackButton() {
+export default function SummaryResultButton() {
   const router = useRouter();
-  const pathname = usePathname();
 
   const handlePress = () => {
-    if (pathname.includes('/latin-to-baybayin') || pathname.includes('/baybayin-to-latin')) {
-      router.replace('/(learning)/subukan-tab');
-    } else if (pathname.includes('/summary-results')) {
-      router.replace('/(learning)/subukan-tab');
-    } else {
-      router.replace("/");
-    }
+      router.replace('/(learning)/summary-results');
   };
 
   return (
@@ -23,8 +16,8 @@ export default function BackButton() {
       style={styles.backButton}
     >
       <View style={styles.container}>
-        <Undo2 size={16} color="#573826" style={{ marginRight: 5 }} />
-        <Text style={styles.text}>Bumalik</Text>
+        <BarChart3 size={18} color="#573826" style={{ marginRight: 8 }} />
+        <Text style={styles.text}>View Summary of Results</Text>
       </View>
     </TouchableOpacity>
   );
