@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { quizData, gameConfig } from '../data/quiz-data';
+import { quizData, gameConfig, getAllWords } from '../data/quiz-data';
 import { lessonModules } from '../data/lesson-data';
 
 export const useQuizGame = () => {
@@ -31,17 +31,30 @@ export const useQuizGame = () => {
   const [showCongratulationsModal, setShowCongratulationsModal] = useState(false);
 
   const createQuestionPool = useCallback((lessonId) => {
-    let lessonWords = [];
+    // Get all words from the quiz data
+    const allWords = getAllWords();
+    
+    // If we have a lesson ID, filter words from that lesson
     if (lessonId && lessonModules[lessonId]) {
       const lesson = lessonModules[lessonId];
       if (lesson.examples) {
-        lessonWords = lesson.examples.map(ex => ({ latin: ex.latin, baybayin: ex.baybayin }));
+        // Map lesson examples to match our word format
+        return lesson.examples
+          .map(ex => ({
+            latin: ex.latin,
+            baybayin: ex.baybayin,
+            meaning: ex.meaning || '',
+            inputCount: ex.inputCount || ex.baybayin.length
+          }))
+          .sort(() => Math.random() - 0.5)
+          .slice(0, gameConfig.questions.questionsPerLesson);
       }
     }
-
-    const wordPool = lessonWords.length > 0 ? lessonWords : quizData.words;
-    const shuffledWords = [...wordPool].sort(() => Math.random() - 0.5);
-    return shuffledWords.slice(0, gameConfig.questions.totalQuestions);
+    
+    // If no specific lesson or no examples, use all words
+    return [...allWords]
+      .sort(() => Math.random() - 0.5)
+      .slice(0, gameConfig.questions.questionsPerLesson);
   }, []);
 
   // Get current question from pool
@@ -102,7 +115,6 @@ export const useQuizGame = () => {
     if (!currentQuestionData || showFeedback) return;
 
     const isAnswerCorrect = checkAnswer(answer);
-    
     setUserAnswer(answer);
     setIsCorrect(isAnswerCorrect);
     setShowFeedback(true);
@@ -111,15 +123,14 @@ export const useQuizGame = () => {
     setGameState(prev => {
       const newState = { ...prev };
       
+      // Update score and lives
       if (isAnswerCorrect) {
-        // Calculate score
-        let points = gameConfig.scoring.correctAnswer;
-        
+        const points = gameConfig.scoring.correctAnswer;
         newState.score += points;
         newState.correctAnswers += 1;
       } else {
         if (gameConfig.lives.loseLifeOnWrong) {
-          newState.lives -= 1;
+          newState.lives = Math.max(0, newState.lives - 1); // Ensure lives don't go below 0
         }
       }
       
@@ -133,32 +144,35 @@ export const useQuizGame = () => {
         isCorrect: isAnswerCorrect
       });
       
-      // Check if game is complete - prioritize game over (lives) over completion
-      if (newState.totalQuestions >= gameConfig.questions.totalQuestions && newState.lives > 0) {
-        // Game Complete - user finished all questions successfully with lives remaining
-        console.log('Game Complete triggered - all questions answered with lives remaining');
-        newState.isGameActive = false;
-        newState.isGameComplete = true;
-        newState.isGameOver = false;
-        newState.endTime = Date.now();
-        
-        // Show Congratulations modal after a short delay
-        setTimeout(() => {
-          console.log('Setting congratulations modal to true');
-          setShowCongratulationsModal(true);
-        }, 1000);
-      } else if (newState.lives <= 0) {
-        // Game Over - user lost all lives (regardless of questions completed)
-        console.log('Game Over triggered - no lives left');
+      // Check if game is over due to no lives left
+      if (newState.lives <= 0) {
+        console.log('Game Over - No lives left');
         newState.isGameActive = false;
         newState.isGameComplete = true;
         newState.isGameOver = true;
         newState.endTime = Date.now();
         
-        // Show Game Over modal after a short delay
+        // Force state update before showing modal
+        setGameState(prev => ({ ...prev, ...newState }));
+        
+        // Show game over modal
         setTimeout(() => {
+          console.log('Showing game over modal');
           setShowGameOverModal(true);
-        }, 1000);
+        }, 1);
+      } 
+      // Check if game is complete - all questions answered with lives remaining
+      else if (newState.totalQuestions >= gameConfig.questions.totalQuestions) {
+        console.log('Game Complete - All questions answered with lives remaining');
+        newState.isGameActive = false;
+        newState.isGameComplete = true;
+        newState.isGameOver = false;
+        newState.endTime = Date.now();
+        
+        setTimeout(() => {
+          console.log('Showing congratulations modal');
+          setShowCongratulationsModal(true);
+        }, 10);
       }
       
       return newState;
@@ -170,11 +184,18 @@ export const useQuizGame = () => {
   const checkAnswer = useCallback((answer) => {
     if (!currentQuestionData) return false;
     
+    // For Latin to Baybayin mode
     if (gameState.gameMode === 'latin-to-baybayin') {
-      return answer === currentQuestionData.baybayin;
-    } else {
-      return answer === currentQuestionData.latin;
+      // Normalize both strings for comparison (remove diacritics and make lowercase)
+      const normalize = (str) => str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+      return normalize(answer) === normalize(currentQuestionData.baybayin);
+    } 
+    // For Baybayin to Latin mode
+    else if (gameState.gameMode === 'baybayin-to-latin') {
+      return answer.toLowerCase() === currentQuestionData.latin.toLowerCase();
     }
+    
+    return false;
   }, [currentQuestionData, gameState.gameMode]);
 
 

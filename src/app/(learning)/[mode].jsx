@@ -11,7 +11,6 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useQuizGame } from '@hooks/useQuizGame';
 import GameStats from '@components/quiz/game-stats';
 import ProgressBar from '@components/quiz/progress-bar';
-import FeedbackModal from '@components/quiz/feedback-modal';
 import QuizResult from '@components/quiz/quiz-result';
 import BaybayinToLatinMode from '@components/quiz/baybayin-to-latin-mode';
 import LatinToBaybayinMode from '@components/quiz/latin-to-baybayin-mode';
@@ -70,12 +69,7 @@ const QuizScreen = () => {
   }, [gameState, gameStats, showGameOverModal, showCongratulationsModal, currentQuestionData]);
 
   const handleContinue = () => {
-    if (gameState.isGameComplete || gameState.isGameOver) {
-      // Don't show alert, let the modals handle it
-      return;
-    } else {
-      continueToNext();
-    }
+    continueToNext();
   };
 
   const handleRestart = () => {
@@ -183,19 +177,6 @@ const QuizScreen = () => {
         </Text>
       </View>
 
-      {/* Test button for debugging - remove after testing */}
-      <View style={styles.testContainer}>
-        <TouchableOpacity
-          style={styles.testButton}
-          onPress={() => {
-            console.log('Test button pressed from start screen');
-            setShowCongratulationsModal(true);
-          }}
-        >
-          <Text style={styles.testButtonText}>🧪 Test Congratulations Modal</Text>
-        </TouchableOpacity>
-      </View>
-
     </ScrollView>
   );
 
@@ -216,37 +197,22 @@ const QuizScreen = () => {
               showPercentage={false}
             />
             
-            <ScrollView style={styles.questionContainer} showsVerticalScrollIndicator={false}>
-              {renderGameMode()}
-            </ScrollView>
+            <View style={styles.quizContent}>
+              <ScrollView style={styles.questionContainer} showsVerticalScrollIndicator={false}>
+                {renderGameMode()}
+              </ScrollView>
+              
+              {showFeedback && (
+                <TouchableOpacity
+                  style={[styles.continueButton, isCorrect ? styles.continueButtonCorrect : styles.continueButtonIncorrect]}
+                  onPress={handleContinue}
+                >
+                  <Text style={styles.continueButtonText}>SUSUNOD</Text>
+                </TouchableOpacity>
+              )}
+            </View>
           </View>
           
-          <View style={styles.gameControls}>
-            <TouchableOpacity
-              style={[styles.controlButton, styles.restartButton]}
-              onPress={handleRestart}
-            >
-              <Text style={styles.controlButtonText}>Ulitin</Text>
-            </TouchableOpacity>
-            
-            <TouchableOpacity
-              style={[styles.controlButton, styles.backToSubukanButton]}
-              onPress={handleBackToSubukan}
-            >
-              <Text style={styles.controlButtonText}>Back to Subukan</Text>
-            </TouchableOpacity>
-            
-            {/* Temporary test button - remove after testing */}
-            <TouchableOpacity
-              style={[styles.controlButton, { backgroundColor: '#FF9800' }]}
-              onPress={() => {
-                console.log('Test button pressed - showing congratulations modal');
-                setShowCongratulationsModal(true);
-              }}
-            >
-              <Text style={styles.controlButtonText}>Test Win</Text>
-            </TouchableOpacity>
-          </View>
         </View>
       );
     } catch (error) {
@@ -274,15 +240,6 @@ const QuizScreen = () => {
     <View style={styles.container}>
       {!gameState.isGameActive ? renderStartScreen() : renderGameScreen()}
       
-      <FeedbackModal
-        visible={showFeedback && !gameState.isGameComplete}
-        isCorrect={isCorrect}
-        message={isCorrect ? 'Magaling!' : 'Subukan ulit!'}
-        onContinue={handleContinue}
-        onRestart={handleRestart}
-        showRestart={false}
-      />
-      
       {/* Quiz Result Modals */}
       <QuizResult
         showGameOverModal={showGameOverModal}
@@ -303,10 +260,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
-  },
-  startContainer: {
-    flex: 1,
-    padding: 20,
+    // backgroundColor: 'yellow', // test
   },
   title: {
     fontSize: 28,
@@ -383,58 +337,25 @@ const styles = StyleSheet.create({
 
   contentContainer: {
     flex: 1,
-    padding: 15,
+    // padding: 15,
+    paddingHorizontal: 20,
+    // backgroundColor: 'yellow', // test
   },
 
   gameContainer: {
     flex: 1,
+    // backgroundColor: 'green', // test
+  },
+  quizContent: {
+    flex: 1,
+    width: '100%',
+    paddingHorizontal: 10,
+    // backgroundColor: 'blue', //test
   },
   questionContainer: {
     flex: 1,
-    // backgroundColor: 'red',
-  },
-  gameControls: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: 16,
-    backgroundColor: '#FFFFFF',
-    borderTopWidth: 1,
-    borderTopColor: '#E0E0E0',
-    gap: 12,
-
-    // backgroundColor: 'blue',
-  },
-  controlButton: {
-    flex: 1,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderRadius: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    minHeight: 44,
-  },
-  restartButton: {
-    backgroundColor: '#4CAF50',
-  },
-  backToSubukanButton: {
-    backgroundColor: '#757575',
-  },
-  controlButtonText: {
-    color: '#FFFFFF',
-    fontSize: 14,
-    fontWeight: '600',
-    textAlign: 'center',
-    letterSpacing: 0.3,
-  },
-
-
-
-  buttonText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: '600',
-    textAlign: 'center',
-    letterSpacing: 0.5,
+    width: '100%',
+    // backgroundColor: "red", // test
   },
   errorText: {
     color: '#F44336',
@@ -442,28 +363,28 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     padding: 20,
   },
-  testContainer: {
-    padding: 16,
-    marginTop: 10,
-  },
-  testButton: {
-    backgroundColor: '#FF9800',
-    borderRadius: 12,
-    padding: 16,
+  continueButton: {
+    marginBottom: 16,
+    paddingVertical: 16,
+    borderRadius: 25,
     alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 2,
     shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
   },
-  testButtonText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: '600',
+  continueButtonCorrect: {
+    backgroundColor: '#4CAF50',
+  },
+  continueButtonIncorrect: {
+    backgroundColor: '#F44336',
+  },
+  continueButtonText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
   },
 });
 

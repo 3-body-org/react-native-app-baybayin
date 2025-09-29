@@ -12,7 +12,7 @@ module.exports = function (api) {
           "@quiz": "./src/components/quiz",
           "@data": "./src/data",
           "@hooks": "./src/hooks",
-
+          "@utils": "./src/utils",
         },
       },
     ],

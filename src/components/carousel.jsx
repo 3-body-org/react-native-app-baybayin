@@ -91,9 +91,6 @@ export default function Carousel({ data = [] }) {
         snapToInterval={ITEM_WIDTH + ITEM_MARGIN * 2}
         snapToAlignment="start"
         decelerationRate="fast"
-        contentContainerStyle={{
-          paddingHorizontal: (width - ITEM_WIDTH) / 2 - ITEM_MARGIN,
-        }}
         getItemLayout={getItemLayout}
         onScrollToIndexFailed={onScrollToIndexFailed}
       />
@@ -121,7 +118,7 @@ const styles = StyleSheet.create({
     position: "relative",
   },
   slide: {
-    width: "100%",
+    width: "98%",
     height: 240,
     justifyContent: "flex-end",
   },
@@ -130,6 +127,7 @@ const styles = StyleSheet.create({
     padding: 15,
     borderBottomLeftRadius: 15,
     borderBottomRightRadius: 15,
+    width: "98%",
   },
   title: {
     fontSize: 20,
