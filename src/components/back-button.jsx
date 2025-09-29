@@ -1,13 +1,23 @@
 import React from "react";
 import { TouchableOpacity, StyleSheet, Text, View } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useRouter, usePathname } from "expo-router";
 import { Undo2 } from "lucide-react-native";
 
 export default function BackButton() {
-  const navigation = useNavigation();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const handlePress = () => {
+    if (pathname.includes('/latin-to-baybayin') || pathname.includes('/baybayin-to-latin')) {
+      router.replace('/(learning)/subukan-tab');
+    } else {
+      router.replace("/");
+    }
+  };
+
   return (
     <TouchableOpacity
-      onPress={() => navigation.navigate("HomeScreen")}
+      onPress={handlePress}
       style={styles.backButton}
     >
       <View style={styles.container}>

@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Alert 
 } from 'react-native';
-import QuizTile from './quiz-tile';
+import QuizTile from '../../components/quiz/quiz-tile';
 import { baybayinCharacters, pangaltasReplacement } from '../../data/quiz-data';
 
 const LatinToBaybayinMode = ({ 
@@ -162,16 +162,10 @@ const LatinToBaybayinMode = ({
       {/* Available Characters */}
       <View style={styles.availableContainer}>
         <Text style={styles.availableLabel}>Mga karakter na pwedeng piliin:</Text>
-        <ScrollView 
-          horizontal 
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.availableRow}
-        >
+        <View style={styles.availableRow}>
           {availableCharacters.map((character, index) => {
             const isUsed = selectedCharacters.includes(character);
             const status = getCharacterStatus(character, index);
-            
-
             
             return (
               <QuizTile
@@ -185,7 +179,7 @@ const LatinToBaybayinMode = ({
               />
             );
           })}
-        </ScrollView>
+        </View>
       </View>
 
       {/* Feedback */}
@@ -206,7 +200,6 @@ const LatinToBaybayinMode = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
   },
   loadingText: {
     fontSize: 18,
@@ -249,10 +242,12 @@ const styles = StyleSheet.create({
   },
   selectedRow: {
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     flexWrap: 'wrap',
     marginBottom: 10,
+    paddingHorizontal: 10,
+    flex: 1,
   },
   emptySlot: {
     width: 60,
@@ -286,7 +281,12 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   availableRow: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    flexWrap: 'wrap',
     paddingHorizontal: 10,
+    flex: 1,
   },
   feedbackContainer: {
     backgroundColor: '#F8F9FA',
