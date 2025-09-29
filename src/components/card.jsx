@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
 
     // Android Shadow
-    elevation: 3,
+    // elevation: 3,
 
     // Background + Border
     borderRadius: 12,

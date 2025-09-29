@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { quizData, gameConfig } from '../data/quiz-data';
+import { lessonModules } from '../data/lesson-data';
 
 export const useQuizGame = () => {
   // Game state
@@ -29,14 +30,17 @@ export const useQuizGame = () => {
   const [showGameOverModal, setShowGameOverModal] = useState(false);
   const [showCongratulationsModal, setShowCongratulationsModal] = useState(false);
 
+  const createQuestionPool = useCallback((lessonId) => {
+    let lessonWords = [];
+    if (lessonId && lessonModules[lessonId]) {
+      const lesson = lessonModules[lessonId];
+      if (lesson.examples) {
+        lessonWords = lesson.examples.map(ex => ({ latin: ex.latin, baybayin: ex.baybayin }));
+      }
+    }
 
-  // Create shuffled question pool for the game
-  const createQuestionPool = useCallback(() => {
-    const availableWords = quizData.words;
-    
-    // Always create exactly 10 questions
-    const shuffledWords = [...availableWords].sort(() => Math.random() - 0.5);
-    
+    const wordPool = lessonWords.length > 0 ? lessonWords : quizData.words;
+    const shuffledWords = [...wordPool].sort(() => Math.random() - 0.5);
     return shuffledWords.slice(0, gameConfig.questions.totalQuestions);
   }, []);
 
@@ -49,7 +53,7 @@ export const useQuizGame = () => {
   }, [questionPool, currentQuestionIndex]);
 
   // Start new game
-  const startGame = useCallback((mode = 'latin-to-baybayin') => {
+  const startGame = useCallback((mode = 'latin-to-baybayin', lessonId) => {
     const newGameState = {
       currentQuestion: 0,
       score: 0,
@@ -66,12 +70,10 @@ export const useQuizGame = () => {
     
     setGameState(newGameState);
     
-    // Create shuffled question pool
-    const pool = createQuestionPool();
+    const pool = createQuestionPool(lessonId);
     setQuestionPool(pool);
     setCurrentQuestionIndex(0);
     
-    // Load first question
     if (pool.length > 0) {
       setCurrentQuestionData(pool[0]);
       setUserAnswer('');

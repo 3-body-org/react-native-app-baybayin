@@ -10,7 +10,7 @@ const lessonModules = {
       "Batid natin ang kahalagahan ng wika sa ating buhay. Ito ay isang instrumento ng pagkakaunawaan. Ayon sa mga propesor sa Komunikasyon na sina Emmert at Donaghy (1981), ang wika, kung ito ay pasalita, ay isang sistema ng mga sagisag na binubuo ng mga tunog; kung ito naman ay pasulat, ito ay iniuugnay natin sa mga kahulugang nais nating iparating sa ibang tao.",
       "Ngunit saan nga ba nagmula ang wika? Walang nakaaalam kung paano ito nagsimula ngunit maraming mga haka-haka at teorya tungkol sa pinagmulan ng wika. Ang mga lingguwistang nag-aaral at nagsuri ng wika ay nakakalap ng iba't ibang teoryang maaring magbigay-linaw sa pinagmulan ng wika, bagama't ang mga ito ay hindi makapagpapatunay o makapagpapabulaan sa pinanggalingan ng wika.",
       "Ang unang taong naninirahan sa Pilipinas ay nagtataglay na ng mga patakarang pangkabuhayan, kultura, at paniniwalang panrelihiyon. Gayundin, mahihinuha na sila man ay may sarili nang wikang ginagamit bagama't pinaniniwalaang walang isang wikang nanaig sa Pilipinas noon. Gayunpaman, napatunayang marunong sumulat at bumasa ang mga katutubo. May sinusunod silang pamamaraan na pagsulat na tinatawag na baybayin.",
-      { type: "image", src: require("../assets/baybayin-patinig-katinig.webp") }
+      { type: "image", src: require("@assets/baybayin-patinig-katinig.webp") }
     ]
   },
   patinig: {
@@ -80,8 +80,8 @@ const lessonModules = {
       "Ang kudlit ay mga tuldok na ginagamit upang baguhin ang tunog ng isang karakter.",
       "Kudlit sa itaas (ᜒ) - nagbabago ang tunog sa /e/ o /i/",
       "Kudlit sa ibaba (ᜓ) - nagbabago ang tunog sa /o/ o /u/",
-      { type: "image", src: require("../assets/kudlit-taas.webp") },
-      { type: "image", src: require("../assets/kudlit-baba.webp") }
+      { type: "image", src: require("@assets/kudlit-taas.webp") },
+      { type: "image", src: require("@assets/kudlit-baba.webp") }
     ],
     characters: [
       // BA

@@ -8,14 +8,16 @@ import {
   Text,
   ImageBackground,
 } from "react-native";
+import { useRouter } from "expo-router";
 import { ChevronLeft, ChevronRight } from "lucide-react-native";
-import Pagination from "./pagination";
+import Pagination from "@components/pagination";
 
 const { width } = Dimensions.get("window");
-const ITEM_WIDTH = Math.round(width * 0.87);
+const ITEM_WIDTH = Math.round(width * 0.90);
 const ITEM_MARGIN = 7;
 
-export default function Carousel({ data = [], navigation }) {
+export default function Carousel({ data = [] }) {
+  const router = useRouter();
   const flatListRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -50,7 +52,7 @@ export default function Carousel({ data = [], navigation }) {
     <View style={{ width: ITEM_WIDTH, marginHorizontal: ITEM_MARGIN }}>
       <TouchableOpacity
         activeOpacity={0.8}
-        onPress={() => navigation.navigate(item.screen)}
+        onPress={() => router.push(item.screen)}
       >
         <ImageBackground
           source={item.backgroundImage}

@@ -36,3 +36,6 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+plan.md
+task.md
+common_mistakes.md
