@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useQuizGame } from '@hooks/useQuizGame';
+import { gameConfig } from '@data/quiz-data';
 import GameStats from '@components/quiz/game-stats';
 import ProgressBar from '@components/quiz/progress-bar';
 import QuizResult from '@components/quiz/quiz-result';
@@ -18,7 +19,7 @@ import LatinToBaybayinMode from '@components/quiz/latin-to-baybayin-mode';
 
 const QuizScreen = () => {
   const router = useRouter();
-  const { mode, lessonId } = useLocalSearchParams();
+  const { mode = 'latin-to-baybayin', lessonId } = useLocalSearchParams();
   const {
     gameState,
     currentQuestionData,
@@ -41,12 +42,12 @@ const QuizScreen = () => {
     startGame(mode, lessonId);
   };
 
-  // Auto-start with initial mode if provided
+  // Auto-start the game when the component mounts
   useEffect(() => {
-    if (mode && !gameState.isGameActive) {
+    if (!gameState.isGameActive && !gameState.isGameComplete) {
       startGame(mode, lessonId);
     }
-  }, [mode, lessonId, gameState.isGameActive, startGame]);
+  }, [mode, lessonId, gameState.isGameActive, gameState.isGameComplete, startGame]);
 
   const handleSubmitAnswer = (answer) => {
     submitAnswer(answer);
@@ -127,60 +128,21 @@ const QuizScreen = () => {
     }
   };
 
-  const renderStartScreen = () => (
-    <ScrollView style={styles.startContainer}>
-      <Text style={styles.title}>Fill-in-the-Baybayin ✍️</Text>
-      <Text style={styles.subtitle}>
-        Subukan ang inyong kaalaman sa Baybayin!
-      </Text>
-      
-      <View style={styles.modeContainer}>
-        <TouchableOpacity
-          style={styles.modeButton}
-          onPress={() => handleStartGame('latin-to-baybayin')}
-        >
-          <Text style={styles.modeIcon}>🔤</Text>
-          <Text style={styles.modeTitle}>Latin → Baybayin</Text>
-          <Text style={styles.modeDescription}>
-            Piliin ang tamang Baybayin characters
-          </Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity
-          style={styles.modeButton}
-          onPress={() => handleStartGame('baybayin-to-latin')}
-        >
-          <Text style={styles.modeIcon}>📝</Text>
-          <Text style={styles.modeTitle}>Baybayin → Latin</Text>
-          <Text style={styles.modeDescription}>
-            Piliin ang tamang Latin na salita
-          </Text>
-        </TouchableOpacity>
-      </View>
-      
-      <View style={styles.instructionsContainer}>
-        <Text style={styles.instructionsTitle}>Paano Maglaro:</Text>
-        <Text style={styles.instruction}>
-          1. Piliin ang mode: Latin → Baybayin o Baybayin → Latin
-        </Text>
-        <Text style={styles.instruction}>
-          2. Sagutin ang mga tanong (walang paulit-ulit)
-        </Text>
-        <Text style={styles.instruction}>
-          3. Makakuha ng 10 points bawat tamang sagot
-        </Text>
-        <Text style={styles.instruction}>
-          4. May 3 buhay - mawawala ang isa sa maling sagot
-        </Text>
-        <Text style={styles.instruction}>
-          5. Matuto ng mga salitang Baybayin!
-        </Text>
-      </View>
-
-    </ScrollView>
-  );
-
   const renderGameScreen = () => {
+    // If the game is not active and not complete, it's in a loading state.
+    if (!gameState.isGameActive && !gameState.isGameComplete) {
+      return (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <Text>Loading Quiz...</Text>
+        </View>
+      );
+    }
+
+    // If the game is complete, show nothing (modal will be visible)
+    if (gameState.isGameComplete) {
+      return null;
+    }
+
     try {
       return (
         <View style={styles.gameContainer}>
@@ -192,7 +154,7 @@ const QuizScreen = () => {
             
             <ProgressBar
               current={gameStats.totalQuestions}
-              total={gameStats.totalQuestionsInPool}
+              total={gameConfig.questions.questionsPerLesson}
               label="Mga Tanong"
               showPercentage={false}
             />
@@ -238,13 +200,13 @@ const QuizScreen = () => {
 
   return (
     <View style={styles.container}>
-      {!gameState.isGameActive ? renderStartScreen() : renderGameScreen()}
+      {renderGameScreen()}
       
       {/* Quiz Result Modals */}
       <QuizResult
         showGameOverModal={showGameOverModal}
         showCongratulationsModal={showCongratulationsModal}
-        gameStats={gameStats}
+        gameState={gameState}
         onRestart={restartGame}
         onBackToMenu={() => router.back()}
         onHideGameOver={hideGameOverModal}

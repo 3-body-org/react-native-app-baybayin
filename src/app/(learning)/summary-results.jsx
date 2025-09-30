@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   View,
   Text,
@@ -6,82 +6,127 @@ import {
   ScrollView,
   TouchableOpacity,
   SafeAreaView,
-} from 'react-native';
-import { useLocalSearchParams, useRouter } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import { Ionicons } from '@expo/vector-icons';
+} from "react-native";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import { Ionicons } from "@expo/vector-icons";
+import { getQuizResults } from "../../data/quiz-results";
+import Container from "../../components/container";
 
 const SummaryResults = () => {
   const router = useRouter();
-  const { mode, score, correctAnswers, totalQuestions } = useLocalSearchParams();
+  const { mode, score, correctAnswers, totalQuestions } =
+    useLocalSearchParams();
 
-  // Mock data - replace with actual data from your state management
-  const recentQuizzes = [
-    { id: 1, score: 85, correct: 8, total: 10, date: 'Today' },
-    { id: 2, score: 72, correct: 7, total: 10, date: 'Yesterday' },
-    { id: 3, score: 90, correct: 9, total: 10, date: '2 days ago' },
-  ];
+  // Get actual quiz data
+  const recentQuizzes = getQuizResults();
 
-  const averageScore = recentQuizzes.length > 0
-    ? Math.round(recentQuizzes.reduce((sum, quiz) => sum + quiz.score, 0) / recentQuizzes.length)
-    : 0;
+  const averageScore =
+    recentQuizzes.length > 0
+      ? Math.round(
+          recentQuizzes.reduce((sum, quiz) => sum + quiz.score, 0) /
+            recentQuizzes.length
+        )
+      : 0;
 
   return (
     <SafeAreaView style={styles.safeArea}>
+      {/* Header */}
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>Buod ng Resulta</Text>
+        <View style={styles.headerRight} />
+      </View>
+
       <ScrollView style={styles.container}>
-        {/* Current Session Stats */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Current Session</Text>
-          <View style={styles.statsGrid}>
-            <View style={styles.statCard}>
-              <Text style={styles.statValue}>{score || 0}</Text>
-              <Text style={styles.statLabel}>Score</Text>
-            </View>
-            <View style={styles.statCard}>
-              <Text style={styles.statValue}>
-                {totalQuestions ? Math.round((correctAnswers / totalQuestions) * 100) : 0}%
-              </Text>
-              <Text style={styles.statLabel}>Accuracy</Text>
-            </View>
-            <View style={styles.statCard}>
-              <Text style={styles.statValue}>
-                {correctAnswers || 0}/{totalQuestions || 0}
-              </Text>
-              <Text style={styles.statLabel}>Correct</Text>
-            </View>
-          </View>
-        </View>
-
-        {/* Overall Performance */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Overall Performance</Text>
-          <View style={styles.overallStats}>
-            <View style={styles.overallStat}>
-              <Text style={styles.overallValue}>{averageScore}%</Text>
-              <Text style={styles.overallLabel}>Average Score</Text>
-            </View>
-            <View style={styles.overallStat}>
-              <Text style={styles.overallValue}>{recentQuizzes.length}</Text>
-              <Text style={styles.overallLabel}>Quizzes Completed</Text>
-            </View>
-          </View>
-        </View>
-
-        {/* Recent Quiz History */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Recent Quizzes</Text>
-          {recentQuizzes.map((quiz) => (
-            <View key={quiz.id} style={styles.quizItem}>
-              <View style={styles.quizHeader}>
-                <Text style={styles.quizDate}>{quiz.date}</Text>
-                <Text style={styles.quizScore}>{quiz.score}%</Text>
+        <Container>
+          {/* Current Session Stats */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Huling Resulta</Text>
+            <View style={styles.statsGrid}>
+              <View style={styles.statCard}>
+                <View style={styles.statIconContainer}>
+                  <Text style={styles.statIcon}>⭐</Text>
+                </View>
+                <Text style={styles.statValue}>{score || 0}</Text>
+                <Text style={styles.statLabel}>Iskor</Text>
               </View>
-              <Text style={styles.quizDetails}>
-                {quiz.correct}/{quiz.total} correct answers
-              </Text>
+              <View style={styles.statCard}>
+                <View style={styles.statIconContainer}>
+                  <Text style={styles.statIcon}>🎯</Text>
+                </View>
+                <Text style={styles.statValue}>
+                  {totalQuestions
+                    ? Math.round((correctAnswers / totalQuestions) * 100)
+                    : 0}
+                  %
+                </Text>
+                <Text style={styles.statLabel}>kawastuhan</Text>
+              </View>
+              <View style={styles.statCard}>
+                <View style={styles.statIconContainer}>
+                  <Text style={styles.statIcon}>✅</Text>
+                </View>
+                <Text style={styles.statValue}>
+                  {correctAnswers || 0}/{totalQuestions || 0}
+                </Text>
+                <Text style={styles.statLabel}>Tamang Nasagot</Text>
+              </View>
             </View>
-          ))}
-        </View>
+          </View>
+
+          {/* Overall Performance */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Kabuuang Kakayahan</Text>
+            <View style={styles.overallStats}>
+              <View style={styles.overallStat}>
+                <Text style={styles.overallValue}>{averageScore}%</Text>
+                <Text style={styles.overallLabel}>Average na Iskor</Text>
+              </View>
+              <View style={styles.overallStat}>
+                <Text style={styles.overallValue}>{recentQuizzes.length}</Text>
+                <Text style={styles.overallLabel}>Mga Quiz na Nakumpleto</Text>
+              </View>
+            </View>
+          </View>
+
+          {/* Recent Quiz History */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Mga Kamakailang Quiz</Text>
+            {recentQuizzes.length > 0 ? (
+              recentQuizzes.map((quiz, index) => (
+                <View key={index} style={styles.quizItem}>
+                  <Text style={styles.quizDate}>
+                    {new Date(quiz.date).toLocaleDateString()}
+                  </Text>
+                  <View style={styles.quizStatsGrid}>
+                    <View style={styles.quizStat}>
+                      <Text style={styles.quizStatIcon}>⭐</Text>
+                      <Text style={styles.quizStatValue}>{quiz.score}</Text>
+                      <Text style={styles.quizStatLabel}>Iskor</Text>
+                    </View>
+                    <View style={styles.quizStat}>
+                      <Text style={styles.quizStatIcon}>✅</Text>
+                      <Text style={styles.quizStatValue}>
+                        {quiz.correctAnswers}/{quiz.totalQuestions}
+                      </Text>
+                      <Text style={styles.quizStatLabel}>Tamang Nasagot</Text>
+                    </View>
+                    <View style={styles.quizStat}>
+                      <Text style={styles.quizStatIcon}>❤️</Text>
+                      <Text style={styles.quizStatValue}>{quiz.lives}</Text>
+                      <Text style={styles.quizStatLabel}>Natitirang Buhay</Text>
+                    </View>
+                  </View>
+                </View>
+              ))
+            ) : (
+              <Text style={styles.noQuizzesText}>
+                Wala pang mga resulta ng quiz. Maglaro ng quiz upang makita ang
+                iyong progreso!
+              </Text>
+            )}
+          </View>
+        </Container>
       </ScrollView>
     </SafeAreaView>
   );
@@ -90,108 +135,166 @@ const SummaryResults = () => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
-  },
-  container: {
-    flex: 1,
-    padding: 16,
+    backgroundColor: "#fff",
   },
   header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 16,
+    flexDirection: "column",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginHorizontal: 15,
+    marginTop: 15,
+    borderRadius: 20,
+    paddingHorizontal: 16,
+    paddingVertical: 20,
+    backgroundColor: "#FEF3EC",
     borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0',
+    borderBottomColor: "#573826",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   headerTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#333',
+    fontSize: 20,
+    fontWeight: "600",
+    color: "#573826",
   },
   headerRight: {
-    width: 24, // Same as back button for balance
+    width: 24,
   },
   backButton: {
     padding: 4,
+  },
+  container: {
+    flex: 1,
   },
   section: {
     marginBottom: 24,
   },
   sectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#333',
+    fontSize: 20,
+    fontWeight: "600",
+    color: "#573826",
     marginBottom: 16,
+    alignSelf: "flex-start",
   },
   statsGrid: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: 12,
   },
   statCard: {
     flex: 1,
-    backgroundColor: '#F8F9FA',
-    borderRadius: 12,
-    padding: 16,
-    marginHorizontal: 4,
-    alignItems: 'center',
+    backgroundColor: "#FEF3EC",
+    borderRadius: 16,
+    padding: 15,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.25,
+    shadowRadius: 10,
+    elevation: 5,
+    borderWidth: 1,
+    borderColor: "#573826",
+  },
+  statIconContainer: {
+    marginBottom: 8,
+  },
+  statIcon: {
+    fontSize: 24,
   },
   statValue: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    color: '#4CAF50',
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#573826",
     marginBottom: 4,
   },
   statLabel: {
     fontSize: 14,
-    color: '#666',
-    textAlign: 'center',
+    color: "#8B4513",
+    textAlign: "center",
+    fontWeight: "500",
   },
   overallStats: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    backgroundColor: '#F8F9FA',
-    borderRadius: 12,
+    flexDirection: "row",
+    justifyContent: "space-around",
+    backgroundColor: "#FEF3EC",
+    borderRadius: 16,
     padding: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.25,
+    shadowRadius: 10,
+    elevation: 5,
+    borderWidth: 1,
+    borderColor: "#573826",
   },
   overallStat: {
-    alignItems: 'center',
+    alignItems: "center",
   },
   overallValue: {
     fontSize: 28,
-    fontWeight: 'bold',
-    color: '#573826',
+    fontWeight: "bold",
+    color: "#573826",
     marginBottom: 4,
   },
   overallLabel: {
     fontSize: 14,
-    color: '#666',
-    textAlign: 'center',
+    color: "#8B4513",
+    textAlign: "center",
+    fontWeight: "500",
   },
   quizItem: {
-    backgroundColor: '#F8F9FA',
-    borderRadius: 12,
-    padding: 16,
+    backgroundColor: "#FEF3EC",
+    borderRadius: 16,
+    padding: 18,
     marginBottom: 12,
-  },
-  quizHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 8,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.25,
+    shadowRadius: 10,
+    elevation: 5,
+    borderWidth: 1,
+    borderColor: "#573826",
   },
   quizDate: {
     fontSize: 14,
-    color: '#666',
-    fontWeight: '500',
+    color: "#8B4513",
+    fontWeight: "500",
+    marginBottom: 12,
   },
-  quizScore: {
+  quizStatsGrid: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: 8,
+  },
+  quizStat: {
+    flex: 1,
+    alignItems: "center",
+  },
+  quizStatIcon: {
+    fontSize: 20,
+    marginBottom: 4,
+  },
+  quizStatValue: {
     fontSize: 16,
-    fontWeight: 'bold',
-    color: '#4CAF50',
+    fontWeight: "bold",
+    color: "#573826",
+    marginBottom: 2,
   },
-  quizDetails: {
-    fontSize: 14,
-    color: '#888',
+  quizStatLabel: {
+    fontSize: 12,
+    color: "#8B4513",
+    textAlign: "center",
+    fontWeight: "500",
+  },
+  noQuizzesText: {
+    textAlign: "center",
+    color: "#8B4513",
+    marginTop: 20,
+    fontSize: 16,
+    fontWeight: "500",
   },
 });
 

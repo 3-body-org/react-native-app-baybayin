@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, Dimensions, Text, ActivityIndicator } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Dimensions,
+  Text,
+  ActivityIndicator,
+} from "react-native";
 import Pdf from "react-native-pdf";
-import { Asset } from 'expo-asset';
+import { Asset } from "expo-asset";
 
 export default function BillScreen() {
   const [pdfSource, setPdfSource] = useState(null);
@@ -12,7 +18,7 @@ export default function BillScreen() {
     const loadAsset = async () => {
       try {
         // Load your local PDF file
-        const asset = Asset.fromModule(require('@assets/baybayin-law.pdf'));
+        const asset = Asset.fromModule(require("@assets/baybayin-law.pdf"));
         await asset.downloadAsync();
         setPdfSource({ uri: asset.localUri || asset.uri, cache: false });
         setIsLoading(false);
@@ -22,7 +28,7 @@ export default function BillScreen() {
         setIsLoading(false);
       }
     };
-    
+
     loadAsset();
   }, []);
 
@@ -67,13 +73,13 @@ export default function BillScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { 
-    flex: 1, 
-    backgroundColor: "#fff" 
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
   },
-  pdf: { 
-    flex: 1, 
-    width: Dimensions.get("window").width 
+  pdf: {
+    flex: 1,
+    width: Dimensions.get("window").width,
   },
   loadingContainer: {
     flex: 1,
@@ -109,10 +115,6 @@ const styles = StyleSheet.create({
   },
 });
 
-
-
-
-
 // import React, { useEffect, useState } from "react";
 // import { View, StyleSheet, Dimensions, Text, ActivityIndicator } from "react-native";
 // import Pdf from "react-native-pdf";
@@ -121,14 +123,11 @@ const styles = StyleSheet.create({
 //   const [isLoading, setIsLoading] = useState(true);
 //   const [error, setError] = useState(null);
 
-
-
 //   // Try different source approaches
-//   const pdfSource = { 
+//   const pdfSource = {
 //     uri: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
-//     cache: true 
+//     cache: true
 //   };
-
 
 //   return (
 //     <View style={styles.container}>
@@ -159,7 +158,7 @@ const styles = StyleSheet.create({
 //           }}
 //           onError={(err) => {
 //             console.log("PDF Error:", err);
-//             setError("Could not display the PDF file"); 
+//             setError("Could not display the PDF file");
 //             setIsLoading(false);
 //           }}
 //           style={styles.pdf}
