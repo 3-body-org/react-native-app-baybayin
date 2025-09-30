@@ -9,12 +9,13 @@ import {
   Dimensions
 } from 'react-native';
 import { useRouter } from 'expo-router';
+import { gameConfig } from '../../data/quiz-data';
 
-const QuizResult = ({ 
-  showGameOverModal, 
-  showCongratulationsModal, 
-  gameStats, 
-  onRestart, 
+const QuizResult = ({
+  showGameOverModal,
+  showCongratulationsModal,
+  gameState,
+  onRestart,
   onBackToMenu,
   onHideGameOver,
   onHideCongratulations 
@@ -25,9 +26,9 @@ const QuizResult = ({
     router.push({
       pathname: '/(learning)/summary-results',
       params: {
-        score: gameStats.score,
-        correctAnswers: gameStats.correctAnswers,
-        totalQuestions: gameStats.totalQuestionsInPool,
+        score: gameState.score,
+        correctAnswers: gameState.correctAnswers,
+        totalQuestions: gameConfig.questions.questionsPerLesson,
         mode: 'baybayin'
       }
     });
@@ -59,13 +60,13 @@ const QuizResult = ({
                 <View style={styles.victoryStatCard}>
                   <Text style={styles.victoryStatIcon}>⭐</Text>
                   <Text style={styles.victoryStatLabel}>Huling Iskor</Text>
-                  <Text style={styles.victoryStatValue}>{gameStats.score}</Text>
+                  <Text style={styles.victoryStatValue}>{gameState.score}</Text>
                 </View>
                 
                 <View style={styles.victoryStatCard}>
                   <Text style={styles.victoryStatIcon}>✅</Text>
                   <Text style={styles.victoryStatLabel}>Tamang Nasagot</Text>
-                  <Text style={styles.victoryStatValue}>{gameStats.correctAnswers}/{gameStats.totalQuestionsInPool}</Text>
+                  <Text style={styles.victoryStatValue}>{gameState.correctAnswers}/{gameConfig.questions.questionsPerLesson}</Text>
                 </View>
                 
                 <View style={styles.victoryStatCard}>
@@ -135,19 +136,19 @@ const QuizResult = ({
                 <View style={styles.victoryStatCard}>
                   <Text style={styles.victoryStatIcon}>⭐</Text>
                   <Text style={styles.victoryStatLabel}>Huling Iskor</Text>
-                  <Text style={styles.victoryStatValue}>{gameStats.score}</Text>
+                  <Text style={styles.victoryStatValue}>{gameState.score}</Text>
                 </View>
                 
                 <View style={styles.victoryStatCard}>
                   <Text style={styles.victoryStatIcon}>✅</Text>
                   <Text style={styles.victoryStatLabel}>Tamang Nasagot</Text>
-                  <Text style={styles.victoryStatValue}>{gameStats.correctAnswers}/{gameStats.totalQuestionsInPool}</Text>
+                  <Text style={styles.victoryStatValue}>{gameState.correctAnswers}/{gameConfig.questions.questionsPerLesson}</Text>
                 </View>
                 
                 <View style={styles.victoryStatCard}>
                   <Text style={styles.victoryStatIcon}>❤️</Text>
                   <Text style={styles.victoryStatLabel}>Natitirang Buhay</Text>
-                  <Text style={[styles.victoryStatValue, { color: '#4CAF50' }]}>{gameStats.lives}</Text>
+                  <Text style={[styles.victoryStatValue, { color: '#4CAF50' }]}>{gameState.lives}</Text>
                 </View>
               </View>
               

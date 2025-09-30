@@ -23,7 +23,7 @@ const quizData = {
     { latin: "ARAW", baybayin: "ᜀᜇᜏ᜔", inputCount: 3, meaning: "Day/Sun" },
     { latin: "APOY", baybayin: "ᜀᜉᜓᜌ᜔", inputCount: 3, meaning: "Fire" },
     { latin: "USO", baybayin: "ᜂᜐᜓ", inputCount: 2, meaning: "Trend" },
-    { latin: "ORA", baybayin: "ᜂᜇ", inputCount: 2, meaning: "Hour" },
+    { latin: "ORAS", baybayin: "ᜂᜇ", inputCount: 2, meaning: "Hour" },
     { latin: "EDEN", baybayin: "ᜁᜇᜒᜈ᜔", inputCount: 3, meaning: "Eden" }
   ],
 

@@ -1,11 +1,12 @@
 import React from "react";
-import { TouchableOpacity, StyleSheet, Text, View } from "react-native";
+import { TouchableOpacity, StyleSheet, Text, View, useWindowDimensions } from "react-native";
 import { useRouter, usePathname } from "expo-router";
 import { Undo2 } from "lucide-react-native";
 
 export default function BackButton() {
   const router = useRouter();
   const pathname = usePathname();
+  const { width } = useWindowDimensions();
 
   const handlePress = () => {
     if (pathname.includes('/latin-to-baybayin') || pathname.includes('/baybayin-to-latin')) {
@@ -17,14 +18,25 @@ export default function BackButton() {
     }
   };
 
+  // Responsive text based on screen width
+  const getButtonText = () => {
+    if (width > 300) {
+      return "Bumalik";
+    } else {
+      return "";
+    }
+  };
+
+  const showIcon = width <= 300;
+
   return (
     <TouchableOpacity
       onPress={handlePress}
       style={styles.backButton}
     >
       <View style={styles.container}>
-        <Undo2 size={16} color="#573826" style={{ marginRight: 5 }} />
-        <Text style={styles.text}>Bumalik</Text>
+        <Undo2 size={16} color="#573826" style={{ marginRight: showIcon ? 0 : 5 }} />
+        {!showIcon && <Text style={styles.text}>{getButtonText()}</Text>}
       </View>
     </TouchableOpacity>
   );

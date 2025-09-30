@@ -5,6 +5,7 @@ import {
   View,
   TouchableOpacity,
   StyleSheet,
+  useWindowDimensions,
 } from "react-native";
 import { useRouter } from "expo-router";
 import Card from "@components/card";
@@ -17,6 +18,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export default function HomeScreen() {
   const router = useRouter();
+  const { width, height } = useWindowDimensions();
   const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
 
   const handleOpenBottomSheet = () => {
@@ -28,72 +30,115 @@ export default function HomeScreen() {
   };
 
   return (
-      <View style={styles.container}>
-      <Container >
-        <Text style={styles.greetingText}>
-          Magandang araw!
-        </Text>
+    <View style={styles.container}>
+      {/* Greeting and Learning Card Section Combined */}
+      <View style={styles.greetingCardSection}>
+        <View style={styles.greetingSection}>
+          <Text
+            style={[styles.greetingText, { fontSize: width > 400 ? 28 : 22 }]}
+          >
+            Magandang araw!
+          </Text>
+          <Image
+            source={require("../assets/magandang-araw.webp")}
+            resizeMode="contain"
+            style={[styles.greetingImage, {
+              width: width > 400 ? 220 : 180,
+              height: width > 400 ? 28 : 24
+            }]}
+          />
+        </View>
 
-        <Image
-          source={require("../assets/magandang-araw.webp")}
-          resizeMode="contain"
-          style={styles.greetingImage}
-        />
+        <View style={styles.cardSection}>
+          <Card backgroundColor="#FEF3EC" style={styles.mainCard}>
+            <View style={styles.cardContent}>
+              <Image
+                source={require("../assets/boy.webp")}
+                resizeMode="contain"
+                style={[
+                  styles.boyImage,
+                  {
+                    width: width > 400 ? 110 : width > 300 ? 90 : 75,
+                    height: width > 400 ? 110 : width > 300 ? 90 : 75,
+                  },
+                ]}
+              />
+              <Text
+                style={[
+                  styles.learnText,
+                  {
+                    fontSize: width > 400 ? 30 : width > 300 ? 24 : 20,
+                    marginTop: width > 400 ? 15 : 10,
+                  },
+                ]}
+              >
+                Tayo na't matuto{"\n"}ng Baybayin!
+              </Text>
+            </View>
+          </Card>
+        </View>
+      </View>
 
-        <Card backgroundColor="#FEF3EC">
-          <View style={styles.cardContent}>
-            <Image
-              source={require("../assets/boy.webp")}
-              resizeMode="contain"
-              style={styles.boyImage}
-            />
-            <Text style={styles.learnText}>
-              Tayo na't matuto{'\n'}ng Baybayin!
-            </Text>
-          </View>
-        </Card>
-
-
-      </Container>
-
-<Container>
-        <Text style={styles.categoryText}>
+      {/* Category Section */}
+      <View style={styles.categorySection}>
+        <Text
+          style={[styles.categoryText, { fontSize: width > 400 ? 26 : 20 }]}
+        >
           Kategorya
         </Text>
         <Image
           source={require("@assets/kategorya.webp")}
           resizeMode="contain"
-          style={styles.categoryImage}
+          style={[styles.categoryImage, { width: width > 400 ? 140 : 110 }]}
         />
-      <Carousel data={carouselData} navigation={router} />
-</Container>
+        <Carousel data={carouselData} navigation={router} />
+      </View>
 
-
-      <Container style={styles.shareContainer}>
+      {/* Share Section */}
+      <View style={styles.shareSection}>
         <Card backgroundColor={"#573826"} style={styles.shareCard}>
           <View style={styles.shareRow}>
             <View style={styles.shareTextContainer}>
-              <Text style={styles.shareTitle}>
+              <Text
+                style={[styles.shareTitle, { fontSize: width > 400 ? 24 : 18 }]}
+              >
                 Halina't i-share ang app na ito!
               </Text>
               <TouchableOpacity
                 onPress={handleOpenBottomSheet}
-                style={styles.shareButton}
+                style={[
+                  styles.shareButton,
+                  {
+                    maxWidth: width > 400 ? 150 : 130,
+                    paddingHorizontal: width > 400 ? 20 : 16,
+                  },
+                ]}
               >
-                <Text style={styles.shareButtonText}>
+                <Text
+                  style={[
+                    styles.shareButtonText,
+                    { fontSize: width > 400 ? 18 : 16 },
+                  ]}
+                >
                   Ibahagi
                 </Text>
-                <Share size={16} color="#573826" />
+                <Share size={width > 400 ? 18 : 16} color="#573826" />
               </TouchableOpacity>
             </View>
             <Image
               source={require("../assets/phone.webp")}
               resizeMode="contain"
-              style={styles.phoneImage}
+              style={[
+                styles.phoneImage,
+                {
+                  width: width > 400 ? 130 : width > 300 ? 110 : 90,
+                  height: width > 400 ? 130 : width > 300 ? 110 : 90,
+                },
+              ]}
             />
           </View>
         </Card>
-      </Container>
+      </View>
 
       <CustomBottomSheet
         isVisible={isBottomSheetVisible}
@@ -102,66 +147,77 @@ export default function HomeScreen() {
         snapPoints={["40%", "60%", "80%"]}
         type="social"
       />
-      
-      </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "space-between",
     backgroundColor: "#fff",
-    paddingVertical: 20,
+    paddingVertical: 16,
+  },
+  greetingCardSection: {
+    flex: 3,
+    justifyContent: "center",
+    paddingHorizontal: 20,
+  },
+  greetingSection: {
+    marginBottom: 16,
+  },
+  cardSection: {
+    // No flex here since it's contained in greetingCardSection
+  },
+  categorySection: {
+    flex: 3,
+    justifyContent: "center",
+    paddingHorizontal: 20,
+  },
+  shareSection: {
+    flex: 2,
+    justifyContent: "center",
+    paddingHorizontal: 20,
   },
   greetingText: {
-    fontSize: 20,
     fontWeight: 600,
     color: "#573826",
-    marginBottom: 5,
-    marginTop: 14,
+    marginBottom: 8,
     alignSelf: "flex-start",
   },
   greetingImage: {
-    width: 160,
-    height: 20,
     alignSelf: "flex-start",
+  },
+  mainCard: {
+    marginVertical: 0,
   },
   cardContent: {
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
   },
   boyImage: {
-    width: 80,
-    height: 80,
+    marginRight: 16,
   },
   learnText: {
     color: "#333",
-    fontSize: 22,
     fontWeight: "500",
     textAlign: "right",
-    marginTop: 10,
     flexWrap: "wrap",
     flex: 1,
   },
   categoryText: {
-    fontSize: 20,
     fontWeight: 600,
     color: "#573826",
-    marginBottom: 5,
+    marginBottom: 8,
     alignSelf: "flex-start",
   },
   categoryImage: {
-    width: 100,
-    height: 20,
+    height: 24,
     alignSelf: "flex-start",
-    marginBottom: 20,
-  },
-  shareContainer: {
-    marginVertical: 0,
+    marginBottom: 16,
   },
   shareCard: {
-    marginTop: 0,
+    marginVertical: 0,
   },
   shareRow: {
     flexDirection: "row",
@@ -170,32 +226,28 @@ const styles = StyleSheet.create({
   },
   shareTextContainer: {
     flex: 1,
-    marginRight: 10,
-    paddingLeft: 10,
+    marginRight: 12,
+    paddingLeft: 12,
   },
   shareTitle: {
     color: "#fff",
-    fontSize: 18,
     fontWeight: "600",
-    marginBottom: 10,
+    marginBottom: 12,
   },
   shareButton: {
     backgroundColor: "#F1E3DA",
-    borderRadius: 8,
-    paddingVertical: 8,
+    borderRadius: 10,
+    paddingVertical: 10,
     alignItems: "center",
-    maxWidth: 120,
     flexDirection: "row",
     justifyContent: "center",
-    gap: 8,
+    gap: 6,
   },
   shareButtonText: {
     color: "#573826",
-    fontSize: 16,
     fontWeight: "600",
   },
   phoneImage: {
-    width: 100,
-    height: 100,
+    marginLeft: 8,
   },
 });

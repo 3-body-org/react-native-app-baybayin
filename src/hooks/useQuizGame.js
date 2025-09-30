@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { quizData, gameConfig, getAllWords } from '../data/quiz-data';
 import { lessonModules } from '../data/lesson-data';
+import { saveQuizResult } from '../data/quiz-results';
 
 export const useQuizGame = () => {
   // Game state
@@ -11,6 +12,7 @@ export const useQuizGame = () => {
     totalQuestions: 0,
     correctAnswers: 0,
     gameMode: 'latin-to-baybayin', // 'latin-to-baybayin' or 'baybayin-to-latin'
+    lessonId: null,
     isGameActive: false,
     isGameComplete: false,
     isGameOver: false, // New state for when user loses all lives
@@ -29,6 +31,17 @@ export const useQuizGame = () => {
   const [isCorrect, setIsCorrect] = useState(false);
   const [showGameOverModal, setShowGameOverModal] = useState(false);
   const [showCongratulationsModal, setShowCongratulationsModal] = useState(false);
+
+  // This effect will run when the game is marked as complete
+  useEffect(() => {
+    if (gameState.isGameComplete) {
+      if (gameState.isGameOver) {
+        setShowGameOverModal(true);
+      } else {
+        setShowCongratulationsModal(true);
+      }
+    }
+  }, [gameState.isGameComplete, gameState.isGameOver]);
 
   const createQuestionPool = useCallback((lessonId) => {
     // Get all words from the quiz data
@@ -74,6 +87,7 @@ export const useQuizGame = () => {
       totalQuestions: 0,
       correctAnswers: 0,
       gameMode: mode,
+      lessonId: lessonId,
       isGameActive: true,
       isGameComplete: false,
       isGameOver: false,
@@ -152,15 +166,18 @@ export const useQuizGame = () => {
         newState.isGameOver = true;
         newState.endTime = Date.now();
         
+        // Save the result
+        saveQuizResult({
+          lessonId: newState.lessonId,
+          score: newState.score,
+          correctAnswers: newState.correctAnswers,
+          totalQuestions: gameConfig.questions.questionsPerLesson,
+          lives: newState.lives,
+        });
+
         // Force state update before showing modal
         setGameState(prev => ({ ...prev, ...newState }));
-        
-        // Show game over modal
-        setTimeout(() => {
-          console.log('Showing game over modal');
-          setShowGameOverModal(true);
-        }, 1);
-      } 
+      }
       // Check if game is complete - all questions answered with lives remaining
       else if (newState.totalQuestions >= gameConfig.questions.totalQuestions) {
         console.log('Game Complete - All questions answered with lives remaining');
@@ -169,10 +186,14 @@ export const useQuizGame = () => {
         newState.isGameOver = false;
         newState.endTime = Date.now();
         
-        setTimeout(() => {
-          console.log('Showing congratulations modal');
-          setShowCongratulationsModal(true);
-        }, 10);
+        // Save the result
+        saveQuizResult({
+          lessonId: newState.lessonId,
+          score: newState.score,
+          correctAnswers: newState.correctAnswers,
+          totalQuestions: gameConfig.questions.questionsPerLesson,
+          lives: newState.lives,
+        });
       }
       
       return newState;

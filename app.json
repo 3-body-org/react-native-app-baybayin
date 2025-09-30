@@ -1,5 +1,6 @@
 {
   "expo": {
+    "platforms": ["ios", "android", "web"],
     "scheme": "baynolohiya",
     "name": "baynolohiya",
     "slug": "baynolohiya",
@@ -36,9 +37,7 @@
       "expo-asset",
       "expo-router"
     ],
-    "assetBundlePatterns": [
-      "assets/**/*"
-    ],
+    "assetBundlePatterns": ["assets/**/*"],
     "extra": {
       "eas": {
         "projectId": "3e3249ea-9b91-4292-9fc1-5103cc0596fc"
