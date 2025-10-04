@@ -75,7 +75,7 @@ export default function Carousel({ data = [] }) {
           style={[styles.arrowButton, styles.arrowLeft]}
           onPress={() => scrollToIndex(currentIndex - 1)}
         >
-          <ChevronLeft size={24} color="white" />
+          <ChevronLeft size={24} color="black" />
         </TouchableOpacity>
       )}
       
@@ -100,7 +100,7 @@ export default function Carousel({ data = [] }) {
           style={[styles.arrowButton, styles.arrowRight]}
           onPress={() => scrollToIndex(currentIndex + 1)}
         >
-          <ChevronRight size={24} color="white" />
+          <ChevronRight size={24} color="black" />
         </TouchableOpacity>
       )}
       
@@ -121,30 +121,31 @@ const styles = StyleSheet.create({
     width: "98%",
     height: 240,
     justifyContent: "flex-end",
+    alignItems: "center",
   },
   overlay: {
-    backgroundColor: "rgba(0,0,0,0.4)",
+    alignItems: "center",
     padding: 15,
-    borderBottomLeftRadius: 15,
-    borderBottomRightRadius: 15,
-    width: "98%",
+    paddingBottom: 20,
   },
   title: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: "bold",
     color: "#fff",
+    textAlign: "center",
   },
   description: {
-    fontSize: 14,
+    fontSize: 16,
     color: "#fff",
-    marginTop: 5,
+    textAlign: "center",
+    marginTop: 8,
   },
   arrowButton: {
     position: 'absolute',
     top: '45%',
     transform: [{ translateY: -20 }],
     zIndex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    backgroundColor: "rgba(255, 255, 255, 0.8)",
     borderRadius: 10,
     padding: 12,
     width: 30,
