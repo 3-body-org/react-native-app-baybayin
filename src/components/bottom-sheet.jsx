@@ -2,10 +2,13 @@ import React, { useCallback, useMemo, useRef } from "react";
 import {
   View,
   Text,
+  TextInput,
   StyleSheet,
   TouchableOpacity,
   Alert,
   Share,
+  Clipboard,
+  ScrollView,
 } from "react-native";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import Icon from "react-native-vector-icons/MaterialIcons";
@@ -16,7 +19,7 @@ export default function CustomBottomSheet({
   onClose,
   children,
   title,
-  snapPoints = ["25%", "50%", "90%"],
+  snapPoints = ["50%"],
   type = "default", // 'social' for social sharing
 }) {
   const bottomSheetRef = useRef(null);
@@ -33,7 +36,7 @@ export default function CustomBottomSheet({
         onClose();
       }
     },
-    [onClose],
+    [onClose]
   );
 
   const handleClose = useCallback(() => {
@@ -57,74 +60,109 @@ export default function CustomBottomSheet({
         Alert.alert("Error", "Hindi ma-share sa social media. Subukan ulit.");
       }
     },
-    [shareMessage, onClose],
+    [shareMessage, onClose]
   );
+
+  const handleCopyLink = useCallback(async () => {
+    const link =
+      "https://play.google.com/store/apps/details?id=com.baynolohiya";
+    await Clipboard.setString(link);
+    Alert.alert("Copied!", "Link copied to clipboard.");
+  }, []);
 
   if (!isVisible) return null;
 
   return (
     <BottomSheet
       ref={bottomSheetRef}
-      index={1}
+      index={0}
       snapPoints={snapPointsMemo}
       onChange={handleSheetChanges}
       enablePanDownToClose={true}
+      enableOverDrag={false}
       containerStyle={styles.zIndex2}
       backgroundStyle={styles.bottomSheetBackground}
       handleIndicatorStyle={styles.handleIndicator}
     >
       <BottomSheetView style={styles.contentContainer}>
-        {title && (
-          <View style={styles.header}>
-            <Text style={styles.title}>{title}</Text>
-          </View>
-        )}
         <View style={styles.content}>
           {type === "social" ? (
             <View style={styles.socialContainer}>
-              <Text style={styles.socialSubtitle}>
-                Piliin ang social media platform
-              </Text>
+              <Text style={styles.socialTitle}>Social Share</Text>
+              <Text style={styles.socialSubtitle}>Share this link via</Text>
 
               <View style={styles.socialGrid}>
                 <TouchableOpacity
                   onPress={() => handleSocialShare("facebook")}
                   style={styles.socialButton}
                 >
-                  <View style={[styles.socialIcon, { backgroundColor: "#1877F2" }]}>
+                  <View
+                    style={[styles.socialIcon, { backgroundColor: "#1877F2" }]}
+                  >
                     <Icon name="facebook" size={24} color="#fff" />
                   </View>
-                  <Text style={styles.socialText}>Facebook</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
                   onPress={() => handleSocialShare("twitter")}
                   style={styles.socialButton}
                 >
-                  <View style={[styles.socialIcon, { backgroundColor: "#1DA1F2" }]}>
+                  <View
+                    style={[styles.socialIcon, { backgroundColor: "#1DA1F2" }]}
+                  >
                     <Icon name="alternate-email" size={24} color="#fff" />
                   </View>
-                  <Text style={styles.socialText}>Twitter</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
                   onPress={() => handleSocialShare("instagram")}
                   style={styles.socialButton}
                 >
-                  <View style={[styles.socialIcon, { backgroundColor: "#E4405F" }]}>
+                  <View
+                    style={[styles.socialIcon, { backgroundColor: "#E4405F" }]}
+                  >
                     <Icon name="camera-alt" size={24} color="#fff" />
                   </View>
-                  <Text style={styles.socialText}>Instagram</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
                   onPress={() => handleSocialShare("whatsapp")}
                   style={styles.socialButton}
                 >
-                  <View style={[styles.socialIcon, { backgroundColor: "#25D366" }]}>
+                  <View
+                    style={[styles.socialIcon, { backgroundColor: "#25D366" }]}
+                  >
                     <Icon name="chat-bubble" size={24} color="#fff" />
                   </View>
-                  <Text style={styles.socialText}>WhatsApp</Text>
+                </TouchableOpacity>
+              </View>
+
+              <View style={styles.copyLinkSection}>
+                <Text style={styles.copyLinkTitle}>Copy link</Text>
+                <View style={styles.linkInputContainer}>
+                  <Icon
+                    name="insert-link"
+                    size={20}
+                    color="#6B7280"
+                    style={styles.linkIcon}
+                  />
+                  <ScrollView
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    style={styles.scrollView}
+                  >
+                    <TextInput
+                      style={styles.linkInput}
+                      value="https://play.google.com/store/apps/details?id=com.baynolohiya"
+                      editable={false}
+                    />
+                  </ScrollView>
+                </View>
+                <TouchableOpacity
+                  onPress={handleCopyLink}
+                  style={styles.copyBtn}
+                >
+                  <Text style={styles.copyBtnText}>Copy</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -152,7 +190,7 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   handleIndicator: {
-    backgroundColor: "#D1D5DB",
+    backgroundColor: "#573826",
     width: 48,
     height: 4,
     borderRadius: 2,
@@ -179,45 +217,87 @@ const styles = StyleSheet.create({
   socialContainer: {
     paddingVertical: 16,
   },
+  socialTitle: {
+    fontSize: 18,
+    fontWeight: "700",
+    color: "#573826",
+    textAlign: "left",
+    marginBottom: 8,
+  },
   socialSubtitle: {
-    fontSize: 16,
+    fontSize: 14,
     color: "#6B7280",
-    textAlign: "center",
-    marginBottom: 32,
+    textAlign: "left",
+    marginBottom: 16,
     fontWeight: "500",
+  },
+  copyLinkSection: {
+    marginTop: 24,
+  },
+  copyLinkTitle: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#573826",
+    marginBottom: 8,
+  },
+  linkInputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "#573826",
+    borderRadius: 8,
+    backgroundColor: "#F9FAFB",
+    marginBottom: 8,
+  },
+  linkIcon: {
+    marginLeft: 12,
+    marginRight: 8,
+  },
+  scrollView: {
+    flex: 1,
+  },
+  linkInput: {
+    paddingVertical: 12,
+    paddingRight: 12,
+    fontSize: 14,
+    color: "#573826",
+    minWidth: 200, // ensure it's scrollable
+  },
+  copyBtn: {
+    backgroundColor: "#573826",
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: "center",
+  },
+  copyBtnText: {
+    color: "#FFF",
+    fontSize: 14,
+    fontWeight: "600",
   },
   socialGrid: {
     flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-between",
-    gap: 16,
+    justifyContent: "space-around",
+    width: "100%",
   },
   socialButton: {
     alignItems: "center",
-    width: "45%",
-    paddingVertical: 16,
+    paddingVertical: 8,
     paddingHorizontal: 12,
   },
   socialIcon: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
+    width: 48,
+    height: 48,
+    borderRadius: 24,
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 12,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 3,
+      height: 2,
     },
-    shadowOpacity: 0.2,
-    shadowRadius: 6,
-    elevation: 4,
-  },
-  socialText: {
-    fontSize: 14,
-    color: "#573826",
-    fontWeight: "600",
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 3,
   },
   zIndex2: {
     zIndex: 2,

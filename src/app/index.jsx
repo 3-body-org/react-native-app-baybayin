@@ -15,6 +15,10 @@ import CustomBottomSheet from "@components/bottom-sheet";
 import { carouselData } from "@data/carousel-data";
 import { Share } from "lucide-react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -34,18 +38,20 @@ export default function HomeScreen() {
       {/* Greeting and Learning Card Section Combined */}
       <View style={styles.greetingCardSection}>
         <View style={styles.greetingSection}>
-          <Text
-            style={[styles.greetingText, { fontSize: width > 400 ? 28 : 22 }]}
-          >
+          <Text style={[styles.greetingText, { fontSize: wp(5) }]}>
             Magandang araw!
           </Text>
           <Image
             source={require("../assets/magandang-araw.webp")}
             resizeMode="contain"
-            style={[styles.greetingImage, {
-              width: width > 400 ? 220 : 180,
-              height: width > 400 ? 28 : 24
-            }]}
+            style={[
+              styles.greetingImage,
+              {
+                width: wp(40),
+                height: hp(3),
+                // backgroundColor: "red", // test
+              },
+            ]}
           />
         </View>
 
@@ -53,25 +59,17 @@ export default function HomeScreen() {
           <Card backgroundColor="#FEF3EC" style={styles.mainCard}>
             <View style={styles.cardContent}>
               <Image
-                source={require("../assets/boy.webp")}
+                source={require("@assets/boy.webp")}
                 resizeMode="contain"
                 style={[
                   styles.boyImage,
                   {
-                    width: width > 400 ? 110 : width > 300 ? 90 : 75,
-                    height: width > 400 ? 110 : width > 300 ? 90 : 75,
+                    width: wp(25),
+                    height: hp(10),
                   },
                 ]}
               />
-              <Text
-                style={[
-                  styles.learnText,
-                  {
-                    fontSize: width > 400 ? 30 : width > 300 ? 24 : 20,
-                    marginTop: width > 400 ? 15 : 10,
-                  },
-                ]}
-              >
+              <Text style={styles.learnText}>
                 Tayo na't matuto{"\n"}ng Baybayin!
               </Text>
             </View>
@@ -81,15 +79,13 @@ export default function HomeScreen() {
 
       {/* Category Section */}
       <View style={styles.categorySection}>
-        <Text
-          style={[styles.categoryText, { fontSize: width > 400 ? 26 : 20 }]}
-        >
+        <Text style={[styles.categoryText, { fontSize: wp(5) }]}>
           Kategorya
         </Text>
         <Image
           source={require("@assets/kategorya.webp")}
           resizeMode="contain"
-          style={[styles.categoryImage, { width: width > 400 ? 140 : 110 }]}
+          style={[styles.categoryImage, { width: wp(25), height: hp(3) }]}
         />
         <Carousel data={carouselData} navigation={router} />
       </View>
@@ -99,9 +95,7 @@ export default function HomeScreen() {
         <Card backgroundColor={"#573826"} style={styles.shareCard}>
           <View style={styles.shareRow}>
             <View style={styles.shareTextContainer}>
-              <Text
-                style={[styles.shareTitle, { fontSize: width > 400 ? 24 : 18 }]}
-              >
+              <Text style={[styles.shareTitle, { fontSize: wp(4) }]}>
                 Halina't i-share ang app na ito!
               </Text>
               <TouchableOpacity
@@ -109,30 +103,24 @@ export default function HomeScreen() {
                 style={[
                   styles.shareButton,
                   {
-                    maxWidth: width > 400 ? 150 : 130,
-                    paddingHorizontal: width > 400 ? 20 : 16,
+                    width: wp(30),
                   },
                 ]}
               >
-                <Text
-                  style={[
-                    styles.shareButtonText,
-                    { fontSize: width > 400 ? 18 : 16 },
-                  ]}
-                >
+                <Text style={[styles.shareButtonText, { fontSize: hp(2) }]}>
                   Ibahagi
                 </Text>
-                <Share size={width > 400 ? 18 : 16} color="#573826" />
+                <Share size={wp(5)} color="#573826" />
               </TouchableOpacity>
             </View>
             <Image
-              source={require("../assets/phone.webp")}
+              source={require("@assets/phone.webp")}
               resizeMode="contain"
               style={[
                 styles.phoneImage,
                 {
-                  width: width > 400 ? 130 : width > 300 ? 110 : 90,
-                  height: width > 400 ? 130 : width > 300 ? 110 : 90,
+                  width: wp(25),
+                  height: hp(10),
                 },
               ]}
             />
@@ -143,8 +131,7 @@ export default function HomeScreen() {
       <CustomBottomSheet
         isVisible={isBottomSheetVisible}
         onClose={handleCloseBottomSheet}
-        title="I-share ang Baybayin App"
-        snapPoints={["40%", "60%", "80%"]}
+        snapPoints={["40%"]}
         type="social"
       />
     </View>
@@ -155,28 +142,28 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    paddingVertical: 16,
+    paddingVertical: 30,
+    gap: 10,
   },
   greetingCardSection: {
-    flex: 3,
     justifyContent: "center",
     paddingHorizontal: 20,
+    // backgroundColor: "yellow", // test
   },
   greetingSection: {
     marginBottom: 16,
   },
-  cardSection: {
-    // No flex here since it's contained in greetingCardSection
-  },
+  cardSection: {},
   categorySection: {
-    flex: 3,
+    flex: 1,
     justifyContent: "center",
     paddingHorizontal: 20,
+    // backgroundColor: "blue", // test
   },
   shareSection: {
-    flex: 2,
     justifyContent: "center",
     paddingHorizontal: 20,
+    // backgroundColor: "orange", //test
   },
   greetingText: {
     fontWeight: 600,
@@ -188,12 +175,15 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
   },
   mainCard: {
+    height: hp(18),
     marginVertical: 0,
   },
   cardContent: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    // backgroundColor: "violet", // test
+    height: hp(14),
   },
   boyImage: {
     marginRight: 16,
@@ -203,7 +193,7 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     textAlign: "right",
     flexWrap: "wrap",
-    flex: 1,
+    fontSize: wp(6),
   },
   categoryText: {
     fontWeight: 600,
@@ -212,17 +202,18 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
   },
   categoryImage: {
-    height: 24,
     alignSelf: "flex-start",
     marginBottom: 16,
   },
   shareCard: {
+    height: hp(18),
     marginVertical: 0,
   },
   shareRow: {
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
+    // backgroundColor: "pink", // test
+    height: hp(13),
   },
   shareTextContainer: {
     flex: 1,
@@ -241,11 +232,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
     justifyContent: "center",
-    gap: 6,
+    height: hp(4),
   },
   shareButtonText: {
     color: "#573826",
     fontWeight: "600",
+    // backgroundColor: "violet", //test
+    height: hp(3),
+    margin: 10,
   },
   phoneImage: {
     marginLeft: 8,

@@ -1,222 +1,68 @@
-import React, { useEffect, useState } from "react";
-import {
-  View,
-  StyleSheet,
-  Dimensions,
-  Text,
-  ActivityIndicator,
-} from "react-native";
-import Pdf from "react-native-pdf";
+import React from "react";
+import { View, StyleSheet, ScrollView, Platform, Linking } from "react-native";
+import { router } from "expo-router";
 import { Asset } from "expo-asset";
+import { baybayinBillsData } from "@data/baybayin-bills-data";
+import BillCard from "@components/bill-card";
+import Container from "@components/container";
+
+const getPdfAsset = (billId) => {
+  switch (billId) {
+    case '1':
+      return require('../../assets/sb-1899.pdf');
+    case '2':
+      return require('../../assets/sb-2440.pdf');
+    case '3':
+      return require('../../assets/sb-433.pdf');
+    case '4':
+      return require('../../assets/sb-2086.pdf');
+    case '5':
+      return require('../../assets/sb-1866.pdf');
+    default:
+      throw new Error(`PDF not found for bill id ${billId}`);
+  }
+};
 
 export default function BillScreen() {
-  const [pdfSource, setPdfSource] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const loadAsset = async () => {
+  const handleViewPdf = async (bill) => {
+    if (Platform.OS === 'web') {
       try {
-        // Load your local PDF file
-        const asset = Asset.fromModule(require("@assets/baybayin-law.pdf"));
+        const asset = Asset.fromModule(getPdfAsset(bill.id.toString()));
         await asset.downloadAsync();
-        setPdfSource({ uri: asset.localUri || asset.uri, cache: false });
-        setIsLoading(false);
-      } catch (err) {
-        console.log("Asset error:", err);
-        setError(err.message);
-        setIsLoading(false);
+        Linking.openURL(asset.uri);
+      } catch (error) {
+        console.error('Error opening PDF on web:', error);
+        // Fallback or show error message
       }
-    };
-
-    loadAsset();
-  }, []);
-
-  if (isLoading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#573826" />
-        <Text style={styles.loadingText}>Loading PDF...</Text>
-      </View>
-    );
-  }
-
-  if (error || !pdfSource) {
-    return (
-      <View style={styles.errorContainer}>
-        <Text style={styles.errorText}>⚠️ Failed to load PDF</Text>
-        <Text style={styles.errorSubtext}>Error: {error}</Text>
-      </View>
-    );
-  }
+    } else {
+      router.push({
+        pathname: "/(resources)/pdf-viewer",
+        params: { billId: bill.id.toString() },
+      });
+    }
+  };
 
   return (
-    <View style={styles.container}>
-      <Pdf
-        source={pdfSource}
-        onPageChanged={(page, numberOfPages) => {
-          console.log(`📖 Page ${page} of ${numberOfPages}`);
-        }}
-        onError={(err) => {
-          console.log("❌ PDF Error:", err);
-          setError(err.message);
-        }}
-        style={styles.pdf}
-        trustAllCerts={false}
-        enablePaging={false}
-        spacing={0}
-        minZoom={1}
-        maxZoom={3}
-      />
-    </View>
+    <Container style={styles.container}>
+      <ScrollView
+        style={styles.scrollView}
+        showsVerticalScrollIndicator={false}
+      >
+        {baybayinBillsData.map((bill, index) => (
+          <View key={index}>
+            <BillCard bill={bill} onViewPdf={() => handleViewPdf(bill)} />
+          </View>
+        ))}
+      </ScrollView>
+    </Container>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    margin: 0,
+  },
+  scrollView: {
     flex: 1,
-    backgroundColor: "#fff",
-  },
-  pdf: {
-    flex: 1,
-    width: Dimensions.get("window").width,
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#fff",
-  },
-  loadingText: {
-    marginTop: 10,
-    fontSize: 16,
-    color: "#573826",
-    fontWeight: "500",
-  },
-  errorContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#fff",
-    padding: 20,
-  },
-  errorText: {
-    fontSize: 18,
-    color: "#d32f2f",
-    fontWeight: "bold",
-    marginBottom: 10,
-    textAlign: "center",
-  },
-  errorSubtext: {
-    fontSize: 14,
-    color: "#8B7355",
-    textAlign: "center",
-    lineHeight: 20,
   },
 });
-
-// import React, { useEffect, useState } from "react";
-// import { View, StyleSheet, Dimensions, Text, ActivityIndicator } from "react-native";
-// import Pdf from "react-native-pdf";
-
-// export default function BillScreen() {
-//   const [isLoading, setIsLoading] = useState(true);
-//   const [error, setError] = useState(null);
-
-//   // Try different source approaches
-//   const pdfSource = {
-//     uri: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
-//     cache: true
-//   };
-
-//   return (
-//     <View style={styles.container}>
-//       {/* Loading State */}
-//       {isLoading && (
-//         <View style={styles.loadingContainer}>
-//           <ActivityIndicator size="large" color="#573826" />
-//           <Text style={styles.loadingText}>Loading PDF...</Text>
-//         </View>
-//       )}
-
-//       {/* Error State */}
-//       {error && (
-//         <View style={styles.errorContainer}>
-//           <Text style={styles.errorText}>⚠️ Failed to load PDF</Text>
-//           <Text style={styles.errorSubtext}>
-//             {error}
-//           </Text>
-//         </View>
-//       )}
-
-//       {/* Render PDF */}
-//       <Pdf
-//           source={pdfSource}
-//           onLoadComplete={(numberOfPages) => {
-//             console.log(`PDF loaded: ${numberOfPages} pages`);
-//             setIsLoading(false);
-//           }}
-//           onError={(err) => {
-//             console.log("PDF Error:", err);
-//             setError("Could not display the PDF file");
-//             setIsLoading(false);
-//           }}
-//           style={styles.pdf}
-//           enablePaging={true}
-//           enableRTL={false}
-//           enableAnnotationRendering={true}
-//           trustAllCerts={false}
-//           spacing={0}
-//           minZoom={1}
-//           maxZoom={3}
-//         />
-//     </View>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   container: { flex: 1, backgroundColor: "#fff" },
-//   pdf: { flex: 1, width: Dimensions.get("window").width },
-//   loadingContainer: {
-//     position: "absolute",
-//     top: 0,
-//     left: 0,
-//     right: 0,
-//     bottom: 0,
-//     justifyContent: "center",
-//     alignItems: "center",
-//     backgroundColor: "#fff",
-//     zIndex: 1,
-//   },
-//   loadingText: {
-//     marginTop: 10,
-//     fontSize: 16,
-//     color: "#573826",
-//     fontWeight: "500",
-//   },
-//   errorContainer: {
-//     position: "absolute",
-//     top: 0,
-//     left: 0,
-//     right: 0,
-//     bottom: 0,
-//     justifyContent: "center",
-//     alignItems: "center",
-//     backgroundColor: "#fff",
-//     zIndex: 1,
-//     padding: 20,
-//   },
-//   errorText: {
-//     fontSize: 18,
-//     color: "#d32f2f",
-//     fontWeight: "bold",
-//     marginBottom: 10,
-//     textAlign: "center",
-//   },
-//   errorSubtext: {
-//     fontSize: 14,
-//     color: "#8B7355",
-//     textAlign: "center",
-//     lineHeight: 20,
-//   },
-// });

@@ -2,10 +2,10 @@ export const carouselData = [
   {
     id: 1,
     title: "Matuto ng Baybayin",
-    description: "Alamin ang kasaysayan, alpabeto, at pagsulat ng Baybayin sa mga aralin na madaling sundan.",
-    backgroundImage: require("@assets/bg1.webp"),
+    description:
+      "Alamin ang kasaysayan, alpabeto, at pagsulat ng Baybayin sa mga aralin na madaling sundan.",
+    backgroundImage: require("@assets/bg1.jpg"),
     screen: "/(learning)/aralin-tab",
-    
   },
   {
     id: 2,
@@ -18,7 +18,8 @@ export const carouselData = [
   {
     id: 3,
     title: "Baybayin Bill",
-    description: "Basahin ang mahahalagang seksyon ng panukalang batas tungkol sa Baybayin.",
+    description:
+      "Basahin ang mahahalagang seksyon ng panukalang batas tungkol sa Baybayin.",
     backgroundImage: require("@assets/bg3.webp"),
     screen: "/bill-screen",
   },
