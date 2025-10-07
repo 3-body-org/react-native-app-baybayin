@@ -11,9 +11,13 @@ import {
 import { useRouter } from "expo-router";
 import { ChevronLeft, ChevronRight } from "lucide-react-native";
 import Pagination from "@components/pagination";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
 
 const { width } = Dimensions.get("window");
-const ITEM_WIDTH = Math.round(width * 0.90);
+const ITEM_WIDTH = Math.round(width * 0.9);
 const ITEM_MARGIN = 7;
 
 export default function Carousel({ data = [] }) {
@@ -30,7 +34,7 @@ export default function Carousel({ data = [] }) {
 
   const handleMomentumScrollEnd = (event) => {
     const newIndex = Math.round(
-      event.nativeEvent.contentOffset.x / (ITEM_WIDTH + ITEM_MARGIN * 2),
+      event.nativeEvent.contentOffset.x / (ITEM_WIDTH + ITEM_MARGIN * 2)
     );
     setCurrentIndex(newIndex);
   };
@@ -42,14 +46,22 @@ export default function Carousel({ data = [] }) {
   });
 
   const onScrollToIndexFailed = (info) => {
-    const wait = new Promise(resolve => setTimeout(resolve, 500));
+    const wait = new Promise((resolve) => setTimeout(resolve, 500));
     wait.then(() => {
-      flatListRef.current?.scrollToIndex({ index: info.index, animated: false });
+      flatListRef.current?.scrollToIndex({
+        index: info.index,
+        animated: false,
+      });
     });
   };
 
   const renderItem = ({ item }) => (
-    <View style={{ width: ITEM_WIDTH, marginHorizontal: ITEM_MARGIN }}>
+    <View
+      style={{
+        width: wp(90), //90 muna, will test again later
+        marginHorizontal: ITEM_MARGIN,
+      }}
+    >
       <TouchableOpacity
         activeOpacity={0.8}
         onPress={() => router.push(item.screen)}
@@ -71,14 +83,14 @@ export default function Carousel({ data = [] }) {
   return (
     <View style={styles.container}>
       {currentIndex > 0 && (
-        <TouchableOpacity 
+        <TouchableOpacity
           style={[styles.arrowButton, styles.arrowLeft]}
           onPress={() => scrollToIndex(currentIndex - 1)}
         >
-          <ChevronLeft size={24} color="black" />
+          <ChevronLeft size={wp(4)} color="black" />
         </TouchableOpacity>
       )}
-      
+
       <FlatList
         ref={flatListRef}
         data={data}
@@ -96,19 +108,19 @@ export default function Carousel({ data = [] }) {
       />
 
       {currentIndex < data.length - 1 && (
-        <TouchableOpacity 
+        <TouchableOpacity
           style={[styles.arrowButton, styles.arrowRight]}
           onPress={() => scrollToIndex(currentIndex + 1)}
         >
-          <ChevronRight size={24} color="black" />
+          <ChevronRight size={wp(4)} color="black" />
         </TouchableOpacity>
       )}
-      
-      <Pagination 
-        data={data} 
-        currentIndex={currentIndex} 
+
+      <Pagination
+        data={data}
+        currentIndex={currentIndex}
         scrollToIndex={scrollToIndex}
-      /> 
+      />
     </View>
   );
 }
@@ -118,8 +130,8 @@ const styles = StyleSheet.create({
     position: "relative",
   },
   slide: {
-    width: "98%",
-    height: 240,
+    width: wp(85),
+    height: hp(30),
     justifyContent: "flex-end",
     alignItems: "center",
   },
@@ -129,29 +141,27 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   title: {
-    fontSize: 24,
+    fontSize: hp(3),
     fontWeight: "bold",
     color: "#fff",
     textAlign: "center",
   },
   description: {
-    fontSize: 16,
+    fontSize: hp(1.8),
     color: "#fff",
     textAlign: "center",
     marginTop: 8,
   },
   arrowButton: {
-    position: 'absolute',
-    top: '45%',
+    position: "absolute",
+    top: "45%",
     transform: [{ translateY: -20 }],
     zIndex: 1,
     backgroundColor: "rgba(255, 255, 255, 0.8)",
     borderRadius: 10,
-    padding: 12,
-    width: 30,
-    height: 30,
-    justifyContent: 'center',
-    alignItems: 'center',
+    padding: 5,
+    justifyContent: "center",
+    alignItems: "center",
   },
   arrowLeft: {
     left: 30,
@@ -160,4 +170,4 @@ const styles = StyleSheet.create({
     right: 30,
   },
 });
-ChevronRight
+ChevronRight;

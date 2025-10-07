@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, lazy, Suspense } from "react";
 import {
   View,
   StyleSheet,
   Dimensions,
   Text,
   ActivityIndicator,
+  Platform,
 } from "react-native";
-import Pdf from "react-native-pdf";
 import { Asset } from "expo-asset";
 import { useLocalSearchParams } from "expo-router";
+
+const Pdf = Platform.OS !== 'web' ? lazy(() => import('react-native-pdf')) : null;
 
 export default function PdfViewer() {
   const { billId } = useLocalSearchParams();
@@ -34,19 +36,23 @@ export default function PdfViewer() {
   };
 
   useEffect(() => {
-    const loadPdf = async () => {
-      try {
-        const asset = Asset.fromModule(getPdfAsset(billId));
-        await asset.downloadAsync();
-        setPdfSource({ uri: asset.localUri || asset.uri, cache: false });
-      } catch (err) {
-        console.log("Asset error:", err);
-        setError(err.message);
-      }
-      setIsLoading(false);
-    };
+    if (Platform.OS !== 'web') {
+      const loadPdf = async () => {
+        try {
+          const asset = Asset.fromModule(getPdfAsset(billId));
+          await asset.downloadAsync();
+          setPdfSource({ uri: asset.localUri || asset.uri, cache: false });
+        } catch (err) {
+          console.log("Asset error:", err);
+          setError(err.message);
+        }
+        setIsLoading(false);
+      };
 
-    loadPdf();
+      loadPdf();
+    } else {
+      setIsLoading(false);
+    }
   }, [billId]);
 
   if (isLoading) {
@@ -58,7 +64,7 @@ export default function PdfViewer() {
     );
   }
 
-  if (error || !pdfSource) {
+  if (error || (!pdfSource && Platform.OS !== 'web')) {
     return (
       <View style={styles.errorContainer}>
         <Text style={styles.errorText}>⚠️ Failed to load PDF</Text>
@@ -67,25 +73,40 @@ export default function PdfViewer() {
     );
   }
 
+  if (Platform.OS === 'web') {
+    return (
+      <View style={styles.container}>
+        <Text>PDF viewer is not available on web.</Text>
+      </View>
+    );
+  }
+
   return (
-    <View style={styles.container}>
-      <Pdf
-        source={pdfSource}
-        onPageChanged={(page, numberOfPages) => {
-          console.log(`📖 Page ${page} of ${numberOfPages}`);
-        }}
-        onError={(err) => {
-          console.log("❌ PDF Error:", err);
-          setError(err.message);
-        }}
-        style={styles.pdf}
-        trustAllCerts={false}
-        enablePaging={false}
-        spacing={0}
-        minZoom={1}
-        maxZoom={3}
-      />
-    </View>
+    <Suspense fallback={
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#573826" />
+        <Text style={styles.loadingText}>Loading PDF Viewer...</Text>
+      </View>
+    }>
+      <View style={styles.container}>
+        <Pdf
+          source={pdfSource}
+          onPageChanged={(page, numberOfPages) => {
+            console.log(`📖 Page ${page} of ${numberOfPages}`);
+          }}
+          onError={(err) => {
+            console.log("❌ PDF Error:", err);
+            setError(err.message);
+          }}
+          style={styles.pdf}
+          trustAllCerts={false}
+          enablePaging={false}
+          spacing={0}
+          minZoom={1}
+          maxZoom={3}
+        />
+      </View>
+    </Suspense>
   );
 }
 
