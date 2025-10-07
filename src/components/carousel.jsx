@@ -87,7 +87,7 @@ export default function Carousel({ data = [] }) {
           style={[styles.arrowButton, styles.arrowLeft]}
           onPress={() => scrollToIndex(currentIndex - 1)}
         >
-          <ChevronLeft size={wp(4)} color="black" />
+          <ChevronLeft size={wp(5)} color="black" />
         </TouchableOpacity>
       )}
 
@@ -112,7 +112,7 @@ export default function Carousel({ data = [] }) {
           style={[styles.arrowButton, styles.arrowRight]}
           onPress={() => scrollToIndex(currentIndex + 1)}
         >
-          <ChevronRight size={wp(4)} color="black" />
+          <ChevronRight size={wp(5)} color="black" />
         </TouchableOpacity>
       )}
 
@@ -136,7 +136,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   overlay: {
+    flex: 1,
+    justifyContent: "flex-end",
     alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.2)",
+    borderRadius: 15,
     padding: 15,
     paddingBottom: 20,
   },

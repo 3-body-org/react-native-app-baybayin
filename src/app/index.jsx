@@ -110,7 +110,7 @@ export default function HomeScreen() {
                 <Text style={[styles.shareButtonText, { fontSize: hp(2) }]}>
                   Ibahagi
                 </Text>
-                <Share size={wp(4)} color="#573826" />
+                <Share size={wp(5)} color="#573826" />
               </TouchableOpacity>
             </View>
             <Image
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    paddingVertical: 16,
+    paddingVertical: 30,
     gap: 10,
   },
   greetingCardSection: {
@@ -237,6 +237,9 @@ const styles = StyleSheet.create({
   shareButtonText: {
     color: "#573826",
     fontWeight: "600",
+    // backgroundColor: "violet", //test
+    height: hp(3),
+    margin: 10,
   },
   phoneImage: {
     marginLeft: 8,
