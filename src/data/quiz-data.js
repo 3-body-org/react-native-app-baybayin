@@ -23,7 +23,7 @@ const quizData = {
     { latin: "ARAW", baybayin: "ᜀᜇᜏ᜔", inputCount: 3, meaning: "Day/Sun" },
     { latin: "APOY", baybayin: "ᜀᜉᜓᜌ᜔", inputCount: 3, meaning: "Fire" },
     { latin: "USO", baybayin: "ᜂᜐᜓ", inputCount: 2, meaning: "Trend" },
-    { latin: "ORAS", baybayin: "ᜂᜇ", inputCount: 2, meaning: "Hour" },
+    { latin: "ORAS", baybayin: "ᜂᜇᜐ᜔", inputCount: 3, meaning: "Hour" },
     { latin: "EDEN", baybayin: "ᜁᜇᜒᜈ᜔", inputCount: 3, meaning: "Eden" }
   ],
 
@@ -31,26 +31,26 @@ const quizData = {
   katinig: [
     { latin: "BAYANI", baybayin: "ᜊᜌᜈᜒ", inputCount: 3, meaning: "Hero" },
     { latin: "KAMA", baybayin: "ᜃᜋ", inputCount: 2, meaning: "Bed" },
-    { latin: "GABI", baybayin: "ᜄᜊᜁ", inputCount: 3, meaning: "Night" },
+    { latin: "GABI", baybayin: "ᜄᜊᜒ", inputCount: 2, meaning: "Night" },
     { latin: "DAAN", baybayin: "ᜇᜀᜈ᜔", inputCount: 3, meaning: "Road" },
     { latin: "HALIK", baybayin: "ᜑᜎᜒᜃ᜔", inputCount: 3, meaning: "Kiss" },
     { latin: "LUPA", baybayin: "ᜎᜓᜉ", inputCount: 2, meaning: "Land" },
     { latin: "MATA", baybayin: "ᜋᜆ", inputCount: 2, meaning: "Eye" },
     { latin: "NANAY", baybayin: "ᜈᜈᜌ᜔", inputCount: 3, meaning: "Mother" },
     { latin: "SAYA", baybayin: "ᜐᜌ", inputCount: 2, meaning: "Joy" },
-    { latin: "PAMILYA", baybayin: "ᜉᜋᜒᜎᜌ", inputCount: 4, meaning: "Family" }
+    { latin: "PAMILYA", baybayin: "ᜉᜋᜒᜎ᜔ᜌ", inputCount: 4, meaning: "Family" }
   ],
 
   // KUDLIT - Words demonstrating kudlit usage
   kudlit: [
     { latin: "BILI", baybayin: "ᜊᜒᜎᜒ", inputCount: 2, meaning: "Buy" },
     { latin: "BUKO", baybayin: "ᜊᜓᜃᜓ", inputCount: 2, meaning: "Coconut" },
-    { latin: "KITI", baybayin: "ᜃᜒᜆᜒ", inputCount: 2, meaning: "Tick" },
+    { latin: "KITI", baybayin: "ᜃᜒᜆᜒ", inputCount: 2, meaning: "Chick" },
     { latin: "KUNO", baybayin: "ᜃᜓᜈᜓ", inputCount: 2, meaning: "Pretend" },
     { latin: "DITO", baybayin: "ᜇᜒᜆᜓ", inputCount: 2, meaning: "Here" },
     { latin: "GULO", baybayin: "ᜄᜓᜎᜓ", inputCount: 2, meaning: "Chaos" },
     { latin: "HULI", baybayin: "ᜑᜓᜎᜒ", inputCount: 2, meaning: "Late/Catch" },
-    { latin: "LILO", baybayin: "ᜎᜒᜎᜓ", inputCount: 2, meaning: "Bathe" },
+    { latin: "LIGO", baybayin: "ᜎᜒᜄᜓ", inputCount: 2, meaning: "Bathe" },
     { latin: "MULI", baybayin: "ᜋᜓᜎᜒ", inputCount: 2, meaning: "Again" },
     { latin: "SUKI", baybayin: "ᜐᜓᜃᜒ", inputCount: 2, meaning: "Regular customer" }
   ],
@@ -71,16 +71,16 @@ const quizData = {
 
   // DANDA - Complete sentences with punctuation
   danda: [
-    { latin: "MABUTI", baybayin: "ᜋᜊᜓᜆᜒ᜵", inputCount: 4, meaning: "Good." },
-    { latin: "MAGANDA", baybayin: "ᜋᜄᜈ᜔ᜇ᜵", inputCount: 5, meaning: "Beautiful." },
-    { latin: "MALAKI", baybayin: "ᜋᜎᜃᜒ᜵", inputCount: 4, meaning: "Big." },
-    { latin: "MALIIT", baybayin: "ᜋᜎᜒᜁᜆ᜔᜵", inputCount: 5, meaning: "Small." },
-    { latin: "MASARAP", baybayin: "ᜋᜐᜇᜉ᜔᜵", inputCount: 5, meaning: "Delicious." },
-    { latin: "MAINIT", baybayin: "ᜋᜁᜈᜒᜆ᜔᜵", inputCount: 5, meaning: "Hot." },
-    { latin: "MALAMIG", baybayin: "ᜋᜎᜋᜒᜄ᜔᜵", inputCount: 5, meaning: "Cold." },
-    { latin: "MASAYA", baybayin: "ᜋᜐᜌ᜵", inputCount: 4, meaning: "Happy." },
-    { latin: "MALUNGKOT", baybayin: "ᜋᜎᜓᜅ᜔ᜃᜓᜆ᜔᜵", inputCount: 6, meaning: "Sad." },
-    { latin: "MABAIT", baybayin: "ᜋᜊᜁᜆ᜔᜵", inputCount: 5, meaning: "Kind." }
+    { latin: "MABUTI", baybayin: "ᜋᜊᜓᜆᜒ᜶", inputCount: 4, meaning: "Good." },
+    { latin: "MAGANDA", baybayin: "ᜋᜄᜈ᜔ᜇ᜶", inputCount: 5, meaning: "Beautiful." },
+    { latin: "MALAKI", baybayin: "ᜋᜎᜃᜒ᜶", inputCount: 4, meaning: "Big." },
+    { latin: "MALIIT", baybayin: "ᜋᜎᜒᜁᜆ᜔᜶", inputCount: 5, meaning: "Small." },
+    { latin: "MASARAP", baybayin: "ᜋᜐᜇᜉ᜔᜶", inputCount: 5, meaning: "Delicious." },
+    { latin: "MAINIT", baybayin: "ᜋᜁᜈᜒᜆ᜔᜶", inputCount: 5, meaning: "Hot." },
+    { latin: "MALAMIG", baybayin: "ᜋᜎᜋᜒᜄ᜔᜶", inputCount: 5, meaning: "Cold." },
+    { latin: "MASAYA", baybayin: "ᜋᜐᜌ᜶", inputCount: 4, meaning: "Happy." },
+    { latin: "MALUNGKOT", baybayin: "ᜋᜎᜓᜅ᜔ᜃᜓᜆ᜔᜶", inputCount: 6, meaning: "Sad." },
+    { latin: "MABAIT", baybayin: "ᜋᜊᜁᜆ᜔᜶", inputCount: 5, meaning: "Kind." }
   ]
 };
 
@@ -109,7 +109,6 @@ const baybayinCharacters = [
 
   // PANGALTAS & PUNCTUATION
   "᜔", // Pangaltas (Virama)
-  "᜵", // Danda (Period)
   "᜶"  // Double Danda (Period)
 ];
 
