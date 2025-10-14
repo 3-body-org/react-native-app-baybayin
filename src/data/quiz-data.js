@@ -109,7 +109,8 @@ const baybayinCharacters = [
 
   // PANGALTAS & PUNCTUATION
   "᜔", // Pangaltas (Virama)
-  "᜵"  // Danda (Period)
+  "᜵", // Danda (Period)
+  "᜶"  // Double Danda (Period)
 ];
 
 // Game configuration

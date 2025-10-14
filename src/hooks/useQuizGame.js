@@ -1,7 +1,7 @@
-import { useState, useEffect, useCallback } from 'react';
-import { quizData, gameConfig, getAllWords } from '../data/quiz-data';
-import { lessonModules } from '../data/lesson-data';
-import { saveQuizResult } from '../data/quiz-results';
+import { useState, useEffect, useCallback } from "react";
+import { quizData, gameConfig, getAllWords } from "../data/quiz-data";
+import { lessonModules } from "../data/lesson-data";
+import { saveQuizResult } from "../data/quiz-results";
 
 export const useQuizGame = () => {
   // Game state
@@ -11,13 +11,13 @@ export const useQuizGame = () => {
     lives: gameConfig.lives.maxLives,
     totalQuestions: 0,
     correctAnswers: 0,
-    gameMode: 'latin-to-baybayin', // 'latin-to-baybayin' or 'baybayin-to-latin'
+    gameMode: "latin-to-baybayin", // 'latin-to-baybayin' or 'baybayin-to-latin'
     lessonId: null,
     isGameActive: false,
     isGameComplete: false,
     isGameOver: false, // New state for when user loses all lives
     startTime: null,
-    endTime: null
+    endTime: null,
   });
 
   // Question pool for current game
@@ -26,11 +26,12 @@ export const useQuizGame = () => {
 
   // Current question data
   const [currentQuestionData, setCurrentQuestionData] = useState(null);
-  const [userAnswer, setUserAnswer] = useState('');
+  const [userAnswer, setUserAnswer] = useState("");
   const [showFeedback, setShowFeedback] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
   const [showGameOverModal, setShowGameOverModal] = useState(false);
-  const [showCongratulationsModal, setShowCongratulationsModal] = useState(false);
+  const [showCongratulationsModal, setShowCongratulationsModal] =
+    useState(false);
 
   // This effect will run when the game is marked as complete
   useEffect(() => {
@@ -44,27 +45,17 @@ export const useQuizGame = () => {
   }, [gameState.isGameComplete, gameState.isGameOver]);
 
   const createQuestionPool = useCallback((lessonId) => {
-    // Get all words from the quiz data
-    const allWords = getAllWords();
-    
-    // If we have a lesson ID, filter words from that lesson
-    if (lessonId && lessonModules[lessonId]) {
-      const lesson = lessonModules[lessonId];
-      if (lesson.examples) {
-        // Map lesson examples to match our word format
-        return lesson.examples
-          .map(ex => ({
-            latin: ex.latin,
-            baybayin: ex.baybayin,
-            meaning: ex.meaning || '',
-            inputCount: ex.inputCount || ex.baybayin.length
-          }))
-          .sort(() => Math.random() - 0.5)
-          .slice(0, gameConfig.questions.questionsPerLesson);
-      }
+    // If we have a lesson ID, filter words from that lesson in quizData
+    if (lessonId && quizData[lessonId]) {
+      const lessonQuestions = quizData[lessonId];
+      // Shuffle and return the questions for this lesson
+      return [...lessonQuestions]
+        .sort(() => Math.random() - 0.5)
+        .slice(0, gameConfig.questions.questionsPerLesson);
     }
-    
-    // If no specific lesson or no examples, use all words
+
+    // If no specific lesson or lesson not found, use all words as fallback
+    const allWords = getAllWords();
     return [...allWords]
       .sort(() => Math.random() - 0.5)
       .slice(0, gameConfig.questions.questionsPerLesson);
@@ -79,147 +70,161 @@ export const useQuizGame = () => {
   }, [questionPool, currentQuestionIndex]);
 
   // Start new game
-  const startGame = useCallback((mode = 'latin-to-baybayin', lessonId) => {
-    const newGameState = {
-      currentQuestion: 0,
-      score: 0,
-      lives: gameConfig.lives.maxLives,
-      totalQuestions: 0,
-      correctAnswers: 0,
-      gameMode: mode,
-      lessonId: lessonId,
-      isGameActive: true,
-      isGameComplete: false,
-      isGameOver: false,
-      startTime: Date.now(),
-      endTime: null
-    };
-    
-    setGameState(newGameState);
-    
-    const pool = createQuestionPool(lessonId);
-    setQuestionPool(pool);
-    setCurrentQuestionIndex(0);
-    
-    if (pool.length > 0) {
-      setCurrentQuestionData(pool[0]);
-      setUserAnswer('');
-      setShowFeedback(false);
-      setIsCorrect(false);
-      setShowGameOverModal(false);
-      setShowCongratulationsModal(false);
-    }
-  }, [createQuestionPool]);
+  const startGame = useCallback(
+    (mode = "latin-to-baybayin", lessonId) => {
+      const newGameState = {
+        currentQuestion: 0,
+        score: 0,
+        lives: gameConfig.lives.maxLives,
+        totalQuestions: 0,
+        correctAnswers: 0,
+        gameMode: mode,
+        lessonId: lessonId,
+        isGameActive: true,
+        isGameComplete: false,
+        isGameOver: false,
+        startTime: Date.now(),
+        endTime: null,
+      };
+
+      setGameState(newGameState);
+
+      const pool = createQuestionPool(lessonId);
+      setQuestionPool(pool);
+      setCurrentQuestionIndex(0);
+
+      if (pool.length > 0) {
+        setCurrentQuestionData(pool[0]);
+        setUserAnswer("");
+        setShowFeedback(false);
+        setIsCorrect(false);
+        setShowGameOverModal(false);
+        setShowCongratulationsModal(false);
+      }
+    },
+    [createQuestionPool]
+  );
 
   // Load next question
   const loadNextQuestion = useCallback(() => {
     const nextIndex = currentQuestionIndex + 1;
-    
+
     if (nextIndex < questionPool.length) {
       setCurrentQuestionIndex(nextIndex);
       setCurrentQuestionData(questionPool[nextIndex]);
-      setUserAnswer('');
+      setUserAnswer("");
       setShowFeedback(false);
       setIsCorrect(false);
     }
   }, [currentQuestionIndex, questionPool]);
 
   // Submit answer
-  const submitAnswer = useCallback((answer) => {
-    if (!currentQuestionData || showFeedback) return;
+  const submitAnswer = useCallback(
+    (answer) => {
+      if (!currentQuestionData || showFeedback) return;
 
-    const isAnswerCorrect = checkAnswer(answer);
-    setUserAnswer(answer);
-    setIsCorrect(isAnswerCorrect);
-    setShowFeedback(true);
+      const isAnswerCorrect = checkAnswer(answer);
+      setUserAnswer(answer);
+      setIsCorrect(isAnswerCorrect);
+      setShowFeedback(true);
 
-    // Update game state
-    setGameState(prev => {
-      const newState = { ...prev };
-      
-      // Update score and lives
-      if (isAnswerCorrect) {
-        const points = gameConfig.scoring.correctAnswer;
-        newState.score += points;
-        newState.correctAnswers += 1;
-      } else {
-        if (gameConfig.lives.loseLifeOnWrong) {
-          newState.lives = Math.max(0, newState.lives - 1); // Ensure lives don't go below 0
+      // Update game state
+      setGameState((prev) => {
+        const newState = { ...prev };
+
+        // Update score and lives
+        if (isAnswerCorrect) {
+          const points = gameConfig.scoring.correctAnswer;
+          newState.score += points;
+          newState.correctAnswers += 1;
+        } else {
+          if (gameConfig.lives.loseLifeOnWrong) {
+            newState.lives = Math.max(0, newState.lives - 1); // Ensure lives don't go below 0
+          }
         }
-      }
-      
-      newState.totalQuestions += 1;
-      
-      // Debug logging
-      console.log('Game completion check:', {
-        totalQuestions: newState.totalQuestions,
-        totalQuestionsInPool: gameConfig.questions.totalQuestions,
-        lives: newState.lives,
-        isCorrect: isAnswerCorrect
+
+        newState.totalQuestions += 1;
+
+        // Debug logging
+        console.log("Game completion check:", {
+          totalQuestions: newState.totalQuestions,
+          totalQuestionsInPool: gameConfig.questions.totalQuestions,
+          lives: newState.lives,
+          isCorrect: isAnswerCorrect,
+        });
+
+        // Check if game is over due to no lives left
+        if (newState.lives <= 0) {
+          console.log("Game Over - No lives left");
+          newState.isGameActive = false;
+          newState.isGameComplete = true;
+          newState.isGameOver = true;
+          newState.endTime = Date.now();
+
+          // Save the result
+          saveQuizResult({
+            lessonId: newState.lessonId,
+            score: newState.score,
+            correctAnswers: newState.correctAnswers,
+            totalQuestions: gameConfig.questions.questionsPerLesson,
+            lives: newState.lives,
+          });
+
+          // Force state update before showing modal
+          setGameState((prev) => ({ ...prev, ...newState }));
+        }
+        // Check if game is complete - all questions answered with lives remaining
+        else if (
+          currentQuestionIndex >= questionPool.length - 1
+        ) {
+          console.log(
+            "Game Complete - All questions answered with lives remaining"
+          );
+          newState.isGameActive = false;
+          newState.isGameComplete = true;
+          newState.isGameOver = false;
+          newState.endTime = Date.now();
+
+          // Save the result
+          saveQuizResult({
+            lessonId: newState.lessonId,
+            score: newState.score,
+            correctAnswers: newState.correctAnswers,
+            totalQuestions: gameConfig.questions.questionsPerLesson,
+            lives: newState.lives,
+          });
+        }
+
+        return newState;
       });
-      
-      // Check if game is over due to no lives left
-      if (newState.lives <= 0) {
-        console.log('Game Over - No lives left');
-        newState.isGameActive = false;
-        newState.isGameComplete = true;
-        newState.isGameOver = true;
-        newState.endTime = Date.now();
-        
-        // Save the result
-        saveQuizResult({
-          lessonId: newState.lessonId,
-          score: newState.score,
-          correctAnswers: newState.correctAnswers,
-          totalQuestions: gameConfig.questions.questionsPerLesson,
-          lives: newState.lives,
-        });
-
-        // Force state update before showing modal
-        setGameState(prev => ({ ...prev, ...newState }));
-      }
-      // Check if game is complete - all questions answered with lives remaining
-      else if (newState.totalQuestions >= gameConfig.questions.totalQuestions) {
-        console.log('Game Complete - All questions answered with lives remaining');
-        newState.isGameActive = false;
-        newState.isGameComplete = true;
-        newState.isGameOver = false;
-        newState.endTime = Date.now();
-        
-        // Save the result
-        saveQuizResult({
-          lessonId: newState.lessonId,
-          score: newState.score,
-          correctAnswers: newState.correctAnswers,
-          totalQuestions: gameConfig.questions.questionsPerLesson,
-          lives: newState.lives,
-        });
-      }
-      
-      return newState;
-    });
-
-  }, [currentQuestionData, showFeedback, questionPool]);
+    },
+    [currentQuestionData, showFeedback, questionPool]
+  );
 
   // Check if answer is correct
-  const checkAnswer = useCallback((answer) => {
-    if (!currentQuestionData) return false;
-    
-    // For Latin to Baybayin mode
-    if (gameState.gameMode === 'latin-to-baybayin') {
-      // Normalize both strings for comparison (remove diacritics and make lowercase)
-      const normalize = (str) => str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-      return normalize(answer) === normalize(currentQuestionData.baybayin);
-    } 
-    // For Baybayin to Latin mode
-    else if (gameState.gameMode === 'baybayin-to-latin') {
-      return answer.toLowerCase() === currentQuestionData.latin.toLowerCase();
-    }
-    
-    return false;
-  }, [currentQuestionData, gameState.gameMode]);
+  const checkAnswer = useCallback(
+    (answer) => {
+      if (!currentQuestionData) return false;
 
+      // For Latin to Baybayin mode
+      if (gameState.gameMode === "latin-to-baybayin") {
+        // Normalize both strings for comparison (remove diacritics and make lowercase)
+        const normalize = (str) =>
+          str
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .toLowerCase();
+        return normalize(answer) === normalize(currentQuestionData.baybayin);
+      }
+      // For Baybayin to Latin mode
+      else if (gameState.gameMode === "baybayin-to-latin") {
+        return answer.toLowerCase() === currentQuestionData.latin.toLowerCase();
+      }
 
+      return false;
+    },
+    [currentQuestionData, gameState.gameMode]
+  );
 
   // Continue to next question
   const continueToNext = useCallback(() => {
@@ -232,8 +237,8 @@ export const useQuizGame = () => {
   const restartGame = useCallback(() => {
     setShowGameOverModal(false);
     setShowCongratulationsModal(false);
-    startGame(gameState.gameMode);
-  }, [startGame, gameState.gameMode]);
+    startGame(gameState.gameMode, gameState.lessonId);
+  }, [startGame, gameState.gameMode, gameState.lessonId]);
 
   // Hide Game Over modal
   const hideGameOverModal = useCallback(() => {
@@ -245,15 +250,13 @@ export const useQuizGame = () => {
     setShowCongratulationsModal(false);
   }, []);
 
-
-
   // Get game statistics
   const gameStats = {
     score: gameState.score,
     lives: gameState.lives,
     totalQuestions: gameState.totalQuestions,
     correctAnswers: gameState.correctAnswers,
-    totalQuestionsInPool: gameConfig.questions.totalQuestions
+    totalQuestionsInPool: gameConfig.questions.totalQuestions,
   };
 
   return {
@@ -272,6 +275,6 @@ export const useQuizGame = () => {
     restartGame,
     loadNextQuestion,
     hideGameOverModal,
-    hideCongratulationsModal
+    hideCongratulationsModal,
   };
 };

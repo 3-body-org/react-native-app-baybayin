@@ -100,6 +100,7 @@ const QuizScreen = () => {
       if (gameState.gameMode === 'latin-to-baybayin') {
         return (
           <LatinToBaybayinMode
+            key={currentQuestionData?.latin || 'question'}
             questionData={currentQuestionData}
             onSubmitAnswer={handleSubmitAnswer}
             showFeedback={showFeedback}
