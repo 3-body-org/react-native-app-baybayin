@@ -70,20 +70,18 @@ const LatinToBaybayinMode = ({
     setSelectedCharacters([]);
   }, [generateAvailableCharacters]);
 
+  // Submit answer when selection is complete
+  useEffect(() => {
+    if (!showFeedback && selectedCharacters.length >= questionData?.inputCount) {
+      const currentAnswer = selectedCharacters.join('');
+      onSubmitAnswer(currentAnswer);
+    }
+  }, [selectedCharacters, questionData?.inputCount, showFeedback, onSubmitAnswer]);
+
   const handleCharacterPress = (character) => {
     if (showFeedback) return;
-    
-    setSelectedCharacters(prev => {
-      const newSelection = [...prev, character];
-      const currentAnswer = newSelection.join('');
-      
-      // Check if we've reached the expected number of tiles
-      if (newSelection.length >= questionData.inputCount) {
-        onSubmitAnswer(currentAnswer);
-      }
-      
-      return newSelection;
-    });
+
+    setSelectedCharacters(prev => [...prev, character]);
   };
 
   const handleRemoveCharacter = (index) => {

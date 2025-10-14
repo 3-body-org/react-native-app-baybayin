@@ -8,16 +8,16 @@ import Container from "@components/container";
 
 const getPdfAsset = (billId) => {
   switch (billId) {
-    case '1':
-      return require('../../assets/sb-1899.pdf');
-    case '2':
-      return require('../../assets/sb-2440.pdf');
-    case '3':
-      return require('../../assets/sb-433.pdf');
-    case '4':
-      return require('../../assets/sb-2086.pdf');
-    case '5':
-      return require('../../assets/sb-1866.pdf');
+    case "1":
+      return require("@assets/sb-1899.pdf");
+    case "2":
+      return require("@assets/sb-2440.pdf");
+    case "3":
+      return require("@assets/sb-433.pdf");
+    case "4":
+      return require("@assets/sb-2086.pdf");
+    case "5":
+      return require("@assets/sb-1866.pdf");
     default:
       throw new Error(`PDF not found for bill id ${billId}`);
   }
@@ -25,13 +25,13 @@ const getPdfAsset = (billId) => {
 
 export default function BillScreen() {
   const handleViewPdf = async (bill) => {
-    if (Platform.OS === 'web') {
+    if (Platform.OS === "web") {
       try {
         const asset = Asset.fromModule(getPdfAsset(bill.id.toString()));
         await asset.downloadAsync();
         Linking.openURL(asset.uri);
       } catch (error) {
-        console.error('Error opening PDF on web:', error);
+        console.error("Error opening PDF on web:", error);
         // Fallback or show error message
       }
     } else {
