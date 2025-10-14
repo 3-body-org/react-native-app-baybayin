@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { quizData, gameConfig, getAllWords } from "../data/quiz-data";
 import { lessonModules } from "../data/lesson-data";
-import { saveQuizResult } from "../data/quiz-results";
+import { saveQuizResult, getQuizResults } from "../data/quiz-results";
 
 export const useQuizGame = () => {
   // Game state
@@ -33,6 +33,23 @@ export const useQuizGame = () => {
   const [showCongratulationsModal, setShowCongratulationsModal] =
     useState(false);
 
+  // State for saved quiz results
+  const [savedQuizResults, setSavedQuizResults] = useState([]);
+
+  // Load saved quiz results on mount
+  useEffect(() => {
+    const loadResults = async () => {
+      try {
+        const results = await getQuizResults();
+        setSavedQuizResults(results);
+      } catch (error) {
+        console.error("Failed to load quiz results:", error);
+      }
+    };
+
+    loadResults();
+  }, []);
+
   // This effect will run when the game is marked as complete
   useEffect(() => {
     if (gameState.isGameComplete) {
@@ -41,6 +58,17 @@ export const useQuizGame = () => {
       } else {
         setShowCongratulationsModal(true);
       }
+
+      // Refresh saved results after game completion
+      const refreshResults = async () => {
+        try {
+          const results = await getQuizResults();
+          setSavedQuizResults(results);
+        } catch (error) {
+          console.error("Failed to refresh quiz results:", error);
+        }
+      };
+      refreshResults();
     }
   }, [gameState.isGameComplete, gameState.isGameOver]);
 
@@ -269,6 +297,7 @@ export const useQuizGame = () => {
     showCongratulationsModal,
     setShowCongratulationsModal,
     gameStats,
+    savedQuizResults,
     startGame,
     submitAnswer,
     continueToNext,

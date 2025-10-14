@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -17,9 +17,16 @@ const SummaryResults = () => {
   const router = useRouter();
   const { mode, score, correctAnswers, totalQuestions } =
     useLocalSearchParams();
+  const [recentQuizzes, setRecentQuizzes] = useState([]);
 
-  // Get actual quiz data
-  const recentQuizzes = getQuizResults();
+  useEffect(() => {
+    const fetchResults = async () => {
+      const results = await getQuizResults();
+      setRecentQuizzes(results);
+    };
+
+    fetchResults();
+  }, []);
 
   const averageScore =
     recentQuizzes.length > 0
@@ -147,8 +154,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 20,
     backgroundColor: "#FEF3EC",
-    borderBottomWidth: 1,
-    borderBottomColor: "#573826",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
