@@ -80,3 +80,5 @@ The tunnel mode creates a secure connection that works regardless of network con
 ## Development Notes
 
 This app includes native dependencies that may require additional setup steps depending on your development environment. The tunnel mode option provides the most reliable connection method for testing across different network configurations.
+
+![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/3-body-org/react-native-app-baybayin?utm_source=oss&utm_medium=github&utm_campaign=3-body-org%2Freact-native-app-baybayin&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)
